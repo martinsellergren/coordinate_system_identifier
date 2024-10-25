@@ -1,0 +1,117 @@
+import 'package:coordinate_systems_data/data_model.dart';
+import 'package:latlong2/latlong.dart' as l;
+import 'package:parse_coordinates/parse_coordinates.dart';
+import 'package:proj4dart/proj4dart.dart' as p;
+
+import '../coordinate_system_data.dart';
+import '../logger.dart';
+import 'model.dart';
+
+PointDetails getPointDetailsFromCoordinateInput({
+  required String input,
+}) {
+  final point = _pointFromInput(input);
+  int nSuccess = 0;
+  int nErrors = 0;
+  final entries = coordinateSystemsData.items
+      .map(
+        (e) {
+          final lonLat = LonLatFromPointAndCoordinateSystem.instance(
+              point: point, coordinateSystem: e);
+          if (lonLat != null) {
+            nSuccess++;
+          } else {
+            nErrors++;
+          }
+          return MapEntry(e, lonLat);
+        },
+      )
+      .where((e) => e.value != null)
+      .map((e) => MapEntry(e.key, e.value!));
+  if (entries.isEmpty) throw TransformException();
+  final map = Map.fromEntries(entries);
+  logger.i(
+      'lonLatFromPointAndCoordinateSystem, nSuccess: $nSuccess, nErrors: $nErrors');
+  final res = PointDetails(point: point, lonLats: map);
+  return res;
+}
+
+class TransformException implements Exception {}
+
+Point _pointFromInput(String input) {
+  final res = parseCoordinates(input);
+  if (res == null) throw const FormatException();
+  return Point(x: res.long, y: res.lat);
+}
+
+double? distanceBetween({required LonLat lonLat1, required LonLat lonLat2}) {
+  try {
+    final res = const l.Distance()(
+      l.LatLng(lonLat1.lat, lonLat1.lon),
+      l.LatLng(lonLat2.lat, lonLat2.lon),
+    );
+    return res;
+  } catch (e, s) {
+    logger.e('Error calculating distance between $lonLat1, $lonLat2',
+        error: e, stackTrace: s);
+    return null;
+  }
+}
+
+class LonLatFromPointAndCoordinateSystem {
+  LonLatFromPointAndCoordinateSystem._() {
+    _loadProjections();
+  }
+
+  static LonLatFromPointAndCoordinateSystem instance =
+      LonLatFromPointAndCoordinateSystem._();
+
+  static void setup() => instance;
+
+  void _loadProjections() {
+    int nSuccess = 0;
+    int nErrors = 0;
+    for (final e in coordinateSystemsData.items) {
+      try {
+        p.Projection.add(e.epsgCode.toString(), e.proj4);
+        nSuccess++;
+      } catch (error) {
+        logger.d('Error registering proj4 definition for ${e.epsgCode}');
+        nErrors++;
+      }
+    }
+    logger.i('Load projections, nSuccess: $nSuccess, nErrors: $nErrors');
+  }
+
+  LonLat? call({
+    required Point point,
+    required CoordinateSystem coordinateSystem,
+  }) {
+    final proj = p.Projection.get('${coordinateSystem.epsgCode}');
+    if (proj == null) return null;
+    try {
+      final res =
+          proj.transform(p.Projection.WGS84, p.Point(x: point.x, y: point.y));
+      if (!res.x.isFinite) throw 'Longitude is not finite, ${res.x}';
+      if (!res.y.isFinite) throw 'Latitude is not finite, ${res.y}';
+      final lonLat = LonLat(lon: res.x, lat: res.y);
+      if (!coordinateSystem.bounds.contains(lonLat)) {
+        return null;
+      }
+      return lonLat;
+    } catch (e) {
+      logger.d(
+          'Error transforming ($point, epsg=${coordinateSystem.epsgCode}), $e');
+      return null;
+    }
+  }
+}
+
+extension on Bounds {
+  bool contains(LonLat lonLat) {
+    return lonLat.lon > southWest.lon &&
+        lonLat.lat > southWest.lat &&
+        lonLat.lon < northEast.lon &&
+        lonLat.lat < northEast.lat;
+  }
+}
