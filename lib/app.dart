@@ -8,8 +8,10 @@ class App extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const MaterialApp(
-      home: HomePage(),
+    return MaterialApp(
+      home: const HomePage(),
+      builder: (context, child) =>
+          Overlay.wrap(child: SelectionArea(child: child!)),
     );
   }
 }
