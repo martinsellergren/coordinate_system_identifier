@@ -17,10 +17,3 @@ void main() async {
   );
   print('res=$res');
 }
-
-// const _sweref = CoordinateSystem(
-//   epsgCode: 3006,
-//   name: 'SWEREF99 TM',
-//   proj4:
-//       '+proj=utm +zone=33 +ellps=GRS80 +towgs84=0,0,0,0,0,0,0 +units=m +no_defs +type=crs',
-// );

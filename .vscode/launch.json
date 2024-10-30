@@ -1,0 +1,28 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "coordinate_system_identifier",
+            "request": "launch",
+            "type": "dart"
+        },
+        {
+            "name": "coordinate_system_identifier (release mode)",
+            "request": "launch",
+            "type": "dart",
+            "flutterMode": "release"
+        },
+        {
+            "name": "playground",
+            "cwd": "playground",
+            "request": "launch",
+            "type": "dart"
+        },
+        {
+            "name": "data-parsing",
+            "cwd": "stuff/data-parsing",
+            "request": "launch",
+            "type": "dart"
+        }
+    ]
+}

@@ -100,10 +100,10 @@ class _StepperState extends State<_Stepper> {
                   ),
                 _Step.enterMapPoint => Step(
                     title: const Text('Enter approximate location'),
-                    content: _Map(
+                    content: Map(
                       onTap: (lonLat) => showDialog(
                         context: context,
-                        builder: (context) => _ResDialog(
+                        builder: (context) => ResDialog(
                           tappedPoint: lonLat,
                           inputPointDetails: _inputPointDetails!,
                         ),
@@ -198,10 +198,11 @@ class _EnterCoordinatesButtonState extends State<_EnterCoordinatesButton> {
   }
 }
 
-class _Map extends StatelessWidget {
+class Map extends StatelessWidget {
   final Function(LonLat lonLat) onTap;
 
-  const _Map({required this.onTap});
+  @visibleForTesting
+  const Map({super.key, required this.onTap});
 
   @override
   Widget build(BuildContext context) {
@@ -216,18 +217,19 @@ class _Map extends StatelessWidget {
   }
 }
 
-class _ResDialog extends StatefulWidget {
+class ResDialog extends StatefulWidget {
   final LonLat tappedPoint;
   final PointDetails inputPointDetails;
 
-  const _ResDialog(
-      {required this.tappedPoint, required this.inputPointDetails});
+  @visibleForTesting
+  const ResDialog(
+      {super.key, required this.tappedPoint, required this.inputPointDetails});
 
   @override
-  State<_ResDialog> createState() => _ResDialogState();
+  State<ResDialog> createState() => _ResDialogState();
 }
 
-class _ResDialogState extends State<_ResDialog> {
+class _ResDialogState extends State<ResDialog> {
   late final _items = _coordinateSystemsOrderedByDistance();
 
   @override
