@@ -1,6 +1,8 @@
 import 'package:collection/collection.dart';
 import 'package:coordinate_systems_data/data_model.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:latlong_formatter/latlong_formatter.dart' as f;
 import 'package:pointer_interceptor/pointer_interceptor.dart';
 
 import '../app.dart';
@@ -41,7 +43,7 @@ class _ResDialogState extends State<ResDialog> {
                         ),
                         child: _Tile(
                           cell1: Text('coordinate system'),
-                          cell2: Text('latitude, longitude (WGS84)'),
+                          cell2: Text('WGS84 coordinates'),
                           cell3: Text('distance from approximation'),
                         ),
                       ),
@@ -143,8 +145,8 @@ class _Tile extends StatelessWidget {
   Widget build(BuildContext context) {
     return Row(
       children: [
-        Expanded(flex: 4, child: Center(child: cell1)),
-        Expanded(flex: 3, child: Center(child: cell2)),
+        Expanded(flex: 5, child: Center(child: cell1)),
+        Expanded(flex: 5, child: Center(child: cell2)),
         Expanded(flex: 3, child: Center(child: cell3)),
       ],
     );
@@ -162,20 +164,81 @@ class _LatLong extends StatelessWidget {
       TextSpan(
         children: [
           TextSpan(
-            text:
-                '${lonLat.lat.toStringAsFixed(3)}, ${lonLat.lon.toStringAsFixed(3)}',
+            text: lonLat.formatAsDegrees,
           ),
           WidgetSpan(
             alignment: PlaceholderAlignment.middle,
             child: IconButton(
-              onPressed: () {},
+              onPressed: () => showDialog(
+                context: context,
+                builder: (context) => CopyDialog(lonLat: lonLat),
+              ),
               icon: const Icon(
                 Icons.copy,
-                size: 15,
+                size: _copyIconSize,
               ),
             ),
           ),
         ],
+      ),
+    );
+  }
+}
+
+extension on LonLat {
+  String get formatAsDegrees =>
+      f.LatLongFormatter('''{latd°m's.s"c} {lond°m's.s"c}''')
+          .format(f.LatLong(lat, lon));
+
+  String get formatAsDecimal =>
+      f.LatLongFormatter('''{lat-d.ddddd}, {lon-d.ddddd}''')
+          .format(f.LatLong(lat, lon));
+}
+
+const _copyIconSize = 15.0;
+
+class CopyDialog extends StatelessWidget {
+  final LonLat lonLat;
+
+  @visibleForTesting
+  const CopyDialog({super.key, required this.lonLat});
+
+  @override
+  Widget build(BuildContext context) {
+    return SimpleDialog(children: [
+      _CopyTile(text: lonLat.formatAsDegrees),
+      _CopyTile(text: lonLat.formatAsDecimal),
+    ]);
+  }
+}
+
+class _CopyTile extends StatelessWidget {
+  final String text;
+
+  const _CopyTile({required this.text});
+
+  @override
+  Widget build(BuildContext context) {
+    return TextButton(
+      onPressed: () async {
+        await Clipboard.setData(ClipboardData(text: text));
+        if (!context.mounted) return;
+        context
+            .showSnackBar(const SnackBar(content: Text('Copied to clipboard')));
+        Navigator.of(context).pop();
+      },
+      child: Text.rich(
+        TextSpan(
+          children: [
+            TextSpan(text: text),
+            const WidgetSpan(
+              child: Padding(
+                padding: EdgeInsets.only(left: 8),
+                child: Icon(Icons.copy, size: _copyIconSize),
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }

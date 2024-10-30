@@ -20,6 +20,7 @@ enum _Case {
   home,
   map,
   resDialog,
+  copyDialog,
 }
 
 class _Page extends StatelessWidget {
@@ -37,6 +38,7 @@ class _Page extends StatelessWidget {
           ),
         ),
         body: TabBarView(
+            physics: const NeverScrollableScrollPhysics(),
             children: _Case.values
                 .map((e) => switch (e) {
                       _Case.home => const HomePage(),
@@ -48,6 +50,8 @@ class _Page extends StatelessWidget {
                           pointDetails: getPointDetailsFromCoordinateInput(
                               input: '6097107,356084'),
                         ),
+                      _Case.copyDialog => const CopyDialog(
+                          lonLat: LonLat(lon: 10.43, lat: 60.54654)),
                     })
                 .toList()),
       ),

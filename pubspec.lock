@@ -268,6 +268,14 @@ packages:
     description: flutter
     source: sdk
     version: "0.0.0"
+  format:
+    dependency: transitive
+    description:
+      name: format
+      sha256: "94f93703645ec4d7d19f02d7d87617a5463169e252c0d45b125f13a54a90d037"
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.5.2"
   freezed:
     dependency: "direct dev"
     description:
@@ -380,6 +388,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "4.0.2"
+  intl:
+    dependency: transitive
+    description:
+      name: intl
+      sha256: d6f56758b7d3014a48af9701c085700aac781a92a87a62b1333b46d8879661cf
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.19.0"
   io:
     dependency: transitive
     description:
@@ -404,6 +420,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "4.9.0"
+  latlong_formatter:
+    dependency: "direct main"
+    description:
+      name: latlong_formatter
+      sha256: "1ad151ced11b5271138cd2ebda41db5fa8796865057c809da754a5fbc5f62369"
+      url: "https://pub.dev"
+    source: hosted
+    version: "2.0.1"
   leak_tracker:
     dependency: transitive
     description:
