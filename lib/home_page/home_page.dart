@@ -16,7 +16,12 @@ class HomePage extends StatelessWidget {
       appBar: AppBar(
         actions: [
           IconButton(
-            onPressed: () => showAboutDialog(context: context),
+            onPressed: () => showAboutDialog(
+              context: context,
+              applicationName: 'Coordinate system identifier',
+              applicationIcon: const Icon(Icons.place),
+              children: [const Text('Enjoy life')],
+            ),
             icon: const Icon(Icons.info),
           ),
         ],
