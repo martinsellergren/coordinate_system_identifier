@@ -171,7 +171,7 @@ class _EnterCoordinatesTextFieldState
       widget.onInputAccepted(res);
     } catch (e) {
       setState(() {
-        _errorMessage = 'Error handling input\n$e';
+        _errorMessage = 'Bad input, $e';
       });
     }
   }

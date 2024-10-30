@@ -1,6 +1,5 @@
 import 'package:coordinate_systems_data/data_model.dart';
 import 'package:maps_toolkit/maps_toolkit.dart' as t;
-import 'package:parse_coordinates/parse_coordinates.dart';
 import 'package:proj4dart/proj4dart.dart' as p;
 
 import '../coordinate_system_data.dart';
@@ -39,9 +38,13 @@ PointDetails getPointDetailsFromCoordinateInput({
 class TransformException implements Exception {}
 
 Point _pointFromInput(String input) {
-  final res = parseCoordinates(input);
-  if (res == null) throw const FormatException();
-  return Point(x: res.long, y: res.lat);
+  input = input.trim();
+  final parts = input.split(RegExp(r'[,\s]+'));
+  if (parts.length != 2) throw const FormatException();
+  return Point(
+    x: double.parse(parts[1]),
+    y: double.parse(parts[0]),
+  );
 }
 
 class LonLatFromPointAndCoordinateSystem {
