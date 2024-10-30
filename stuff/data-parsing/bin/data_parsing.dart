@@ -5,7 +5,7 @@ import 'package:coordinate_systems_data/data_model.dart';
 import 'package:http/http.dart';
 import 'package:postgres/postgres.dart' as p;
 
-import 'model.dart';
+import 'epsg_response_model.dart';
 
 void main(List<String> arguments) async {
   final client = Client();
@@ -28,17 +28,20 @@ void main(List<String> arguments) async {
     final name = res.first[1] as String;
     try {
       final proj4 = await _getProj4(client: client, epsgCode: epsgCode);
-      final bounds =
-          await _getCoordinateSystemBounds(client: client, epsgCode: epsgCode);
+      final epsgJson = await _getEpsgJson(client: client, epsgCode: epsgCode);
+      if (epsgJson.coordinateSystem?.axis?.firstOrNull?.unit == 'degree') {
+        print('Skipping degree coordinate system $epsgCode');
+        continue;
+      }
       items.add(CoordinateSystem(
         epsgCode: epsgCode,
         name: name,
         proj4: proj4,
-        bounds: bounds,
+        bounds: epsgJson.bounds,
       ));
       await _saveJson(CoordinateSystemsData(items: items));
-    } catch (e) {
-      print('Error for $i: $e');
+    } catch (e, s) {
+      print('Error for $epsgCode: $e $s');
     }
   }
   await conn.close();
@@ -68,21 +71,23 @@ Future<String> _getProj4({
   return res.body;
 }
 
-Future<Bounds> _getCoordinateSystemBounds({
+Future<EpsgJsonResponse> _getEpsgJson({
   required Client client,
   required int epsgCode,
 }) async {
   final res = await client.get(Uri.parse('https://epsg.io/$epsgCode.json'));
   if (res.statusCode != 200) throw HttpException('${res.statusCode}');
-  final parsed = EpsgJsonResponse.fromJson(jsonDecode(res.body));
-  final bbox = parsed.bbox;
-  return Bounds(
-    northEast: LonLat(lon: bbox.eastLongitude, lat: bbox.northLatitude),
-    southWest: LonLat(lon: bbox.westLongitude, lat: bbox.southLatitude),
-  );
+  return EpsgJsonResponse.fromJson(jsonDecode(res.body));
 }
 
 Future<void> _saveJson(CoordinateSystemsData data) async {
   await File('../../assets/coordinate_systems.json')
       .writeAsString(jsonEncode(data.toJson()));
+}
+
+extension on EpsgJsonResponse {
+  Bounds get bounds => Bounds(
+        northEast: LonLat(lon: bbox.eastLongitude, lat: bbox.northLatitude),
+        southWest: LonLat(lon: bbox.westLongitude, lat: bbox.southLatitude),
+      );
 }

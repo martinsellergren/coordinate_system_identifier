@@ -1,6 +1,6 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'model.dart';
+part of 'epsg_response_model.dart';
 
 // **************************************************************************
 // JsonSerializableGenerator
@@ -9,13 +9,18 @@ part of 'model.dart';
 _$EpsgJsonResponseImpl _$$EpsgJsonResponseImplFromJson(
         Map<String, dynamic> json) =>
     _$EpsgJsonResponseImpl(
-      bbox: Bbox.fromJson(json['bbox'] as Map<String, dynamic>),
+      bbox: BboxResp.fromJson(json['bbox'] as Map<String, dynamic>),
+      coordinateSystem: json['coordinate_system'] == null
+          ? null
+          : CoordinateSystemResp.fromJson(
+              json['coordinate_system'] as Map<String, dynamic>),
     );
 
 Map<String, dynamic> _$$EpsgJsonResponseImplToJson(
         _$EpsgJsonResponseImpl instance) =>
     <String, dynamic>{
       'bbox': instance.bbox,
+      'coordinate_system': instance.coordinateSystem,
     };
 
 _$BboxImpl _$$BboxImplFromJson(Map<String, dynamic> json) => _$BboxImpl(
@@ -31,4 +36,28 @@ Map<String, dynamic> _$$BboxImplToJson(_$BboxImpl instance) =>
       'west_longitude': instance.westLongitude,
       'north_latitude': instance.northLatitude,
       'east_longitude': instance.eastLongitude,
+    };
+
+_$CoordinateSystemRespImpl _$$CoordinateSystemRespImplFromJson(
+        Map<String, dynamic> json) =>
+    _$CoordinateSystemRespImpl(
+      axis: (json['axis'] as List<dynamic>?)
+          ?.map((e) => AxisResp.fromJson(e as Map<String, dynamic>))
+          .toList(),
+    );
+
+Map<String, dynamic> _$$CoordinateSystemRespImplToJson(
+        _$CoordinateSystemRespImpl instance) =>
+    <String, dynamic>{
+      'axis': instance.axis,
+    };
+
+_$AxisRespImpl _$$AxisRespImplFromJson(Map<String, dynamic> json) =>
+    _$AxisRespImpl(
+      unit: json['unit'],
+    );
+
+Map<String, dynamic> _$$AxisRespImplToJson(_$AxisRespImpl instance) =>
+    <String, dynamic>{
+      'unit': instance.unit,
     };
