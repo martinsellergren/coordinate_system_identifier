@@ -44,7 +44,7 @@ class _Page extends StatelessWidget {
                         ),
                       _Case.resDialog => ResDialog(
                           tappedPoint: const LonLat(lon: 20, lat: 60),
-                          inputPointDetails: getPointDetailsFromCoordinateInput(
+                          pointDetails: getPointDetailsFromCoordinateInput(
                               input: '6097107,356084'),
                         ),
                     })

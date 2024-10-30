@@ -1,5 +1,5 @@
 import 'package:coordinate_systems_data/data_model.dart';
-import 'package:latlong2/latlong.dart' as l;
+import 'package:maps_toolkit/maps_toolkit.dart' as t;
 import 'package:parse_coordinates/parse_coordinates.dart';
 import 'package:proj4dart/proj4dart.dart' as p;
 
@@ -44,18 +44,10 @@ Point _pointFromInput(String input) {
   return Point(x: res.long, y: res.lat);
 }
 
-double? distanceBetween({required LonLat lonLat1, required LonLat lonLat2}) {
-  try {
-    final res = const l.Distance()(
-      l.LatLng(lonLat1.lat, lonLat1.lon),
-      l.LatLng(lonLat2.lat, lonLat2.lon),
-    );
-    return res;
-  } catch (e, s) {
-    logger.e('Error calculating distance between $lonLat1, $lonLat2',
-        error: e, stackTrace: s);
-    return null;
-  }
+double distanceBetween({required LonLat lonLat1, required LonLat lonLat2}) {
+  return t.SphericalUtil.computeDistanceBetween(
+          lonLat1.asMapsToolkit, lonLat2.asMapsToolkit)
+      .toDouble();
 }
 
 class LonLatFromPointAndCoordinateSystem {
@@ -107,11 +99,30 @@ class LonLatFromPointAndCoordinateSystem {
   }
 }
 
-extension on Bounds {
+extension BoundsX on Bounds {
   bool contains(LonLat lonLat) {
-    return lonLat.lon > southWest.lon &&
-        lonLat.lat > southWest.lat &&
-        lonLat.lon < northEast.lon &&
-        lonLat.lat < northEast.lat;
+    return t.PolygonUtil.containsLocation(
+      lonLat.asMapsToolkit,
+      path.map((e) => e.asMapsToolkit).toList(),
+      true,
+    );
   }
+
+  double get area {
+    return t.SphericalUtil.computeArea(
+            path.map((e) => e.asMapsToolkit).toList())
+        .toDouble();
+  }
+
+  List<LonLat> get path => [
+        northEast,
+        LonLat(lon: southWest.lon, lat: northEast.lat),
+        southWest,
+        LonLat(lon: northEast.lon, lat: southWest.lat),
+        northEast,
+      ];
+}
+
+extension on LonLat {
+  t.LatLng get asMapsToolkit => t.LatLng(lat, lon);
 }
