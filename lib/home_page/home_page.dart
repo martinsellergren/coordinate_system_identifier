@@ -99,7 +99,7 @@ class _StepperState extends State<_Stepper> {
                   ),
                 _Step.enterMapPoint => Step(
                     title: const Text('Enter approximate location'),
-                    content: Map(
+                    content: ApproximationInputMap(
                       onTap: (lonLat) => showDialog(
                         context: context,
                         builder: (context) => ResDialog(
@@ -157,12 +157,14 @@ class _EnterCoordinatesTextFieldState
                   icon: const Icon(Icons.send),
                   onPressed: () => _onSubmitted(_controller.text),
                 ),
+          helperText: 'north east',
         ),
       ),
     );
   }
 
   void _onSubmitted(String value) {
+    value = value.trim();
     if (value.isEmpty) return;
     try {
       final res = getPointDetailsFromCoordinateInput(input: value);
@@ -175,33 +177,11 @@ class _EnterCoordinatesTextFieldState
   }
 }
 
-class _EnterCoordinatesButton extends StatefulWidget {
-  final String Function() getCoordinateInput;
-  final Function(PointDetails res) onInputAccepted;
-
-  const _EnterCoordinatesButton(
-      {required this.onInputAccepted, required this.getCoordinateInput});
-
-  @override
-  State<_EnterCoordinatesButton> createState() =>
-      _EnterCoordinatesButtonState();
-}
-
-class _EnterCoordinatesButtonState extends State<_EnterCoordinatesButton> {
-  @override
-  Widget build(BuildContext context) {
-    return TextButton(
-      onPressed: () {},
-      child: const Text('Continue'),
-    );
-  }
-}
-
-class Map extends StatelessWidget {
+class ApproximationInputMap extends StatelessWidget {
   final Function(LonLat lonLat) onTap;
 
   @visibleForTesting
-  const Map({super.key, required this.onTap});
+  const ApproximationInputMap({super.key, required this.onTap});
 
   @override
   Widget build(BuildContext context) {

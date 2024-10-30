@@ -44,12 +44,6 @@ Point _pointFromInput(String input) {
   return Point(x: res.long, y: res.lat);
 }
 
-double distanceBetween({required LonLat lonLat1, required LonLat lonLat2}) {
-  return t.SphericalUtil.computeDistanceBetween(
-          lonLat1.asMapsToolkit, lonLat2.asMapsToolkit)
-      .toDouble();
-}
-
 class LonLatFromPointAndCoordinateSystem {
   LonLatFromPointAndCoordinateSystem._() {
     _loadProjections();
@@ -99,28 +93,23 @@ class LonLatFromPointAndCoordinateSystem {
   }
 }
 
+double distanceBetween({required LonLat lonLat1, required LonLat lonLat2}) {
+  return t.SphericalUtil.computeDistanceBetween(
+          lonLat1.asMapsToolkit, lonLat2.asMapsToolkit)
+      .toDouble();
+}
+
 extension BoundsX on Bounds {
   bool contains(LonLat lonLat) {
-    return t.PolygonUtil.containsLocation(
-      lonLat.asMapsToolkit,
-      path.map((e) => e.asMapsToolkit).toList(),
-      true,
-    );
+    return lonLat.lon > southWest.lon &&
+        lonLat.lat > southWest.lat &&
+        lonLat.lon < northEast.lon &&
+        lonLat.lat < northEast.lat;
   }
 
-  double get area {
-    return t.SphericalUtil.computeArea(
-            path.map((e) => e.asMapsToolkit).toList())
-        .toDouble();
+  double get diagonalLength {
+    return distanceBetween(lonLat1: northEast, lonLat2: southWest);
   }
-
-  List<LonLat> get path => [
-        northEast,
-        LonLat(lon: southWest.lon, lat: northEast.lat),
-        southWest,
-        LonLat(lon: northEast.lon, lat: southWest.lat),
-        northEast,
-      ];
 }
 
 extension on LonLat {

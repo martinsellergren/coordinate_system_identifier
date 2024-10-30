@@ -90,8 +90,9 @@ extension on PointDetails {
       );
     }).sorted((a, b) => [
           a.dKm.compareTo(b.dKm),
-          a.coordinateSystem.bounds.area
-              .compareTo(b.coordinateSystem.bounds.area)
+          // a.coordinateSystem.bounds.diagonalLength
+          //     .compareTo(b.coordinateSystem.bounds.diagonalLength),
+          a.coordinateSystem.name.compareTo(b.coordinateSystem.name)
         ].firstWhere((e) => e != 0, orElse: () => 0));
   }
 }

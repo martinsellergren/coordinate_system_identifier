@@ -42,7 +42,7 @@ class _Page extends StatelessWidget {
             children: _Case.values
                 .map((e) => switch (e) {
                       _Case.home => const HomePage(),
-                      _Case.map => Map(
+                      _Case.map => ApproximationInputMap(
                           onTap: (lonLat) => print('Tapped map at $lonLat'),
                         ),
                       _Case.resDialog => ResDialog(
