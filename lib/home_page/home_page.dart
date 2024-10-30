@@ -1,13 +1,11 @@
-import 'package:collection/collection.dart';
 import 'package:coordinate_systems_data/data_model.dart';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'package:pointer_interceptor/pointer_interceptor.dart';
 import 'package:separate/separate.dart';
 
-import '../app.dart';
 import '../geoutils/geoutils.dart';
 import '../geoutils/model.dart';
+import '../res_dialog/res_dialog.dart';
 
 class HomePage extends StatelessWidget {
   const HomePage({super.key});
@@ -214,152 +212,6 @@ class Map extends StatelessWidget {
         onTap: (argument) =>
             onTap(LonLat(lon: argument.longitude, lat: argument.latitude)),
       ),
-    );
-  }
-}
-
-class ResDialog extends StatefulWidget {
-  final LonLat tappedPoint;
-  final PointDetails pointDetails;
-
-  @visibleForTesting
-  const ResDialog(
-      {super.key, required this.tappedPoint, required this.pointDetails});
-
-  @override
-  State<ResDialog> createState() => _ResDialogState();
-}
-
-class _ResDialogState extends State<ResDialog> {
-  late final _items = widget.pointDetails
-      .coordinateSystemsOrderedByDistance(reference: widget.tappedPoint);
-
-  @override
-  Widget build(BuildContext context) {
-    return Dialog(
-      child: PointerInterceptor(
-        child: _items.isEmpty
-            ? const Text('No results')
-            : SingleChildScrollView(
-                child: Padding(
-                  padding: const EdgeInsets.all(16.0),
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      const DefaultTextStyle(
-                        style: TextStyle(
-                          fontSize: 12,
-                          fontWeight: FontWeight.bold,
-                        ),
-                        child: _Tile(
-                          cell1: Text('coordinate system'),
-                          cell2: Text('latitude, longitude (WGS84)'),
-                          cell3: Text('distance from approximation'),
-                        ),
-                      ),
-                      const Divider(),
-                      ..._items.topCandidates.map(
-                        (e) => _ResTile(data: e),
-                      ),
-                      if (_items.more.isNotEmpty)
-                        ExpansionTile(
-                          title: const Align(
-                            alignment: Alignment.centerRight,
-                            child: Text('More'),
-                          ),
-                          children: _items.more
-                              .map((e) => _ResTile(data: e))
-                              .toList(),
-                        ),
-                    ],
-                  ),
-                ),
-              ),
-      ),
-    );
-  }
-}
-
-typedef CoordinateSystemRes = ({
-  CoordinateSystem coordinateSystem,
-  double dKm,
-  LonLat lonLat,
-});
-
-extension on PointDetails {
-  List<CoordinateSystemRes> coordinateSystemsOrderedByDistance({
-    required LonLat reference,
-  }) {
-    return lonLats.entries.map((e) {
-      final d = distanceBetween(lonLat1: e.value, lonLat2: reference);
-      final dRoundedKm = double.parse((d * 0.001).toStringAsFixed(0));
-      return (
-        coordinateSystem: e.key,
-        dKm: dRoundedKm,
-        lonLat: e.value,
-      );
-    }).sorted((a, b) => [
-          a.dKm.compareTo(b.dKm),
-          a.coordinateSystem.bounds.area
-              .compareTo(b.coordinateSystem.bounds.area)
-        ].firstWhere((e) => e != 0, orElse: () => 0));
-  }
-}
-
-extension on List<CoordinateSystemRes> {
-  List<CoordinateSystemRes> get topCandidates {
-    final minD = map((e) => e.dKm).min;
-    const allowance = 10;
-    return takeWhile((e) => e.dKm <= minD + allowance).take(10).toList();
-  }
-
-  List<CoordinateSystemRes> get more {
-    final top = topCandidates;
-    return skipWhile((e) => top.contains(e)).take(150).toList();
-  }
-}
-
-class _ResTile extends StatelessWidget {
-  final CoordinateSystemRes data;
-
-  const _ResTile({required this.data});
-
-  @override
-  Widget build(BuildContext context) {
-    return _Tile(
-      cell1: TextButton(
-        onPressed: () => context
-            .openUrl('https://epsg.io/${data.coordinateSystem.epsgCode}'),
-        child: Text(
-          data.coordinateSystem.name,
-        ),
-      ),
-      cell2: TextButton(
-        onPressed: () => context.openUrl(
-            'https://maps.google.com/?q=${data.lonLat.lat},${data.lonLat.lon}'),
-        child: Text(
-            '${data.lonLat.lat.toStringAsFixed(3)}, ${data.lonLat.lon.toStringAsFixed(3)}'),
-      ),
-      cell3: Text('${data.dKm.toStringAsFixed(0)} km'),
-    );
-  }
-}
-
-class _Tile extends StatelessWidget {
-  final Widget cell1;
-  final Widget cell2;
-  final Widget cell3;
-
-  const _Tile({required this.cell1, required this.cell2, required this.cell3});
-
-  @override
-  Widget build(BuildContext context) {
-    return Row(
-      children: [
-        Expanded(flex: 4, child: Center(child: cell1)),
-        Expanded(flex: 3, child: Center(child: cell2)),
-        Expanded(flex: 3, child: Center(child: cell3)),
-      ],
     );
   }
 }

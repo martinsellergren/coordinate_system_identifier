@@ -3,6 +3,7 @@
 import 'package:coordinate_system_identifier/coordinate_system_data.dart';
 import 'package:coordinate_system_identifier/geoutils/geoutils.dart';
 import 'package:coordinate_system_identifier/home_page/home_page.dart';
+import 'package:coordinate_system_identifier/res_dialog/res_dialog.dart';
 import 'package:coordinate_systems_data/data_model.dart';
 import 'package:flutter/material.dart';
 
