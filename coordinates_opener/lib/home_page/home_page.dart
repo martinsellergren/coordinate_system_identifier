@@ -5,6 +5,7 @@ import 'package:separate/separate.dart';
 import 'package:shared/geoutils/geoutils.dart';
 import 'package:shared/geoutils/model.dart';
 
+import '../app.dart';
 import '../res_dialog/res_dialog.dart';
 
 class HomePage extends StatelessWidget {
@@ -18,7 +19,7 @@ class HomePage extends StatelessWidget {
           IconButton(
             onPressed: () => showAboutDialog(
               context: context,
-              applicationName: 'Coordinate system identifier',
+              applicationName: appName,
               applicationIcon: const Icon(Icons.place),
               children: [const Text('Enjoy life')],
             ),
@@ -52,7 +53,7 @@ class _Headline extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return const Text(
-      'Welcome to this Coordinate system identifier',
+      'Open coordinates in Google Maps',
       style: TextStyle(
         fontSize: 24,
         fontWeight: FontWeight.w600,
