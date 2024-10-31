@@ -82,7 +82,7 @@ Future<EpsgJsonResponse> _getEpsgJson({
 
 Future<void> _saveJson(CoordinateSystemsData data) async {
   await File(
-          '../../packages/coordinate_systems_data/assets/coordinate_systems.json')
+          '../packages/coordinate_systems_data/assets/coordinate_systems.json')
       .writeAsString(jsonEncode(data.toJson()));
 }
 

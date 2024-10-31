@@ -3,28 +3,21 @@
     "configurations": [
         {
             "name": "coordinate_system_identifier",
-            "cwd": "coordinate_system_identifier",
             "request": "launch",
-            "type": "dart",
+            "type": "dart"
         },
         {
             "name": "coordinate_system_identifier (release mode)",
-            "cwd": "coordinate_system_identifier",
             "request": "launch",
             "type": "dart",
             "flutterMode": "release"
         },
         {
             "name": "playground",
-            "cwd": "coordinate_system_identifier/playground",
+            "cwd": "playground",
             "request": "launch",
             "type": "dart"
         },
-        {
-            "name": "data-parsing",
-            "cwd": "stuff/data-parsing",
-            "request": "launch",
-            "type": "dart"
-        }
+
     ]
 }

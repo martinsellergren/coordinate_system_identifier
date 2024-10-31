@@ -9,7 +9,7 @@ environment:
 dependencies:
   postgres: ^3.4.0
   coordinate_systems_data:
-    path: ../../packages/coordinate_systems_data
+    path: ../packages/coordinate_systems_data
   http: ^1.2.2
   freezed_annotation: ^2.4.4
   json_annotation: ^4.9.0

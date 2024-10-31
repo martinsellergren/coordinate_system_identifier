@@ -1,6 +1,6 @@
 name: coordinates_opener
 description: "Open any coordinates in google maps."
-publish_to: 'none'
+publish_to: "none"
 version: 1.0.0+1
 
 environment:
@@ -11,6 +11,11 @@ dependencies:
     sdk: flutter
   coordinate_systems_data:
     path: ../packages/coordinate_systems_data
+  shared:
+    path: ../packages/shared
+  url_launcher: ^6.3.1
+  google_maps_flutter: ^2.9.0
+  separate: ^1.0.3
 
 dev_dependencies:
   flutter_test:
