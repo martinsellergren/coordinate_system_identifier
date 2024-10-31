@@ -10,7 +10,7 @@ dependencies:
   flutter:
     sdk: flutter
   coordinate_systems_data:
-    path: packages/coordinate_systems_data
+    path: ../packages/coordinate_systems_data
   provider: ^6.1.2
   proj4dart: ^2.1.0
   separate: ^1.0.3
