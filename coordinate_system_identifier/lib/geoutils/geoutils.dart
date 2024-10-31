@@ -1,8 +1,8 @@
+import 'package:coordinate_systems_data/coordinate_systems_data.dart';
 import 'package:coordinate_systems_data/data_model.dart';
 import 'package:maps_toolkit/maps_toolkit.dart' as t;
 import 'package:proj4dart/proj4dart.dart' as p;
 
-import '../coordinate_system_data.dart';
 import '../logger.dart';
 import 'model.dart';
 

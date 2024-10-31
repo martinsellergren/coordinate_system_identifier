@@ -5,11 +5,8 @@ import 'package:flutter/services.dart';
 
 late final CoordinateSystemsData coordinateSystemsData;
 
-Future<void> loadCoordinateSystemData({bool fromOutside = false}) async {
+Future<void> loadCoordinateSystemData() async {
   String data = await rootBundle.loadString(
-    fromOutside
-        ? 'packages/coordinate_system_identifier/assets/coordinate_systems.json'
-        : 'assets/coordinate_systems.json',
-  );
+      'packages/coordinate_systems_data/assets/coordinate_systems.json');
   coordinateSystemsData = CoordinateSystemsData.fromJson(jsonDecode(data));
 }
