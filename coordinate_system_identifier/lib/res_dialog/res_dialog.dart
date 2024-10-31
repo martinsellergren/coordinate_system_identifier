@@ -4,10 +4,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:latlong_formatter/latlong_formatter.dart' as f;
 import 'package:pointer_interceptor/pointer_interceptor.dart';
+import 'package:shared/geoutils/geoutils.dart';
+import 'package:shared/geoutils/model.dart';
 
 import '../app.dart';
-import '../geoutils/geoutils.dart';
-import '../geoutils/model.dart';
 
 class ResDialog extends StatefulWidget {
   final LonLat tappedPoint;

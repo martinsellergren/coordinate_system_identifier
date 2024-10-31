@@ -13,6 +13,8 @@ dependencies:
     path: ..
   coordinate_systems_data:
     path: ../../packages/coordinate_systems_data
+  shared:
+    path: ../../packages/shared
 
 dev_dependencies:
   flutter_test:

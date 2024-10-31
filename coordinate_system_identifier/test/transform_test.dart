@@ -1,9 +1,9 @@
 // ignore_for_file: avoid_print
 
-import 'package:coordinate_system_identifier/geoutils/geoutils.dart';
-import 'package:coordinate_system_identifier/geoutils/model.dart';
 import 'package:coordinate_systems_data/coordinate_systems_data.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:shared/geoutils/geoutils.dart';
+import 'package:shared/geoutils/model.dart';
 
 void main() async {
   TestWidgetsFlutterBinding.ensureInitialized();
