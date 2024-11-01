@@ -2,6 +2,7 @@ import 'package:coordinate_systems_data/data_model.dart';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:separate/separate.dart';
+import 'package:shared/geoutils/coordinates_parsing.dart';
 import 'package:shared/geoutils/geoutils.dart';
 import 'package:shared/geoutils/model.dart';
 
@@ -173,7 +174,11 @@ class _EnterCoordinatesTextFieldState
     value = value.trim();
     if (value.isEmpty) return;
     try {
-      final res = getPointDetailsFromCoordinateInput(input: value);
+      final point = parseCoordinates(value).map(
+        wellDefined: (value) => throw 'only decimal coordinates are accepted',
+        ambiguous: (value) => value.point,
+      );
+      final res = getPointDetails(point: point);
       widget.onInputAccepted(res);
     } catch (e) {
       setState(() {

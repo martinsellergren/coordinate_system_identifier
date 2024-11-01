@@ -2,14 +2,11 @@ import 'package:coordinate_systems_data/coordinate_systems_data.dart';
 import 'package:coordinate_systems_data/data_model.dart';
 import 'package:maps_toolkit/maps_toolkit.dart' as t;
 import 'package:proj4dart/proj4dart.dart' as p;
-import 'package:shared/logger.dart';
 
+import '../logger.dart';
 import 'model.dart';
 
-PointDetails getPointDetailsFromCoordinateInput({
-  required String input,
-}) {
-  final point = _pointFromInput(input);
+PointDetails getPointDetails({required Point point}) {
   int nSuccess = 0;
   int nErrors = 0;
   final entries = coordinateSystemsData.items
@@ -36,16 +33,6 @@ PointDetails getPointDetailsFromCoordinateInput({
 }
 
 class TransformException implements Exception {}
-
-Point _pointFromInput(String input) {
-  input = input.trim();
-  final parts = input.split(RegExp(r'[,\s]+'));
-  if (parts.length != 2) throw const FormatException();
-  return Point(
-    x: double.parse(parts[1]),
-    y: double.parse(parts[0]),
-  );
-}
 
 class LonLatFromPointAndCoordinateSystem {
   LonLatFromPointAndCoordinateSystem._() {
