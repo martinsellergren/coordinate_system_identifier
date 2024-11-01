@@ -21,7 +21,6 @@ dependencies:
   collection: ^1.18.0
   url_launcher: ^6.3.1
   pointer_interceptor: ^0.10.1+2
-  latlong_formatter: ^2.0.1
 
 dev_dependencies:
   flutter_test:

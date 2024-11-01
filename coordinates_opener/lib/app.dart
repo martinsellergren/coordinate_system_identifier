@@ -1,3 +1,4 @@
+import 'package:coordinate_systems_data/data_model.dart';
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -34,4 +35,7 @@ extension AppContext on BuildContext {
       showSnackBar(SnackBar(content: Text('Error opening url $url ($e)')));
     }
   }
+
+  void openInGoogleMaps({required LonLat lonLat}) =>
+      openUrl('https://maps.google.com/?q=${lonLat.lat},${lonLat.lon}');
 }

@@ -14,6 +14,12 @@
             "request": "launch",
             "type": "dart",
             "flutterMode": "release"
-        }
+        },
+        {
+            "name": "playground",
+            "cwd": "playground",
+            "request": "launch",
+            "type": "dart"
+        },
     ]
 }

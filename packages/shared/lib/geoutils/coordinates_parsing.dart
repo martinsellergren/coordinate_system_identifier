@@ -1,5 +1,6 @@
 import 'package:coordinate_systems_data/data_model.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:parse_coordinates/parse_coordinates.dart' as p;
 
 import 'model.dart';
 
@@ -17,18 +18,34 @@ sealed class CoordinatesParsingResult with _$CoordinatesParsingResult {
 }
 
 CoordinatesParsingResult parseCoordinates(String source) {
+  source = source.trim();
   if (source.contains('°')) {
-    return const CoordinatesParsingResult.wellDefined(
-        lonLat: LonLat(lon: 0, lat: 0));
+    return CoordinatesParsingResult.wellDefined(lonLat: _parseDegrees(source));
+  } else if (source.contains(RegExp(r'[C-X]'))) {
+    return CoordinatesParsingResult.wellDefined(lonLat: _parseUtm(source));
   } else {
-    source = source.trim();
-    final parts = source.split(RegExp(r'[,\s]+'));
-    if (parts.length != 2) throw const FormatException();
-    return CoordinatesParsingResult.ambiguous(
-      point: Point(
-        x: double.parse(parts[1]),
-        y: double.parse(parts[0]),
-      ),
-    );
+    return CoordinatesParsingResult.ambiguous(point: _parseDecimal(source));
   }
+}
+
+LonLat _parseDegrees(String source) {
+  final res = p.parseCoordinates(source);
+  if (res == null) throw const FormatException();
+  return LonLat(lon: res.long, lat: res.lat);
+}
+
+LonLat _parseUtm(String source) {
+  final res = p.parseCoordinates(source);
+  if (res == null) throw const FormatException();
+  return LonLat(lon: res.long, lat: res.lat);
+}
+
+Point _parseDecimal(String source) {
+  source = source.trim();
+  final parts = source.split(RegExp(r'[,\s]+'));
+  if (parts.length != 2) throw const FormatException();
+  return Point(
+    x: double.parse(parts[1]),
+    y: double.parse(parts[0]),
+  );
 }

@@ -5,6 +5,7 @@ import 'package:coordinate_system_identifier/res_dialog/res_dialog.dart';
 import 'package:coordinate_systems_data/coordinate_systems_data.dart';
 import 'package:coordinate_systems_data/data_model.dart';
 import 'package:flutter/material.dart';
+import 'package:shared/copy_dialog.dart';
 import 'package:shared/geoutils/geoutils.dart';
 import 'package:shared/geoutils/model.dart';
 
@@ -46,11 +47,24 @@ class _Page extends StatelessWidget {
                       _Case.map => ApproximationInputMap(
                           onTap: (lonLat) => print('Tapped map at $lonLat'),
                         ),
-                      _Case.resDialog => ResDialog(
-                          tappedPoint: const LonLat(lon: 20, lat: 60),
-                          pointDetails: getPointDetails(
-                              point: const Point(x: 6097107, y: 356084)),
-                        ),
+                      _Case.resDialog => () {
+                          final dialog = ResDialog(
+                            tappedPoint: const LonLat(lon: 20, lat: 60),
+                            pointDetails: getPointDetails(
+                                point: const Point(x: 6097107, y: 356084)),
+                          );
+                          return Column(
+                            children: [
+                              TextButton(
+                                  onPressed: () => showDialog(
+                                        context: context,
+                                        builder: (context) => dialog,
+                                      ),
+                                  child: const Text('open')),
+                              dialog,
+                            ],
+                          );
+                        }(),
                       _Case.copyDialog => const CopyDialog(
                           lonLat: LonLat(lon: 10.43, lat: 60.54654)),
                     })

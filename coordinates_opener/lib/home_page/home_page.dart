@@ -1,7 +1,7 @@
 import 'package:coordinate_systems_data/data_model.dart';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'package:separate/separate.dart';
+import 'package:shared/geoutils/coordinates_parsing.dart';
 import 'package:shared/geoutils/geoutils.dart';
 import 'package:shared/geoutils/model.dart';
 
@@ -17,174 +17,154 @@ class HomePage extends StatelessWidget {
       appBar: AppBar(
         actions: [
           IconButton(
-            onPressed: () => showAboutDialog(
-              context: context,
-              applicationName: appName,
-              applicationIcon: const Icon(Icons.place),
-              children: [const Text('Enjoy life')],
-            ),
+            onPressed: () => _showAboutDialog(context),
             icon: const Icon(Icons.info),
           ),
         ],
       ),
-      body: SingleChildScrollView(
-        child: Container(
-          padding: const EdgeInsets.all(16),
-          alignment: Alignment.center,
-          child: SizedBox(
-            width: 500,
-            child: Column(
-              children: [
-                const _Headline(),
-                const _WelcomeText(),
-                const _Stepper(),
-              ].separate((i, e0, e1) => const SizedBox(height: 24)),
-            ),
-          ),
-        ),
+      body: Container(
+        padding: const EdgeInsets.all(16),
+        alignment: Alignment.center,
+        child: const SizedBox(width: 500, child: _Content()),
       ),
     );
   }
 }
 
-class _Headline extends StatelessWidget {
-  const _Headline();
-
-  @override
-  Widget build(BuildContext context) {
-    return const Text(
-      'Open coordinates in Google Maps',
-      style: TextStyle(
-        fontSize: 24,
-        fontWeight: FontWeight.w600,
-      ),
+void _showAboutDialog(BuildContext context) => showAboutDialog(
+      context: context,
+      applicationName: appName,
+      applicationIcon: const Icon(Icons.place),
+      children: [const Text('Enjoy life')],
     );
-  }
-}
 
-class _WelcomeText extends StatelessWidget {
-  const _WelcomeText();
+class _Content extends StatefulWidget {
+  const _Content();
 
   @override
-  Widget build(BuildContext context) {
-    return const Text(
-        "Use this tool when you have some coordinates but don't know in which coordinate system they are defined.");
-  }
+  State<_Content> createState() => _ContentState();
 }
 
-class _Stepper extends StatefulWidget {
-  const _Stepper();
-
-  @override
-  State<_Stepper> createState() => _StepperState();
-}
-
-class _StepperState extends State<_Stepper> {
-  int _currentStep = 0;
-  PointDetails? _inputPointDetails;
-
-  @override
-  Widget build(BuildContext context) {
-    return Stepper(
-      currentStep: _currentStep,
-      controlsBuilder: (context, details) => const SizedBox.shrink(),
-      onStepTapped: (value) => switch (_Step.values[value]) {
-        _Step.enterCoordinates => setState(() => _currentStep = 0),
-        _Step.enterMapPoint => null,
-      },
-      steps: _Step.values
-          .map((e) => switch (e) {
-                _Step.enterCoordinates => Step(
-                    title: const Text('Enter coordinates'),
-                    content: _EnterCoordinatesTextField(
-                      onInputAccepted: (res) => setState(() {
-                        _inputPointDetails = res;
-                        _currentStep = 1;
-                      }),
-                    ),
-                  ),
-                _Step.enterMapPoint => Step(
-                    title: const Text('Enter approximate location'),
-                    content: ApproximationInputMap(
-                      onTap: (lonLat) => showDialog(
-                        context: context,
-                        builder: (context) => const ResDialog(),
-                      ),
-                    ),
-                  ),
-              })
-          .toList(),
-    );
-  }
-}
-
-enum _Step {
-  enterCoordinates,
-  enterMapPoint,
-}
-
-class _EnterCoordinatesTextField extends StatefulWidget {
-  final Function(PointDetails res) onInputAccepted;
-
-  const _EnterCoordinatesTextField({required this.onInputAccepted});
-
-  @override
-  State<_EnterCoordinatesTextField> createState() =>
-      _EnterCoordinatesTextFieldState();
-}
-
-class _EnterCoordinatesTextFieldState
-    extends State<_EnterCoordinatesTextField> {
-  late final TextEditingController _controller = TextEditingController();
-  String? _errorMessage;
+class _ContentState extends State<_Content> {
+  final TextEditingController _anyCoordinatesInputController =
+      TextEditingController(); // to preserve text input state
+  PointDetails? _ambiguousInputPointDetails;
 
   @override
   void dispose() {
-    _controller.dispose();
+    _anyCoordinatesInputController.dispose();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    return ListenableBuilder(
-      listenable: _controller,
-      builder: (context, child) => TextField(
-        controller: _controller,
-        onChanged: (value) => setState(() => _errorMessage = null),
-        onSubmitted: _onSubmitted,
-        decoration: InputDecoration(
-          errorText: _errorMessage,
-          suffix: _controller.text.isEmpty
-              ? null
-              : IconButton(
-                  icon: const Icon(Icons.send),
-                  onPressed: () => _onSubmitted(_controller.text),
-                ),
-          helperText: 'north east',
-        ),
+    return _ambiguousInputPointDetails == null
+        ? Center(
+            child: _AnyCoordinatesTextField(
+              controller: _anyCoordinatesInputController,
+              onEnteredWellDefinedCoordinates: (lonLat) =>
+                  context.openInGoogleMaps(lonLat: lonLat),
+              onEnteredAmbiguousCoordinates: (point) =>
+                  setState(() => _ambiguousInputPointDetails = point),
+            ),
+          )
+        : LocationInputStepper(
+            onCancel: () => setState(() => _ambiguousInputPointDetails = null),
+            onMapTap: (lonLat) => showDialog(
+              context: context,
+              builder: (context) => AmbiguousResDialog(
+                inputPointDetails: _ambiguousInputPointDetails!,
+                tappedPoint: lonLat,
+              ),
+            ),
+          );
+  }
+}
+
+class _AnyCoordinatesTextField extends StatefulWidget {
+  final TextEditingController controller;
+  final Function(LonLat lonLat) onEnteredWellDefinedCoordinates;
+  final Function(PointDetails pointDetails) onEnteredAmbiguousCoordinates;
+
+  const _AnyCoordinatesTextField(
+      {required this.onEnteredWellDefinedCoordinates,
+      required this.onEnteredAmbiguousCoordinates,
+      required this.controller});
+
+  @override
+  State<_AnyCoordinatesTextField> createState() =>
+      _AnyCoordinatesTextFieldState();
+}
+
+class _AnyCoordinatesTextFieldState extends State<_AnyCoordinatesTextField> {
+  String? _errorText;
+
+  @override
+  Widget build(BuildContext context) {
+    return TextField(
+      controller: widget.controller,
+      onChanged: (value) => setState(() => _errorText = null),
+      onSubmitted: _onSubmitted,
+      decoration: InputDecoration(
+        // labelText: 'Enter coordinates in any format or coordinate system',
+        helperText: 'Enter coordinates in any format or coordinate system',
+        errorText: _errorText,
       ),
     );
   }
 
   void _onSubmitted(String value) {
-    value = value.trim();
     if (value.isEmpty) return;
     try {
-      final res = getPointDetailsFromCoordinateInput(input: value);
-      widget.onInputAccepted(res);
+      final res = parseCoordinates(value);
+      switch (res) {
+        case WellDefined():
+          widget.onEnteredWellDefinedCoordinates(res.lonLat);
+        case Ambiguous():
+          widget.onEnteredAmbiguousCoordinates(
+            getPointDetails(point: res.point),
+          );
+      }
     } catch (e) {
-      setState(() {
-        _errorMessage = 'Bad input, $e';
-      });
+      setState(() => _errorText = 'Bad input, $e');
     }
   }
 }
 
-class ApproximationInputMap extends StatelessWidget {
-  final Function(LonLat lonLat) onTap;
+class LocationInputStepper extends StatelessWidget {
+  final Function() onCancel;
+  final Function(LonLat lonLat) onMapTap;
 
   @visibleForTesting
-  const ApproximationInputMap({super.key, required this.onTap});
+  const LocationInputStepper(
+      {super.key, required this.onMapTap, required this.onCancel});
+
+  @override
+  Widget build(BuildContext context) {
+    return SingleChildScrollView(
+      child: Stepper(
+        currentStep: 1,
+        controlsBuilder: (context, details) => const SizedBox.shrink(),
+        onStepTapped: (value) => value == 0 ? onCancel() : null,
+        steps: [
+          const Step(
+            title: Text('Enter coordinates'),
+            content: SizedBox.shrink(),
+          ),
+          Step(
+            title: const Text('Enter approximate location'),
+            content: _Map(onTap: onMapTap),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _Map extends StatelessWidget {
+  final Function(LonLat lonLat) onTap;
+
+  const _Map({required this.onTap});
 
   @override
   Widget build(BuildContext context) {
@@ -192,8 +172,10 @@ class ApproximationInputMap extends StatelessWidget {
       aspectRatio: 2,
       child: GoogleMap(
         initialCameraPosition: const CameraPosition(target: LatLng(0, 0)),
-        onTap: (argument) =>
-            onTap(LonLat(lon: argument.longitude, lat: argument.latitude)),
+        onTap: (argument) => onTap(LonLat(
+          lon: argument.longitude,
+          lat: argument.latitude,
+        )),
       ),
     );
   }

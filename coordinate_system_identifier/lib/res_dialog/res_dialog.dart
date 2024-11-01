@@ -1,10 +1,10 @@
 import 'package:collection/collection.dart';
 import 'package:coordinate_systems_data/data_model.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:latlong_formatter/latlong_formatter.dart' as f;
 import 'package:pointer_interceptor/pointer_interceptor.dart';
-import 'package:shared/geoutils/geoutils.dart';
+import 'package:shared/copy_dialog.dart';
+import 'package:shared/evaluate_coordinate_systems_utils.dart';
+import 'package:shared/geoutils/formatting.dart';
 import 'package:shared/geoutils/model.dart';
 
 import '../app.dart';
@@ -67,33 +67,6 @@ class _ResDialogState extends State<ResDialog> {
               ),
       ),
     );
-  }
-}
-
-typedef CoordinateSystemRes = ({
-  CoordinateSystem coordinateSystem,
-  double dKm,
-  LonLat lonLat,
-});
-
-extension on PointDetails {
-  List<CoordinateSystemRes> coordinateSystemsOrderedByDistance({
-    required LonLat reference,
-  }) {
-    return lonLats.entries.map((e) {
-      final d = distanceBetween(lonLat1: e.value, lonLat2: reference);
-      final dRoundedKm = double.parse((d * 0.001).toStringAsFixed(0));
-      return (
-        coordinateSystem: e.key,
-        dKm: dRoundedKm,
-        lonLat: e.value,
-      );
-    }).sorted((a, b) => [
-          a.dKm.compareTo(b.dKm),
-          // a.coordinateSystem.bounds.diagonalLength
-          //     .compareTo(b.coordinateSystem.bounds.diagonalLength),
-          a.coordinateSystem.name.compareTo(b.coordinateSystem.name)
-        ].firstWhere((e) => e != 0, orElse: () => 0));
   }
 }
 
@@ -176,70 +149,11 @@ class _LatLong extends StatelessWidget {
               ),
               icon: const Icon(
                 Icons.copy,
-                size: _copyIconSize,
+                size: copyDialogCopyIconSize,
               ),
             ),
           ),
         ],
-      ),
-    );
-  }
-}
-
-extension on LonLat {
-  String get formatAsDegrees =>
-      f.LatLongFormatter('''{latd°m's.s"c} {lond°m's.s"c}''')
-          .format(f.LatLong(lat, lon));
-
-  String get formatAsDecimal =>
-      f.LatLongFormatter('''{lat-d.ddddd}, {lon-d.ddddd}''')
-          .format(f.LatLong(lat, lon));
-}
-
-const _copyIconSize = 15.0;
-
-class CopyDialog extends StatelessWidget {
-  final LonLat lonLat;
-
-  @visibleForTesting
-  const CopyDialog({super.key, required this.lonLat});
-
-  @override
-  Widget build(BuildContext context) {
-    return SimpleDialog(children: [
-      _CopyTile(text: lonLat.formatAsDegrees),
-      _CopyTile(text: lonLat.formatAsDecimal),
-    ]);
-  }
-}
-
-class _CopyTile extends StatelessWidget {
-  final String text;
-
-  const _CopyTile({required this.text});
-
-  @override
-  Widget build(BuildContext context) {
-    return TextButton(
-      onPressed: () async {
-        await Clipboard.setData(ClipboardData(text: text));
-        if (!context.mounted) return;
-        context
-            .showSnackBar(const SnackBar(content: Text('Copied to clipboard')));
-        Navigator.of(context).pop();
-      },
-      child: Text.rich(
-        TextSpan(
-          children: [
-            TextSpan(text: text),
-            const WidgetSpan(
-              child: Padding(
-                padding: EdgeInsets.only(left: 8),
-                child: Icon(Icons.copy, size: _copyIconSize),
-              ),
-            ),
-          ],
-        ),
       ),
     );
   }
