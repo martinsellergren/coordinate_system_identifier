@@ -7,6 +7,7 @@ import 'package:shared/geoutils/model.dart';
 
 import '../app.dart';
 import '../res_dialog/res_dialog.dart';
+import 'utils.dart';
 
 class HomePage extends StatelessWidget {
   const HomePage({super.key});
@@ -46,8 +47,7 @@ class _Content extends StatefulWidget {
 }
 
 class _ContentState extends State<_Content> {
-  final TextEditingController _anyCoordinatesInputController =
-      TextEditingController(); // to preserve text input state
+  final _anyCoordinatesInputController = TextEditingController();
   PointDetails? _ambiguousInputPointDetails;
 
   @override
@@ -58,10 +58,12 @@ class _ContentState extends State<_Content> {
 
   @override
   Widget build(BuildContext context) {
-    return _ambiguousInputPointDetails == null
+    final ambiguousInputPointDetails = _ambiguousInputPointDetails;
+    return ambiguousInputPointDetails == null
         ? Center(
             child: _AnyCoordinatesTextField(
-              controller: _anyCoordinatesInputController,
+              controller:
+                  _anyCoordinatesInputController, // to preserve text input state
               onEnteredWellDefinedCoordinates: (lonLat) =>
                   context.openInGoogleMaps(lonLat: lonLat),
               onEnteredAmbiguousCoordinates: (point) =>
@@ -70,13 +72,22 @@ class _ContentState extends State<_Content> {
           )
         : LocationInputStepper(
             onCancel: () => setState(() => _ambiguousInputPointDetails = null),
-            onMapTap: (lonLat) => showDialog(
-              context: context,
-              builder: (context) => AmbiguousResDialog(
-                inputPointDetails: _ambiguousInputPointDetails!,
-                tappedPoint: lonLat,
-              ),
-            ),
+            onMapTap: (lonLat) => isLikelyWgs84DegreesInDecimalFormat(
+              point: ambiguousInputPointDetails.point,
+              approximation: lonLat,
+            )
+                ? context.openInGoogleMaps(
+                    lonLat: LonLat(
+                    lon: ambiguousInputPointDetails.point.x,
+                    lat: ambiguousInputPointDetails.point.y,
+                  ))
+                : showDialog(
+                    context: context,
+                    builder: (context) => AmbiguousResDialog(
+                      inputPointDetails: ambiguousInputPointDetails,
+                      tappedPoint: lonLat,
+                    ),
+                  ),
           );
   }
 }
