@@ -9,7 +9,7 @@ import 'package:flutter/material.dart';
 import 'package:shared/geoutils/geoutils.dart';
 import 'package:shared/geoutils/model.dart';
 
-const _initialCase = _Case.pickReferenceSystemDialog;
+const _initialCase = _Case.stepper;
 
 enum _Case {
   home,
@@ -51,9 +51,11 @@ class _PageState extends State<_Page> {
           _Case.stepper => Center(
               child: SizedBox(
                 width: 500,
-                child: LocationInputStepper(
+                child: AmbiguousInputStepper(
                   onMapTap: (lonLat) => print('Tapped $lonLat'),
                   onCancel: () {},
+                  inputPoint: const Point(x: 20, y: 60),
+                  onUpdateInputPoint: (inputPoint) {},
                 ),
               ),
             ),

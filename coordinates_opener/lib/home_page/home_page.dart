@@ -48,7 +48,7 @@ class _Content extends StatefulWidget {
 
 class _ContentState extends State<_Content> {
   final _anyCoordinatesInputController = TextEditingController();
-  PointDetails? _ambiguousInputPointDetails;
+  Point? _ambiguousInputPoint;
 
   @override
   void dispose() {
@@ -58,8 +58,8 @@ class _ContentState extends State<_Content> {
 
   @override
   Widget build(BuildContext context) {
-    final ambiguousInputPointDetails = _ambiguousInputPointDetails;
-    return ambiguousInputPointDetails == null
+    final ambiguousInputPoint = _ambiguousInputPoint;
+    return ambiguousInputPoint == null
         ? Center(
             child: _AnyCoordinatesTextField(
               controller:
@@ -67,35 +67,56 @@ class _ContentState extends State<_Content> {
               onEnteredWellDefinedCoordinates: (lonLat) =>
                   context.openInGoogleMaps(lonLat: lonLat),
               onEnteredAmbiguousCoordinates: (point) =>
-                  setState(() => _ambiguousInputPointDetails = point),
+                  setState(() => _ambiguousInputPoint = point),
             ),
           )
-        : LocationInputStepper(
-            onCancel: () => setState(() => _ambiguousInputPointDetails = null),
-            onMapTap: (lonLat) => isLikelyWgs84DegreesInDecimalFormat(
-              point: ambiguousInputPointDetails.point,
-              approximation: lonLat,
-            )
-                ? context.openInGoogleMaps(
-                    lonLat: LonLat(
-                    lon: ambiguousInputPointDetails.point.x,
-                    lat: ambiguousInputPointDetails.point.y,
-                  ))
-                : showDialog(
-                    context: context,
-                    builder: (context) => AmbiguousResDialog(
-                      inputPointDetails: ambiguousInputPointDetails,
-                      tappedPoint: lonLat,
-                    ),
-                  ),
+        : AmbiguousInputStepper(
+            inputPoint: ambiguousInputPoint,
+            onUpdateInputPoint: (inputPoint) =>
+                setState(() => _ambiguousInputPoint = inputPoint),
+            onCancel: () => setState(() => _ambiguousInputPoint = null),
+            onMapTap: (lonLat) => _onMapTap(
+              tapped: lonLat,
+              inputPoint: ambiguousInputPoint,
+            ),
           );
+  }
+
+  void _onMapTap({
+    required LonLat tapped,
+    required Point inputPoint,
+  }) {
+    if (isLikelyWgs84DegreesInDecimalFormat(
+        point: inputPoint, approximation: tapped)) {
+      context.openInGoogleMaps(
+        lonLat: LonLat(
+          lon: inputPoint.x,
+          lat: inputPoint.y,
+        ),
+      );
+    } else {
+      try {
+        final details = getPointDetails(point: inputPoint);
+        showDialog(
+          context: context,
+          builder: (context) => AmbiguousResDialog(
+            inputPointDetails: details,
+            tappedPoint: tapped,
+          ),
+        );
+      } catch (e) {
+        setState(() => _ambiguousInputPoint = null);
+        context.showSnackBar(
+            SnackBar(content: Text('Error processing input, $e')));
+      }
+    }
   }
 }
 
 class _AnyCoordinatesTextField extends StatefulWidget {
   final TextEditingController controller;
   final Function(LonLat lonLat) onEnteredWellDefinedCoordinates;
-  final Function(PointDetails pointDetails) onEnteredAmbiguousCoordinates;
+  final Function(Point point) onEnteredAmbiguousCoordinates;
 
   const _AnyCoordinatesTextField(
       {required this.onEnteredWellDefinedCoordinates,
@@ -132,9 +153,7 @@ class _AnyCoordinatesTextFieldState extends State<_AnyCoordinatesTextField> {
         case WellDefined():
           widget.onEnteredWellDefinedCoordinates(res.lonLat);
         case Ambiguous():
-          widget.onEnteredAmbiguousCoordinates(
-            getPointDetails(point: res.point),
-          );
+          widget.onEnteredAmbiguousCoordinates(res.point);
       }
     } catch (e) {
       setState(() => _errorText = 'Bad input, $e');
@@ -142,32 +161,105 @@ class _AnyCoordinatesTextFieldState extends State<_AnyCoordinatesTextField> {
   }
 }
 
-class LocationInputStepper extends StatelessWidget {
+class AmbiguousInputStepper extends StatefulWidget {
+  final Point inputPoint;
   final Function() onCancel;
   final Function(LonLat lonLat) onMapTap;
+  final Function(Point inputPoint) onUpdateInputPoint;
 
   @visibleForTesting
-  const LocationInputStepper(
-      {super.key, required this.onMapTap, required this.onCancel});
+  const AmbiguousInputStepper(
+      {super.key,
+      required this.onMapTap,
+      required this.onCancel,
+      required this.inputPoint,
+      required this.onUpdateInputPoint});
+
+  @override
+  State<AmbiguousInputStepper> createState() => _AmbiguousInputStepperState();
+}
+
+class _AmbiguousInputStepperState extends State<AmbiguousInputStepper> {
+  _Step _currentStep = _Step.determineXY;
 
   @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(
       child: Stepper(
-        currentStep: 1,
-        controlsBuilder: (context, details) => const SizedBox.shrink(),
-        onStepTapped: (value) => value == 0 ? onCancel() : null,
-        steps: [
-          const Step(
-            title: Text('Enter coordinates'),
-            content: SizedBox.shrink(),
-          ),
-          Step(
-            title: const Text('Enter approximate location'),
-            content: _Map(onTap: onMapTap),
-          ),
-        ],
+        currentStep: _currentStep.index,
+        controlsBuilder: switch (_currentStep) {
+          _Step.determineXY => null, //i.e default controls
+          _Step.enterCoordinates ||
+          _Step.enterApproximateLocation =>
+            (context, details) => const SizedBox.shrink(),
+        },
+        onStepCancel: () => widget.onCancel(),
+        onStepContinue: () => setState(() => _currentStep =
+            _Step.values[_Step.values.indexOf(_currentStep) + 1]),
+        onStepTapped: (value) => switch (_Step.values[value]) {
+          _Step.enterCoordinates => widget.onCancel(),
+          _Step.determineXY ||
+          _Step.enterApproximateLocation =>
+            setState(() => _currentStep = _Step.values[value]),
+        },
+        steps: _Step.values
+            .map(
+              (e) => switch (e) {
+                _Step.enterCoordinates => const Step(
+                    title: Text('Enter coordinates'),
+                    content: SizedBox.shrink(),
+                  ),
+                _Step.determineXY => Step(
+                    title: const Text('Confirm or swap'),
+                    content: _PickXY(
+                      inputPoint: widget.inputPoint,
+                      onUpdateInputPoint: widget.onUpdateInputPoint,
+                    ),
+                  ),
+                _Step.enterApproximateLocation => Step(
+                    title: const Text('Enter approximate location'),
+                    content: _Map(onTap: widget.onMapTap),
+                  ),
+              },
+            )
+            .toList(),
       ),
+    );
+  }
+}
+
+enum _Step {
+  enterCoordinates,
+  determineXY,
+  enterApproximateLocation,
+}
+
+class _PickXY extends StatelessWidget {
+  final Point inputPoint;
+  final Function(Point inputPoint) onUpdateInputPoint;
+
+  const _PickXY({required this.inputPoint, required this.onUpdateInputPoint});
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      children: [
+        Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text('N: ${inputPoint.y}'),
+            Text('E:  ${inputPoint.x}'),
+          ],
+        ),
+        const SizedBox(width: 8),
+        IconButton(
+          onPressed: () => onUpdateInputPoint(Point(
+            x: inputPoint.y,
+            y: inputPoint.x,
+          )),
+          icon: const Icon(Icons.swap_vert),
+        ),
+      ],
     );
   }
 }
