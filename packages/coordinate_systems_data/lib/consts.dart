@@ -18,7 +18,7 @@ final wgs84 = CoordinateSystem(
   name: 'WGS 84',
   proj4: '+proj=longlat +datum=WGS84 +no_defs +type=crs',
   bounds: Bounds(
-    northEast: LonLat(lon: 90, lat: 180),
-    southWest: LonLat(lon: -90, lat: -180),
+    northEast: LonLat(lon: 180, lat: 90),
+    southWest: LonLat(lon: -180, lat: -90),
   ),
 );

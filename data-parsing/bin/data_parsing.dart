@@ -29,10 +29,6 @@ void main(List<String> arguments) async {
     try {
       final proj4 = await _getProj4(client: client, epsgCode: epsgCode);
       final epsgJson = await _getEpsgJson(client: client, epsgCode: epsgCode);
-      if (epsgJson.coordinateSystem?.axis?.firstOrNull?.unit == 'degree') {
-        print('Skipping degree coordinate system $epsgCode');
-        continue;
-      }
       items.add(CoordinateSystem(
         epsgCode: epsgCode,
         name: name,
@@ -57,6 +53,7 @@ from
   epsg_coordinatereferencesystem
 where
   deprecated = 0
+  and coord_ref_sys_kind = 'projected'
 order by coord_ref_sys_code
 limit 1
 offset $offset

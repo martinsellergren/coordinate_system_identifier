@@ -7,7 +7,6 @@ part 'epsg_response_model.g.dart';
 class EpsgJsonResponse with _$EpsgJsonResponse {
   const factory EpsgJsonResponse({
     required BboxResp bbox,
-    @JsonKey(name: 'coordinate_system') CoordinateSystemResp? coordinateSystem,
   }) = _EpsgJsonResponse;
 
   factory EpsgJsonResponse.fromJson(Map<String, dynamic> json) =>
@@ -26,24 +25,4 @@ class BboxResp with _$BboxResp {
 
   factory BboxResp.fromJson(Map<String, dynamic> json) =>
       _$BboxRespFromJson(json);
-}
-
-@freezed
-class CoordinateSystemResp with _$CoordinateSystemResp {
-  const factory CoordinateSystemResp({
-    List<AxisResp>? axis,
-  }) = _CoordinateSystemResp;
-
-  factory CoordinateSystemResp.fromJson(Map<String, dynamic> json) =>
-      _$CoordinateSystemRespFromJson(json);
-}
-
-@freezed
-class AxisResp with _$AxisResp {
-  const factory AxisResp({
-    Object? unit,
-  }) = _AxisResp;
-
-  factory AxisResp.fromJson(Map<String, dynamic> json) =>
-      _$AxisRespFromJson(json);
 }

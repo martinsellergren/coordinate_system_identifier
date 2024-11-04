@@ -21,9 +21,6 @@ EpsgJsonResponse _$EpsgJsonResponseFromJson(Map<String, dynamic> json) {
 /// @nodoc
 mixin _$EpsgJsonResponse {
   BboxResp get bbox => throw _privateConstructorUsedError;
-  @JsonKey(name: 'coordinate_system')
-  CoordinateSystemResp? get coordinateSystem =>
-      throw _privateConstructorUsedError;
 
   /// Serializes this EpsgJsonResponse to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
@@ -41,13 +38,9 @@ abstract class $EpsgJsonResponseCopyWith<$Res> {
           EpsgJsonResponse value, $Res Function(EpsgJsonResponse) then) =
       _$EpsgJsonResponseCopyWithImpl<$Res, EpsgJsonResponse>;
   @useResult
-  $Res call(
-      {BboxResp bbox,
-      @JsonKey(name: 'coordinate_system')
-      CoordinateSystemResp? coordinateSystem});
+  $Res call({BboxResp bbox});
 
   $BboxRespCopyWith<$Res> get bbox;
-  $CoordinateSystemRespCopyWith<$Res>? get coordinateSystem;
 }
 
 /// @nodoc
@@ -66,17 +59,12 @@ class _$EpsgJsonResponseCopyWithImpl<$Res, $Val extends EpsgJsonResponse>
   @override
   $Res call({
     Object? bbox = null,
-    Object? coordinateSystem = freezed,
   }) {
     return _then(_value.copyWith(
       bbox: null == bbox
           ? _value.bbox
           : bbox // ignore: cast_nullable_to_non_nullable
               as BboxResp,
-      coordinateSystem: freezed == coordinateSystem
-          ? _value.coordinateSystem
-          : coordinateSystem // ignore: cast_nullable_to_non_nullable
-              as CoordinateSystemResp?,
     ) as $Val);
   }
 
@@ -89,21 +77,6 @@ class _$EpsgJsonResponseCopyWithImpl<$Res, $Val extends EpsgJsonResponse>
       return _then(_value.copyWith(bbox: value) as $Val);
     });
   }
-
-  /// Create a copy of EpsgJsonResponse
-  /// with the given fields replaced by the non-null parameter values.
-  @override
-  @pragma('vm:prefer-inline')
-  $CoordinateSystemRespCopyWith<$Res>? get coordinateSystem {
-    if (_value.coordinateSystem == null) {
-      return null;
-    }
-
-    return $CoordinateSystemRespCopyWith<$Res>(_value.coordinateSystem!,
-        (value) {
-      return _then(_value.copyWith(coordinateSystem: value) as $Val);
-    });
-  }
 }
 
 /// @nodoc
@@ -114,15 +87,10 @@ abstract class _$$EpsgJsonResponseImplCopyWith<$Res>
       __$$EpsgJsonResponseImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call(
-      {BboxResp bbox,
-      @JsonKey(name: 'coordinate_system')
-      CoordinateSystemResp? coordinateSystem});
+  $Res call({BboxResp bbox});
 
   @override
   $BboxRespCopyWith<$Res> get bbox;
-  @override
-  $CoordinateSystemRespCopyWith<$Res>? get coordinateSystem;
 }
 
 /// @nodoc
@@ -139,17 +107,12 @@ class __$$EpsgJsonResponseImplCopyWithImpl<$Res>
   @override
   $Res call({
     Object? bbox = null,
-    Object? coordinateSystem = freezed,
   }) {
     return _then(_$EpsgJsonResponseImpl(
       bbox: null == bbox
           ? _value.bbox
           : bbox // ignore: cast_nullable_to_non_nullable
               as BboxResp,
-      coordinateSystem: freezed == coordinateSystem
-          ? _value.coordinateSystem
-          : coordinateSystem // ignore: cast_nullable_to_non_nullable
-              as CoordinateSystemResp?,
     ));
   }
 }
@@ -157,22 +120,17 @@ class __$$EpsgJsonResponseImplCopyWithImpl<$Res>
 /// @nodoc
 @JsonSerializable()
 class _$EpsgJsonResponseImpl implements _EpsgJsonResponse {
-  const _$EpsgJsonResponseImpl(
-      {required this.bbox,
-      @JsonKey(name: 'coordinate_system') this.coordinateSystem});
+  const _$EpsgJsonResponseImpl({required this.bbox});
 
   factory _$EpsgJsonResponseImpl.fromJson(Map<String, dynamic> json) =>
       _$$EpsgJsonResponseImplFromJson(json);
 
   @override
   final BboxResp bbox;
-  @override
-  @JsonKey(name: 'coordinate_system')
-  final CoordinateSystemResp? coordinateSystem;
 
   @override
   String toString() {
-    return 'EpsgJsonResponse(bbox: $bbox, coordinateSystem: $coordinateSystem)';
+    return 'EpsgJsonResponse(bbox: $bbox)';
   }
 
   @override
@@ -180,14 +138,12 @@ class _$EpsgJsonResponseImpl implements _EpsgJsonResponse {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$EpsgJsonResponseImpl &&
-            (identical(other.bbox, bbox) || other.bbox == bbox) &&
-            (identical(other.coordinateSystem, coordinateSystem) ||
-                other.coordinateSystem == coordinateSystem));
+            (identical(other.bbox, bbox) || other.bbox == bbox));
   }
 
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
-  int get hashCode => Object.hash(runtimeType, bbox, coordinateSystem);
+  int get hashCode => Object.hash(runtimeType, bbox);
 
   /// Create a copy of EpsgJsonResponse
   /// with the given fields replaced by the non-null parameter values.
@@ -207,19 +163,14 @@ class _$EpsgJsonResponseImpl implements _EpsgJsonResponse {
 }
 
 abstract class _EpsgJsonResponse implements EpsgJsonResponse {
-  const factory _EpsgJsonResponse(
-      {required final BboxResp bbox,
-      @JsonKey(name: 'coordinate_system')
-      final CoordinateSystemResp? coordinateSystem}) = _$EpsgJsonResponseImpl;
+  const factory _EpsgJsonResponse({required final BboxResp bbox}) =
+      _$EpsgJsonResponseImpl;
 
   factory _EpsgJsonResponse.fromJson(Map<String, dynamic> json) =
       _$EpsgJsonResponseImpl.fromJson;
 
   @override
   BboxResp get bbox;
-  @override
-  @JsonKey(name: 'coordinate_system')
-  CoordinateSystemResp? get coordinateSystem;
 
   /// Create a copy of EpsgJsonResponse
   /// with the given fields replaced by the non-null parameter values.
@@ -441,309 +392,5 @@ abstract class _Bbox implements BboxResp {
   @override
   @JsonKey(includeFromJson: false, includeToJson: false)
   _$$BboxImplCopyWith<_$BboxImpl> get copyWith =>
-      throw _privateConstructorUsedError;
-}
-
-CoordinateSystemResp _$CoordinateSystemRespFromJson(Map<String, dynamic> json) {
-  return _CoordinateSystemResp.fromJson(json);
-}
-
-/// @nodoc
-mixin _$CoordinateSystemResp {
-  List<AxisResp>? get axis => throw _privateConstructorUsedError;
-
-  /// Serializes this CoordinateSystemResp to a JSON map.
-  Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
-
-  /// Create a copy of CoordinateSystemResp
-  /// with the given fields replaced by the non-null parameter values.
-  @JsonKey(includeFromJson: false, includeToJson: false)
-  $CoordinateSystemRespCopyWith<CoordinateSystemResp> get copyWith =>
-      throw _privateConstructorUsedError;
-}
-
-/// @nodoc
-abstract class $CoordinateSystemRespCopyWith<$Res> {
-  factory $CoordinateSystemRespCopyWith(CoordinateSystemResp value,
-          $Res Function(CoordinateSystemResp) then) =
-      _$CoordinateSystemRespCopyWithImpl<$Res, CoordinateSystemResp>;
-  @useResult
-  $Res call({List<AxisResp>? axis});
-}
-
-/// @nodoc
-class _$CoordinateSystemRespCopyWithImpl<$Res,
-        $Val extends CoordinateSystemResp>
-    implements $CoordinateSystemRespCopyWith<$Res> {
-  _$CoordinateSystemRespCopyWithImpl(this._value, this._then);
-
-  // ignore: unused_field
-  final $Val _value;
-  // ignore: unused_field
-  final $Res Function($Val) _then;
-
-  /// Create a copy of CoordinateSystemResp
-  /// with the given fields replaced by the non-null parameter values.
-  @pragma('vm:prefer-inline')
-  @override
-  $Res call({
-    Object? axis = freezed,
-  }) {
-    return _then(_value.copyWith(
-      axis: freezed == axis
-          ? _value.axis
-          : axis // ignore: cast_nullable_to_non_nullable
-              as List<AxisResp>?,
-    ) as $Val);
-  }
-}
-
-/// @nodoc
-abstract class _$$CoordinateSystemRespImplCopyWith<$Res>
-    implements $CoordinateSystemRespCopyWith<$Res> {
-  factory _$$CoordinateSystemRespImplCopyWith(_$CoordinateSystemRespImpl value,
-          $Res Function(_$CoordinateSystemRespImpl) then) =
-      __$$CoordinateSystemRespImplCopyWithImpl<$Res>;
-  @override
-  @useResult
-  $Res call({List<AxisResp>? axis});
-}
-
-/// @nodoc
-class __$$CoordinateSystemRespImplCopyWithImpl<$Res>
-    extends _$CoordinateSystemRespCopyWithImpl<$Res, _$CoordinateSystemRespImpl>
-    implements _$$CoordinateSystemRespImplCopyWith<$Res> {
-  __$$CoordinateSystemRespImplCopyWithImpl(_$CoordinateSystemRespImpl _value,
-      $Res Function(_$CoordinateSystemRespImpl) _then)
-      : super(_value, _then);
-
-  /// Create a copy of CoordinateSystemResp
-  /// with the given fields replaced by the non-null parameter values.
-  @pragma('vm:prefer-inline')
-  @override
-  $Res call({
-    Object? axis = freezed,
-  }) {
-    return _then(_$CoordinateSystemRespImpl(
-      axis: freezed == axis
-          ? _value._axis
-          : axis // ignore: cast_nullable_to_non_nullable
-              as List<AxisResp>?,
-    ));
-  }
-}
-
-/// @nodoc
-@JsonSerializable()
-class _$CoordinateSystemRespImpl implements _CoordinateSystemResp {
-  const _$CoordinateSystemRespImpl({final List<AxisResp>? axis}) : _axis = axis;
-
-  factory _$CoordinateSystemRespImpl.fromJson(Map<String, dynamic> json) =>
-      _$$CoordinateSystemRespImplFromJson(json);
-
-  final List<AxisResp>? _axis;
-  @override
-  List<AxisResp>? get axis {
-    final value = _axis;
-    if (value == null) return null;
-    if (_axis is EqualUnmodifiableListView) return _axis;
-    // ignore: implicit_dynamic_type
-    return EqualUnmodifiableListView(value);
-  }
-
-  @override
-  String toString() {
-    return 'CoordinateSystemResp(axis: $axis)';
-  }
-
-  @override
-  bool operator ==(Object other) {
-    return identical(this, other) ||
-        (other.runtimeType == runtimeType &&
-            other is _$CoordinateSystemRespImpl &&
-            const DeepCollectionEquality().equals(other._axis, _axis));
-  }
-
-  @JsonKey(includeFromJson: false, includeToJson: false)
-  @override
-  int get hashCode =>
-      Object.hash(runtimeType, const DeepCollectionEquality().hash(_axis));
-
-  /// Create a copy of CoordinateSystemResp
-  /// with the given fields replaced by the non-null parameter values.
-  @JsonKey(includeFromJson: false, includeToJson: false)
-  @override
-  @pragma('vm:prefer-inline')
-  _$$CoordinateSystemRespImplCopyWith<_$CoordinateSystemRespImpl>
-      get copyWith =>
-          __$$CoordinateSystemRespImplCopyWithImpl<_$CoordinateSystemRespImpl>(
-              this, _$identity);
-
-  @override
-  Map<String, dynamic> toJson() {
-    return _$$CoordinateSystemRespImplToJson(
-      this,
-    );
-  }
-}
-
-abstract class _CoordinateSystemResp implements CoordinateSystemResp {
-  const factory _CoordinateSystemResp({final List<AxisResp>? axis}) =
-      _$CoordinateSystemRespImpl;
-
-  factory _CoordinateSystemResp.fromJson(Map<String, dynamic> json) =
-      _$CoordinateSystemRespImpl.fromJson;
-
-  @override
-  List<AxisResp>? get axis;
-
-  /// Create a copy of CoordinateSystemResp
-  /// with the given fields replaced by the non-null parameter values.
-  @override
-  @JsonKey(includeFromJson: false, includeToJson: false)
-  _$$CoordinateSystemRespImplCopyWith<_$CoordinateSystemRespImpl>
-      get copyWith => throw _privateConstructorUsedError;
-}
-
-AxisResp _$AxisRespFromJson(Map<String, dynamic> json) {
-  return _AxisResp.fromJson(json);
-}
-
-/// @nodoc
-mixin _$AxisResp {
-  Object? get unit => throw _privateConstructorUsedError;
-
-  /// Serializes this AxisResp to a JSON map.
-  Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
-
-  /// Create a copy of AxisResp
-  /// with the given fields replaced by the non-null parameter values.
-  @JsonKey(includeFromJson: false, includeToJson: false)
-  $AxisRespCopyWith<AxisResp> get copyWith =>
-      throw _privateConstructorUsedError;
-}
-
-/// @nodoc
-abstract class $AxisRespCopyWith<$Res> {
-  factory $AxisRespCopyWith(AxisResp value, $Res Function(AxisResp) then) =
-      _$AxisRespCopyWithImpl<$Res, AxisResp>;
-  @useResult
-  $Res call({Object? unit});
-}
-
-/// @nodoc
-class _$AxisRespCopyWithImpl<$Res, $Val extends AxisResp>
-    implements $AxisRespCopyWith<$Res> {
-  _$AxisRespCopyWithImpl(this._value, this._then);
-
-  // ignore: unused_field
-  final $Val _value;
-  // ignore: unused_field
-  final $Res Function($Val) _then;
-
-  /// Create a copy of AxisResp
-  /// with the given fields replaced by the non-null parameter values.
-  @pragma('vm:prefer-inline')
-  @override
-  $Res call({
-    Object? unit = freezed,
-  }) {
-    return _then(_value.copyWith(
-      unit: freezed == unit ? _value.unit : unit,
-    ) as $Val);
-  }
-}
-
-/// @nodoc
-abstract class _$$AxisRespImplCopyWith<$Res>
-    implements $AxisRespCopyWith<$Res> {
-  factory _$$AxisRespImplCopyWith(
-          _$AxisRespImpl value, $Res Function(_$AxisRespImpl) then) =
-      __$$AxisRespImplCopyWithImpl<$Res>;
-  @override
-  @useResult
-  $Res call({Object? unit});
-}
-
-/// @nodoc
-class __$$AxisRespImplCopyWithImpl<$Res>
-    extends _$AxisRespCopyWithImpl<$Res, _$AxisRespImpl>
-    implements _$$AxisRespImplCopyWith<$Res> {
-  __$$AxisRespImplCopyWithImpl(
-      _$AxisRespImpl _value, $Res Function(_$AxisRespImpl) _then)
-      : super(_value, _then);
-
-  /// Create a copy of AxisResp
-  /// with the given fields replaced by the non-null parameter values.
-  @pragma('vm:prefer-inline')
-  @override
-  $Res call({
-    Object? unit = freezed,
-  }) {
-    return _then(_$AxisRespImpl(
-      unit: freezed == unit ? _value.unit : unit,
-    ));
-  }
-}
-
-/// @nodoc
-@JsonSerializable()
-class _$AxisRespImpl implements _AxisResp {
-  const _$AxisRespImpl({this.unit});
-
-  factory _$AxisRespImpl.fromJson(Map<String, dynamic> json) =>
-      _$$AxisRespImplFromJson(json);
-
-  @override
-  final Object? unit;
-
-  @override
-  String toString() {
-    return 'AxisResp(unit: $unit)';
-  }
-
-  @override
-  bool operator ==(Object other) {
-    return identical(this, other) ||
-        (other.runtimeType == runtimeType &&
-            other is _$AxisRespImpl &&
-            const DeepCollectionEquality().equals(other.unit, unit));
-  }
-
-  @JsonKey(includeFromJson: false, includeToJson: false)
-  @override
-  int get hashCode =>
-      Object.hash(runtimeType, const DeepCollectionEquality().hash(unit));
-
-  /// Create a copy of AxisResp
-  /// with the given fields replaced by the non-null parameter values.
-  @JsonKey(includeFromJson: false, includeToJson: false)
-  @override
-  @pragma('vm:prefer-inline')
-  _$$AxisRespImplCopyWith<_$AxisRespImpl> get copyWith =>
-      __$$AxisRespImplCopyWithImpl<_$AxisRespImpl>(this, _$identity);
-
-  @override
-  Map<String, dynamic> toJson() {
-    return _$$AxisRespImplToJson(
-      this,
-    );
-  }
-}
-
-abstract class _AxisResp implements AxisResp {
-  const factory _AxisResp({final Object? unit}) = _$AxisRespImpl;
-
-  factory _AxisResp.fromJson(Map<String, dynamic> json) =
-      _$AxisRespImpl.fromJson;
-
-  @override
-  Object? get unit;
-
-  /// Create a copy of AxisResp
-  /// with the given fields replaced by the non-null parameter values.
-  @override
-  @JsonKey(includeFromJson: false, includeToJson: false)
-  _$$AxisRespImplCopyWith<_$AxisRespImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }
