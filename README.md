@@ -1,4 +1,4 @@
-Some example points, format Y X
+# Some example points, format Y X
 
 - Treriksröset
   - EPSG:4326 69.059973 20.548645
@@ -18,3 +18,21 @@ Some example points, format Y X
 - Cape cod bay, Massachusetts, USA
   - EPSG:4326 41.949527 -70.320297
   - EPSG:26986 NAD83 / Massachusetts Mainland: 856139.6674427887 297810.8402277441
+
+# nadgrid proj4 problem
+
+proj4 with nadgrid, e.g:
++.gsb
+results in
+Unable to find mandatory grid 'OSTN15_NTv2_OSGBtoETRS.gsb'
+
+CQ77NA83.GSB
+nadgrids=May76v20.gsb
+NB7783v2.gsb
+NTv2_0.gsb
+BETA2007.gsb
+CA61_003.gsb
+\"National 84 (02.07.01).gsb\"
+CA7072_003.gsb
+nzgd2kgrid0005.gsb
+OSTN15_NTv2_OSGBtoETRS.gsb
