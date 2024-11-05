@@ -23,5 +23,3 @@ from
     join epsg_coordinatesystem cs on rs.coord_sys_code = cs.coord_sys_code
 where
     coord_ref_sys_kind = 'projected';
-
---select st_astext (ST_FlipCoordinates (st_transform (st_point (20.548645, 69.059973, 4326), 3006)));
