@@ -83,9 +83,15 @@ Future<void> _loadProjProjections() async {
 }
 
 Future<void> _loadProjNadgrids() async {
-  // final bytes =
-  //     (await rootBundle.load('assets/nzgd2kgrid0005.gsb')).buffer.asUint8List();
-  // p.Projection.nadgrid('nzgd2kgrid0005.gsb', bytes);
+  final manifest = await AssetManifest.loadFromAssetBundle(rootBundle);
+  final assets = manifest
+      .listAssets()
+      .where((e) => e.startsWith('packages/shared/assets/nadgrids/'));
+  for (final e in assets) {
+    final bytes = (await rootBundle.load(e)).buffer.asUint8List();
+    p.Projection.nadgrid(
+        e.replaceFirst('packages/shared/assets/nadgrids/', ''), bytes);
+  }
 }
 
 LonLat? _lonLatFromPointAndCoordinateSystem({
@@ -104,9 +110,11 @@ LonLat? _lonLatFromPointAndCoordinateSystem({
       return null;
     }
     return lonLat;
-  } catch (e) {
-    logger.d(
-        'Error transforming ($point, epsg=${coordinateSystem.epsgCode}), $e');
+  } catch (e, s) {
+    e.toString().toLowerCase().contains('unable to find mandatory grid')
+        ? logger.e('Missing grid shift file', error: e, stackTrace: s)
+        : logger.d(
+            'Error transforming ($point, epsg=${coordinateSystem.epsgCode}), $e');
     return null;
   }
 }
