@@ -1,12 +1,10 @@
-import 'package:coordinate_systems_data/coordinate_systems_data.dart';
 import 'package:flutter/material.dart';
-import 'package:shared/geoutils/geoutils.dart';
+import 'package:shared/geoutils/get_point_details.dart';
 
 import 'app.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await loadCoordinateSystemData();
-  LonLatFromPointAndCoordinateSystem.setup();
+  await setupGetPointDetails();
   runApp(const App());
 }

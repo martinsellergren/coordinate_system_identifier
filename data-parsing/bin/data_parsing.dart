@@ -1,9 +1,9 @@
 import 'dart:convert';
 import 'dart:io';
 
-import 'package:coordinate_systems_data/data_model.dart';
 import 'package:http/http.dart';
 import 'package:postgres/postgres.dart' as p;
+import 'package:shared/coordinate_system_data/model.dart';
 
 import 'epsg_response_model.dart';
 
@@ -78,8 +78,7 @@ Future<EpsgJsonResponse> _getEpsgJson({
 }
 
 Future<void> _saveJson(CoordinateSystemsData data) async {
-  await File(
-          '../packages/coordinate_systems_data/assets/coordinate_systems.json')
+  await File('../packages/shared/assets/coordinate_systems.json')
       .writeAsString(jsonEncode(data.toJson()));
 }
 

@@ -1,5 +1,6 @@
-import 'package:coordinate_systems_data/data_model.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
+
+import '../coordinate_system_data/model.dart';
 
 part 'model.freezed.dart';
 

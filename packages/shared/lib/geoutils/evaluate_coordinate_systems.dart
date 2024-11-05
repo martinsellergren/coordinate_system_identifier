@@ -1,8 +1,8 @@
 import 'package:collection/collection.dart';
-import 'package:coordinate_systems_data/data_model.dart';
 
-import 'geoutils/geoutils.dart';
-import 'geoutils/model.dart';
+import '../coordinate_system_data/model.dart';
+import 'geoutils.dart';
+import 'model.dart';
 
 typedef CoordinateSystemRes = ({
   CoordinateSystem coordinateSystem,

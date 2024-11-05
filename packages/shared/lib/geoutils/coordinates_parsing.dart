@@ -1,7 +1,7 @@
-import 'package:coordinate_systems_data/data_model.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:parse_coordinates/parse_coordinates.dart' as p;
 
+import '../coordinate_system_data/model.dart';
 import 'model.dart';
 
 part 'coordinates_parsing.freezed.dart';

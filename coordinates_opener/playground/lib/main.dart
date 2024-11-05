@@ -1,12 +1,11 @@
 // ignore_for_file: invalid_use_of_visible_for_testing_member, avoid_print
 
-import 'package:coordinate_systems_data/coordinate_systems_data.dart';
-import 'package:coordinate_systems_data/data_model.dart';
 import 'package:coordinates_opener/home_page/home_page.dart';
 import 'package:coordinates_opener/res_dialog/pick_reference_system_dialog.dart';
 import 'package:coordinates_opener/res_dialog/res_dialog.dart';
 import 'package:flutter/material.dart';
-import 'package:shared/geoutils/geoutils.dart';
+import 'package:shared/coordinate_system_data/model.dart';
+import 'package:shared/geoutils/get_point_details.dart';
 import 'package:shared/geoutils/model.dart';
 
 const _initialCase = _Case.stepper;
@@ -20,7 +19,7 @@ enum _Case {
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await loadCoordinateSystemData();
+  await setupGetPointDetails();
   runApp(const MaterialApp(home: _Page()));
 }
 

@@ -1,5 +1,5 @@
-import 'package:coordinate_systems_data/data_model.dart';
 import 'package:flutter/material.dart';
+import 'package:shared/coordinate_system_data/model.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import 'home_page/home_page.dart';

@@ -1,9 +1,9 @@
 import 'package:collection/collection.dart';
-import 'package:coordinate_systems_data/data_model.dart';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:pointer_interceptor/pointer_interceptor.dart';
 import 'package:separate/separate.dart';
+import 'package:shared/coordinate_system_data/model.dart';
 import 'package:shared/copy_dialog.dart';
 import 'package:shared/geoutils/formatting.dart';
 import 'package:shared/geoutils/geoutils.dart';

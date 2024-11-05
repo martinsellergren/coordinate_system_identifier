@@ -1,6 +1,6 @@
-import 'package:coordinate_systems_data/data_model.dart';
+import 'model.dart';
 
-final coordinateSystemsDataSeed = CoordinateSystemsData(items: [sweref99]);
+const coordinateSystemsDataSeed = CoordinateSystemsData(items: [sweref99]);
 
 const sweref99 = CoordinateSystem(
   epsgCode: 3006,
@@ -13,7 +13,7 @@ const sweref99 = CoordinateSystem(
   ),
 );
 
-final wgs84 = CoordinateSystem(
+const wgs84 = CoordinateSystem(
   epsgCode: 4326,
   name: 'WGS 84',
   proj4: '+proj=longlat +datum=WGS84 +no_defs +type=crs',

@@ -2,19 +2,17 @@
 
 import 'package:coordinate_system_identifier/home_page/home_page.dart';
 import 'package:coordinate_system_identifier/res_dialog/res_dialog.dart';
-import 'package:coordinate_systems_data/coordinate_systems_data.dart';
-import 'package:coordinate_systems_data/data_model.dart';
 import 'package:flutter/material.dart';
+import 'package:shared/coordinate_system_data/model.dart';
 import 'package:shared/copy_dialog.dart';
-import 'package:shared/geoutils/geoutils.dart';
+import 'package:shared/geoutils/get_point_details.dart';
 import 'package:shared/geoutils/model.dart';
 
 const initialCase = _Case.resDialog;
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await loadCoordinateSystemData();
-  LonLatFromPointAndCoordinateSystem.setup();
+  await setupGetPointDetails();
   runApp(const MaterialApp(home: _Page()));
 }
 

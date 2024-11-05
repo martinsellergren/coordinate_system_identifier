@@ -1,5 +1,6 @@
-import 'package:coordinate_systems_data/data_model.dart';
 import 'package:latlong_formatter/latlong_formatter.dart' as f;
+
+import '../coordinate_system_data/model.dart';
 
 extension LonLatFormatting on LonLat {
   String get formatAsDegrees =>

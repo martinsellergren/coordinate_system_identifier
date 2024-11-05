@@ -9,8 +9,6 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  coordinate_systems_data:
-    path: ../packages/coordinate_systems_data
   shared:
     path: ../packages/shared
   url_launcher: ^6.3.1
