@@ -20,6 +20,7 @@ class CoordinateSystem with _$CoordinateSystem {
     required String name,
     required String proj4,
     required Bounds bounds,
+    @Default(false) bool hasNadgrid,
   }) = _CoordinateSystem;
 
   factory CoordinateSystem.fromJson(Map<String, dynamic> json) =>

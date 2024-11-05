@@ -24,6 +24,7 @@ _$CoordinateSystemImpl _$$CoordinateSystemImplFromJson(
       name: json['name'] as String,
       proj4: json['proj4'] as String,
       bounds: Bounds.fromJson(json['bounds'] as Map<String, dynamic>),
+      hasNadgrid: json['hasNadgrid'] as bool? ?? false,
     );
 
 Map<String, dynamic> _$$CoordinateSystemImplToJson(
@@ -33,6 +34,7 @@ Map<String, dynamic> _$$CoordinateSystemImplToJson(
       'name': instance.name,
       'proj4': instance.proj4,
       'bounds': instance.bounds,
+      'hasNadgrid': instance.hasNadgrid,
     };
 
 _$BoundsImpl _$$BoundsImplFromJson(Map<String, dynamic> json) => _$BoundsImpl(

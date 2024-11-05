@@ -31,4 +31,3 @@ dev_dependencies:
 flutter:
   assets:
     - assets/coordinate_systems.json
-    - assets/nadgrids/

@@ -181,6 +181,7 @@ mixin _$CoordinateSystem {
   String get name => throw _privateConstructorUsedError;
   String get proj4 => throw _privateConstructorUsedError;
   Bounds get bounds => throw _privateConstructorUsedError;
+  bool get hasNadgrid => throw _privateConstructorUsedError;
 
   /// Serializes this CoordinateSystem to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
@@ -198,7 +199,12 @@ abstract class $CoordinateSystemCopyWith<$Res> {
           CoordinateSystem value, $Res Function(CoordinateSystem) then) =
       _$CoordinateSystemCopyWithImpl<$Res, CoordinateSystem>;
   @useResult
-  $Res call({int epsgCode, String name, String proj4, Bounds bounds});
+  $Res call(
+      {int epsgCode,
+      String name,
+      String proj4,
+      Bounds bounds,
+      bool hasNadgrid});
 
   $BoundsCopyWith<$Res> get bounds;
 }
@@ -222,6 +228,7 @@ class _$CoordinateSystemCopyWithImpl<$Res, $Val extends CoordinateSystem>
     Object? name = null,
     Object? proj4 = null,
     Object? bounds = null,
+    Object? hasNadgrid = null,
   }) {
     return _then(_value.copyWith(
       epsgCode: null == epsgCode
@@ -240,6 +247,10 @@ class _$CoordinateSystemCopyWithImpl<$Res, $Val extends CoordinateSystem>
           ? _value.bounds
           : bounds // ignore: cast_nullable_to_non_nullable
               as Bounds,
+      hasNadgrid: null == hasNadgrid
+          ? _value.hasNadgrid
+          : hasNadgrid // ignore: cast_nullable_to_non_nullable
+              as bool,
     ) as $Val);
   }
 
@@ -262,7 +273,12 @@ abstract class _$$CoordinateSystemImplCopyWith<$Res>
       __$$CoordinateSystemImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({int epsgCode, String name, String proj4, Bounds bounds});
+  $Res call(
+      {int epsgCode,
+      String name,
+      String proj4,
+      Bounds bounds,
+      bool hasNadgrid});
 
   @override
   $BoundsCopyWith<$Res> get bounds;
@@ -285,6 +301,7 @@ class __$$CoordinateSystemImplCopyWithImpl<$Res>
     Object? name = null,
     Object? proj4 = null,
     Object? bounds = null,
+    Object? hasNadgrid = null,
   }) {
     return _then(_$CoordinateSystemImpl(
       epsgCode: null == epsgCode
@@ -303,6 +320,10 @@ class __$$CoordinateSystemImplCopyWithImpl<$Res>
           ? _value.bounds
           : bounds // ignore: cast_nullable_to_non_nullable
               as Bounds,
+      hasNadgrid: null == hasNadgrid
+          ? _value.hasNadgrid
+          : hasNadgrid // ignore: cast_nullable_to_non_nullable
+              as bool,
     ));
   }
 }
@@ -314,7 +335,8 @@ class _$CoordinateSystemImpl implements _CoordinateSystem {
       {required this.epsgCode,
       required this.name,
       required this.proj4,
-      required this.bounds});
+      required this.bounds,
+      this.hasNadgrid = false});
 
   factory _$CoordinateSystemImpl.fromJson(Map<String, dynamic> json) =>
       _$$CoordinateSystemImplFromJson(json);
@@ -327,10 +349,13 @@ class _$CoordinateSystemImpl implements _CoordinateSystem {
   final String proj4;
   @override
   final Bounds bounds;
+  @override
+  @JsonKey()
+  final bool hasNadgrid;
 
   @override
   String toString() {
-    return 'CoordinateSystem(epsgCode: $epsgCode, name: $name, proj4: $proj4, bounds: $bounds)';
+    return 'CoordinateSystem(epsgCode: $epsgCode, name: $name, proj4: $proj4, bounds: $bounds, hasNadgrid: $hasNadgrid)';
   }
 
   @override
@@ -342,12 +367,15 @@ class _$CoordinateSystemImpl implements _CoordinateSystem {
                 other.epsgCode == epsgCode) &&
             (identical(other.name, name) || other.name == name) &&
             (identical(other.proj4, proj4) || other.proj4 == proj4) &&
-            (identical(other.bounds, bounds) || other.bounds == bounds));
+            (identical(other.bounds, bounds) || other.bounds == bounds) &&
+            (identical(other.hasNadgrid, hasNadgrid) ||
+                other.hasNadgrid == hasNadgrid));
   }
 
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
-  int get hashCode => Object.hash(runtimeType, epsgCode, name, proj4, bounds);
+  int get hashCode =>
+      Object.hash(runtimeType, epsgCode, name, proj4, bounds, hasNadgrid);
 
   /// Create a copy of CoordinateSystem
   /// with the given fields replaced by the non-null parameter values.
@@ -371,7 +399,8 @@ abstract class _CoordinateSystem implements CoordinateSystem {
       {required final int epsgCode,
       required final String name,
       required final String proj4,
-      required final Bounds bounds}) = _$CoordinateSystemImpl;
+      required final Bounds bounds,
+      final bool hasNadgrid}) = _$CoordinateSystemImpl;
 
   factory _CoordinateSystem.fromJson(Map<String, dynamic> json) =
       _$CoordinateSystemImpl.fromJson;
@@ -384,6 +413,8 @@ abstract class _CoordinateSystem implements CoordinateSystem {
   String get proj4;
   @override
   Bounds get bounds;
+  @override
+  bool get hasNadgrid;
 
   /// Create a copy of CoordinateSystem
   /// with the given fields replaced by the non-null parameter values.

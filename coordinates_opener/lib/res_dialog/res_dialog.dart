@@ -31,6 +31,8 @@ class _AmbiguousResDialogState extends State<AmbiguousResDialog> {
 
   @override
   Widget build(BuildContext context) {
+    final bool isInaccurate =
+        _activeCoordinateSystem.coordinateSystem.hasNadgrid;
     return Dialog(
       child: PointerInterceptor(
         child: SingleChildScrollView(
@@ -38,7 +40,10 @@ class _AmbiguousResDialogState extends State<AmbiguousResDialog> {
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: <Widget>[
-              _Coordinates(lonLat: _activeCoordinateSystem.lonLat),
+              _Coordinates(
+                lonLat: _activeCoordinateSystem.lonLat,
+                isInaccurate: isInaccurate,
+              ),
               _CoordinateSystem(
                 coordinateSystem: _activeCoordinateSystem.coordinateSystem,
                 inputPointDetails: widget.inputPointDetails,
@@ -52,6 +57,11 @@ class _AmbiguousResDialogState extends State<AmbiguousResDialog> {
               ),
               _OpenInGoogleMapsButton(lonLat: _activeCoordinateSystem.lonLat),
               _MapWithMarker(lonLat: _activeCoordinateSystem.lonLat),
+              if (isInaccurate)
+                _InaccurateTransformationHeadsUp(
+                  inputPoint: widget.inputPointDetails.point,
+                  coordinateSystem: _activeCoordinateSystem.coordinateSystem,
+                ),
             ].separate((i, e0, e1) => const SizedBox(height: 16)),
           ),
         ),
@@ -78,20 +88,23 @@ class _AmbiguousResDialogState extends State<AmbiguousResDialog> {
 
 class _Coordinates extends StatelessWidget {
   final LonLat lonLat;
+  final bool isInaccurate;
 
-  const _Coordinates({required this.lonLat});
+  const _Coordinates({required this.lonLat, required this.isInaccurate});
 
   @override
   Widget build(BuildContext context) {
+    const style = TextStyle(
+      fontWeight: FontWeight.bold,
+    );
     return Text.rich(
       TextSpan(
+        style: style,
         children: [
           TextSpan(
             text: lonLat.formatAsDegrees,
-            style: const TextStyle(
-              fontWeight: FontWeight.bold,
-            ),
           ),
+          if (isInaccurate) const TextSpan(text: ' *'),
           WidgetSpan(
             alignment: PlaceholderAlignment.middle,
             child: IconButton(
@@ -173,6 +186,8 @@ class _OpenInGoogleMapsButton extends StatelessWidget {
   }
 }
 
+const _mapWidth = 350.0;
+
 class _MapWithMarker extends StatelessWidget {
   final LonLat lonLat;
 
@@ -181,7 +196,7 @@ class _MapWithMarker extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      width: 350,
+      width: _mapWidth,
       child: AspectRatio(
         aspectRatio: 1.5,
         child: GoogleMap(
@@ -193,6 +208,53 @@ class _MapWithMarker extends StatelessWidget {
               onTap: () => context.openInGoogleMaps(lonLat: lonLat),
             )
           },
+        ),
+      ),
+    );
+  }
+}
+
+class _InaccurateTransformationHeadsUp extends StatelessWidget {
+  final Point inputPoint;
+  final CoordinateSystem coordinateSystem;
+
+  const _InaccurateTransformationHeadsUp(
+      {required this.inputPoint, required this.coordinateSystem});
+
+  @override
+  Widget build(BuildContext context) {
+    final colors = Theme.of(context).colorScheme;
+    const textStyle = TextStyle(
+      color: Colors.red,
+      fontSize: 12,
+    );
+    return SizedBox(
+      width: _mapWidth + 50,
+      child: Text.rich(
+        TextSpan(
+          style: textStyle,
+          children: [
+            const TextSpan(
+              text:
+                  "* The result is slightly inaccurate because we don't support transformations with meter-level accuracy for this coordinate system. For precise coordinates ",
+            ),
+            WidgetSpan(
+              alignment: PlaceholderAlignment.middle,
+              child: InkWell(
+                onTap: () => context.openUrl(
+                  'https://epsg.io/transform#s_srs=${coordinateSystem.epsgCode}&t_srs=4326&x=${inputPoint.x}&y=${inputPoint.y}',
+                ),
+                child: Text(
+                  'go here.',
+                  style: textStyle.copyWith(color: colors.primary),
+                ),
+              ),
+            ),
+            const TextSpan(
+              text:
+                  ' We recommend that you copy the output coordinates and paste them into Google manually as latitude,longitude.',
+            ),
+          ],
         ),
       ),
     );

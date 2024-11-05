@@ -8,12 +8,13 @@ import 'package:shared/coordinate_system_data/model.dart';
 import 'package:shared/geoutils/get_point_details.dart';
 import 'package:shared/geoutils/model.dart';
 
-const _initialCase = _Case.stepper;
+const _initialCase = _Case.ambiguousResDialogNadgrid;
 
 enum _Case {
   home,
   stepper,
   ambiguousResDialog,
+  ambiguousResDialogNadgrid,
   pickReferenceSystemDialog,
 }
 
@@ -74,6 +75,12 @@ class _PageState extends State<_Page> {
                 ],
               );
             }(),
+          _Case.ambiguousResDialogNadgrid => AmbiguousResDialog(
+              inputPointDetails: getPointDetails(
+                point: const Point(x: 529576.7297772487, y: 180648.18765034562),
+              ),
+              tappedPoint: const LonLat(lon: -0.134211, lat: 51.509913),
+            ),
           _Case.pickReferenceSystemDialog => () {
               final dialog = PickReferenceSystemDialog(
                 pointDetails: getPointDetails(point: const Point(x: 20, y: 60)),

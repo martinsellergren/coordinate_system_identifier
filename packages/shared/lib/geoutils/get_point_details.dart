@@ -19,7 +19,6 @@ class GetPointDetails {
   GetPointDetails._();
 
   static Future<GetPointDetails> _create() async {
-    await _loadProjNadgrids();
     await _loadCoordinateSystemData();
     await _loadProjProjections();
     return GetPointDetails._();
@@ -62,9 +61,18 @@ Future<void> _loadCoordinateSystemData() async {
     // e.g degree-based systems (like WGS84) are not included
     'packages/shared/assets/coordinate_systems.json',
   );
-  final data = CoordinateSystemsData.fromJson(jsonDecode(str));
-  _coordinateSystemsData =
-      data.copyWith(items: data.items.toList()..add(wgs84));
+  var data = CoordinateSystemsData.fromJson(jsonDecode(str));
+  data = data.copyWith(
+    items: [...data.items, wgs84]
+        .map((e) => e.proj4.contains('+nadgrids')
+            ? e.copyWith(
+                proj4: e.proj4.replaceAll(RegExp(r'\+nadgrids=.+? \+'), '+'),
+                hasNadgrid: true,
+              )
+            : e)
+        .toList(),
+  );
+  _coordinateSystemsData = data;
 }
 
 Future<void> _loadProjProjections() async {
@@ -80,18 +88,6 @@ Future<void> _loadProjProjections() async {
     }
   }
   logger.i('Load projections, nSuccess: $nSuccess, nErrors: $nErrors');
-}
-
-Future<void> _loadProjNadgrids() async {
-  final manifest = await AssetManifest.loadFromAssetBundle(rootBundle);
-  final assets = manifest
-      .listAssets()
-      .where((e) => e.startsWith('packages/shared/assets/nadgrids/'));
-  for (final e in assets) {
-    final bytes = (await rootBundle.load(e)).buffer.asUint8List();
-    p.Projection.nadgrid(
-        e.replaceFirst('packages/shared/assets/nadgrids/', ''), bytes);
-  }
 }
 
 LonLat? _lonLatFromPointAndCoordinateSystem({

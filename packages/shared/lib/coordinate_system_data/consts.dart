@@ -11,6 +11,7 @@ const sweref99 = CoordinateSystem(
     northEast: LonLat(lon: 10.03, lat: 54.96),
     southWest: LonLat(lon: 24.17, lat: 69.07),
   ),
+  hasNadgrid: false,
 );
 
 const wgs84 = CoordinateSystem(
@@ -21,4 +22,5 @@ const wgs84 = CoordinateSystem(
     northEast: LonLat(lon: 180, lat: 90),
     southWest: LonLat(lon: -180, lat: -90),
   ),
+  hasNadgrid: false,
 );
