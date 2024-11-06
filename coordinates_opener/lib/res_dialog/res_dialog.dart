@@ -188,10 +188,26 @@ class _OpenInGoogleMapsButton extends StatelessWidget {
 
 const _mapWidth = 350.0;
 
-class _MapWithMarker extends StatelessWidget {
+class _MapWithMarker extends StatefulWidget {
   final LonLat lonLat;
 
   const _MapWithMarker({required this.lonLat});
+
+  @override
+  State<_MapWithMarker> createState() => _MapWithMarkerState();
+}
+
+class _MapWithMarkerState extends State<_MapWithMarker> {
+  GoogleMapController? _controller;
+
+  @override
+  void didUpdateWidget(covariant _MapWithMarker oldWidget) {
+    if (widget.lonLat != oldWidget.lonLat) {
+      _controller?.animateCamera(
+          CameraUpdate.newLatLngZoom(widget.lonLat.toGoogle(), 1));
+    }
+    super.didUpdateWidget(oldWidget);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -200,18 +216,26 @@ class _MapWithMarker extends StatelessWidget {
       child: AspectRatio(
         aspectRatio: 1.5,
         child: GoogleMap(
-          initialCameraPosition: const CameraPosition(target: LatLng(0, 0)),
+          onMapCreated: (controller) => _controller = controller,
+          initialCameraPosition: CameraPosition(
+            target: widget.lonLat.toGoogle(),
+            zoom: 1,
+          ),
           markers: {
             Marker(
               markerId: const MarkerId('theOneAndOnlyMarker'),
-              position: LatLng(lonLat.lat, lonLat.lon),
-              onTap: () => context.openInGoogleMaps(lonLat: lonLat),
-            )
+              position: widget.lonLat.toGoogle(),
+              onTap: () => context.openInGoogleMaps(lonLat: widget.lonLat),
+            ),
           },
         ),
       ),
     );
   }
+}
+
+extension on LonLat {
+  LatLng toGoogle() => LatLng(lat, lon);
 }
 
 class _InaccurateTransformationHeadsUp extends StatelessWidget {
