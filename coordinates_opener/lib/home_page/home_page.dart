@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:shared/coordinate_system_data/model.dart';
 import 'package:shared/geoutils/coordinates_parsing.dart';
@@ -135,6 +136,7 @@ class _AnyCoordinatesTextFieldState extends State<_AnyCoordinatesTextField> {
   Widget build(BuildContext context) {
     return TextField(
       controller: widget.controller,
+      autofocus: true,
       onChanged: (value) => setState(() => _errorText = null),
       onSubmitted: _onSubmitted,
       decoration: InputDecoration(
@@ -180,49 +182,67 @@ class AmbiguousInputStepper extends StatefulWidget {
 }
 
 class _AmbiguousInputStepperState extends State<AmbiguousInputStepper> {
+  final _focusNode = FocusNode()..requestFocus();
   _Step _currentStep = _Step.determineXY;
 
   @override
+  void dispose() {
+    _focusNode.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
-    return SingleChildScrollView(
-      child: Stepper(
-        currentStep: _currentStep.index,
-        controlsBuilder: switch (_currentStep) {
-          _Step.determineXY => null, //i.e default controls
-          _Step.enterCoordinates ||
-          _Step.enterApproximateLocation =>
-            (context, details) => const SizedBox.shrink(),
-        },
-        onStepCancel: () => widget.onCancel(),
-        onStepContinue: () => setState(() => _currentStep =
-            _Step.values[_Step.values.indexOf(_currentStep) + 1]),
-        onStepTapped: (value) => switch (_Step.values[value]) {
-          _Step.enterCoordinates => widget.onCancel(),
-          _Step.determineXY ||
-          _Step.enterApproximateLocation =>
-            setState(() => _currentStep = _Step.values[value]),
-        },
-        steps: _Step.values
-            .map(
-              (e) => switch (e) {
-                _Step.enterCoordinates => const Step(
-                    title: Text('Enter coordinates'),
-                    content: SizedBox.shrink(),
-                  ),
-                _Step.determineXY => Step(
-                    title: const Text('Confirm or swap'),
-                    content: _PickXY(
-                      inputPoint: widget.inputPoint,
-                      onUpdateInputPoint: widget.onUpdateInputPoint,
+    return KeyboardListener(
+      focusNode: _focusNode,
+      onKeyEvent: (value) => value is KeyDownEvent &&
+              value.logicalKey == LogicalKeyboardKey.enter
+          ? switch (_currentStep) {
+              _Step.enterCoordinates || _Step.enterApproximateLocation => null,
+              _Step.determineXY =>
+                setState(() => _currentStep = _Step.enterApproximateLocation),
+            }
+          : null,
+      child: SingleChildScrollView(
+        child: Stepper(
+          currentStep: _currentStep.index,
+          controlsBuilder: switch (_currentStep) {
+            _Step.determineXY => null, //i.e default controls
+            _Step.enterCoordinates ||
+            _Step.enterApproximateLocation =>
+              (context, details) => const SizedBox.shrink(),
+          },
+          onStepCancel: () => widget.onCancel(),
+          onStepContinue: () => setState(() => _currentStep =
+              _Step.values[_Step.values.indexOf(_currentStep) + 1]),
+          onStepTapped: (value) => switch (_Step.values[value]) {
+            _Step.enterCoordinates => widget.onCancel(),
+            _Step.determineXY ||
+            _Step.enterApproximateLocation =>
+              setState(() => _currentStep = _Step.values[value]),
+          },
+          steps: _Step.values
+              .map(
+                (e) => switch (e) {
+                  _Step.enterCoordinates => const Step(
+                      title: Text('Enter coordinates'),
+                      content: SizedBox.shrink(),
                     ),
-                  ),
-                _Step.enterApproximateLocation => Step(
-                    title: const Text('Enter approximate location'),
-                    content: _Map(onTap: widget.onMapTap),
-                  ),
-              },
-            )
-            .toList(),
+                  _Step.determineXY => Step(
+                      title: const Text('Confirm or swap'),
+                      content: _PickXY(
+                        inputPoint: widget.inputPoint,
+                        onUpdateInputPoint: widget.onUpdateInputPoint,
+                      ),
+                    ),
+                  _Step.enterApproximateLocation => Step(
+                      title: const Text('Enter approximate location'),
+                      content: _Map(onTap: widget.onMapTap),
+                    ),
+                },
+              )
+              .toList(),
+        ),
       ),
     );
   }
