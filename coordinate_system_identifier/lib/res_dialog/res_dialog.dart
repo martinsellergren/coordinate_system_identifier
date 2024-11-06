@@ -1,13 +1,13 @@
 import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:pointer_interceptor/pointer_interceptor.dart';
+import 'package:shared/context_extension.dart';
 import 'package:shared/coordinate_system_data/model.dart';
 import 'package:shared/copy_dialog.dart';
 import 'package:shared/geoutils/evaluate_coordinate_systems.dart';
 import 'package:shared/geoutils/formatting.dart';
 import 'package:shared/geoutils/model.dart';
-
-import '../app.dart';
+import 'package:shared/inaccurate_transformation_heads_up.dart';
 
 class ResDialog extends StatefulWidget {
   final LonLat tappedPoint;
@@ -49,7 +49,10 @@ class _ResDialogState extends State<ResDialog> {
                       ),
                       const Divider(),
                       ..._items.topCandidates.map(
-                        (e) => _ResTile(data: e),
+                        (e) => _ResTile(
+                          data: e,
+                          inputPoint: widget.pointDetails.point,
+                        ),
                       ),
                       if (_items.more.isNotEmpty)
                         ExpansionTile(
@@ -58,7 +61,10 @@ class _ResDialogState extends State<ResDialog> {
                             child: Text('More'),
                           ),
                           children: _items.more
-                              .map((e) => _ResTile(data: e))
+                              .map((e) => _ResTile(
+                                    data: e,
+                                    inputPoint: widget.pointDetails.point,
+                                  ))
                               .toList(),
                         ),
                     ],
@@ -85,8 +91,9 @@ extension on List<CoordinateSystemRes> {
 
 class _ResTile extends StatelessWidget {
   final CoordinateSystemRes data;
+  final Point inputPoint;
 
-  const _ResTile({required this.data});
+  const _ResTile({required this.data, required this.inputPoint});
 
   @override
   Widget build(BuildContext context) {
@@ -99,8 +106,20 @@ class _ResTile extends StatelessWidget {
         ),
       ),
       cell2: TextButton(
-        onPressed: () => context.openUrl(
-            'https://maps.google.com/?q=${data.lonLat.lat},${data.lonLat.lon}'),
+        onPressed: () {
+          final url =
+              'https://maps.google.com/?q=${data.lonLat.lat},${data.lonLat.lon}';
+          data.coordinateSystem.hasNadgrid
+              ? showDialog(
+                  context: context,
+                  builder: (context) => _InaccurateTransformationDialog(
+                    data: data,
+                    inputPoint: inputPoint,
+                  ),
+                ).then(
+                  (res) async => context.mounted ? context.openUrl(url) : null)
+              : context.openUrl(url);
+        },
         child: _LatLong(lonLat: data.lonLat),
       ),
       cell3: Text('${data.dKm.toStringAsFixed(0)} km'),
@@ -122,6 +141,35 @@ class _Tile extends StatelessWidget {
         Expanded(flex: 5, child: Center(child: cell1)),
         Expanded(flex: 5, child: Center(child: cell2)),
         Expanded(flex: 3, child: Center(child: cell3)),
+      ],
+    );
+  }
+}
+
+class _InaccurateTransformationDialog extends StatelessWidget {
+  final CoordinateSystemRes data;
+  final Point inputPoint;
+
+  const _InaccurateTransformationDialog(
+      {required this.data, required this.inputPoint});
+
+  @override
+  Widget build(BuildContext context) {
+    return AlertDialog(
+      content: SizedBox(
+        width: 500,
+        child: InaccurateTransformationHeadsUp(
+          coordinateSystem: data.coordinateSystem,
+          inputPoint: inputPoint,
+          showLeadingAsterisk: false,
+          textStyle: const TextStyle(),
+        ),
+      ),
+      actions: [
+        TextButton(
+          onPressed: () => Navigator.of(context).pop(),
+          child: const Text('Ok'),
+        ),
       ],
     );
   }

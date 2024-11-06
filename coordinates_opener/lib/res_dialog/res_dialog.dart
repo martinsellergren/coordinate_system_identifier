@@ -3,13 +3,14 @@ import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:pointer_interceptor/pointer_interceptor.dart';
 import 'package:separate/separate.dart';
+import 'package:shared/context_extension.dart';
 import 'package:shared/coordinate_system_data/model.dart';
 import 'package:shared/copy_dialog.dart';
 import 'package:shared/geoutils/formatting.dart';
 import 'package:shared/geoutils/geoutils.dart';
 import 'package:shared/geoutils/model.dart';
+import 'package:shared/inaccurate_transformation_heads_up.dart';
 
-import '../app.dart';
 import 'pick_reference_system_dialog.dart';
 
 class AmbiguousResDialog extends StatefulWidget {
@@ -247,38 +248,15 @@ class _InaccurateTransformationHeadsUp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final colors = Theme.of(context).colorScheme;
-    const textStyle = TextStyle(
-      color: Colors.red,
-      fontSize: 12,
-    );
     return SizedBox(
       width: _mapWidth + 50,
-      child: Text.rich(
-        TextSpan(
-          style: textStyle,
-          children: [
-            const TextSpan(
-              text:
-                  "* The result is slightly inaccurate because we don't support transformations with meter-level accuracy for this coordinate system. For precise coordinates ",
-            ),
-            WidgetSpan(
-              alignment: PlaceholderAlignment.middle,
-              child: InkWell(
-                onTap: () => context.openUrl(
-                  'https://epsg.io/transform#s_srs=${coordinateSystem.epsgCode}&t_srs=4326&x=${inputPoint.x}&y=${inputPoint.y}',
-                ),
-                child: Text(
-                  'go here.',
-                  style: textStyle.copyWith(color: colors.primary),
-                ),
-              ),
-            ),
-            const TextSpan(
-              text:
-                  ' We recommend that you copy the output coordinates and paste them into Google manually as latitude,longitude.',
-            ),
-          ],
+      child: InaccurateTransformationHeadsUp(
+        coordinateSystem: coordinateSystem,
+        inputPoint: inputPoint,
+        showLeadingAsterisk: true,
+        textStyle: const TextStyle(
+          color: Colors.red,
+          fontSize: 12,
         ),
       ),
     );

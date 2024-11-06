@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:shared/context_extension.dart';
 import 'package:shared/coordinate_system_data/model.dart';
 import 'package:shared/geoutils/coordinates_parsing.dart';
 import 'package:shared/geoutils/get_point_details.dart';
