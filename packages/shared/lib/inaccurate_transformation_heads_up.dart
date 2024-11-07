@@ -19,6 +19,7 @@ class InaccurateTransformationHeadsUp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final primaryColor = Theme.of(context).primaryColor;
     return Text.rich(
       TextSpan(
         style: textStyle,
@@ -37,7 +38,7 @@ class InaccurateTransformationHeadsUp extends StatelessWidget {
               ),
               child: Text(
                 'here.',
-                style: textStyle.copyWith(color: Colors.deepPurple),
+                style: textStyle.copyWith(color: primaryColor),
               ),
             ),
           ),

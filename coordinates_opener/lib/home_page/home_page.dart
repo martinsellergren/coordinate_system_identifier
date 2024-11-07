@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:separate/separate.dart';
 import 'package:shared/context_extension.dart';
 import 'package:shared/coordinate_system_data/model.dart';
 import 'package:shared/geoutils/coordinates_parsing.dart';
@@ -77,7 +78,7 @@ class _ContentState extends State<_Content> {
             onUpdateInputPoint: (inputPoint) =>
                 setState(() => _ambiguousInputPoint = inputPoint),
             onCancel: () => setState(() => _ambiguousInputPoint = null),
-            onMapTap: (lonLat) => _onMapTap(
+            onApproximateLocationSelected: (lonLat) => _onMapTap(
               tapped: lonLat,
               inputPoint: ambiguousInputPoint,
             ),
@@ -167,16 +168,18 @@ class _AnyCoordinatesTextFieldState extends State<_AnyCoordinatesTextField> {
 class AmbiguousInputStepper extends StatefulWidget {
   final Point inputPoint;
   final Function() onCancel;
-  final Function(LonLat lonLat) onMapTap;
   final Function(Point inputPoint) onUpdateInputPoint;
+  final Function(LonLat lonLat) onApproximateLocationSelected;
+  final int? initialStepIndex;
 
   @visibleForTesting
   const AmbiguousInputStepper(
       {super.key,
-      required this.onMapTap,
+      required this.onApproximateLocationSelected,
       required this.onCancel,
       required this.inputPoint,
-      required this.onUpdateInputPoint});
+      required this.onUpdateInputPoint,
+      this.initialStepIndex});
 
   @override
   State<AmbiguousInputStepper> createState() => _AmbiguousInputStepperState();
@@ -184,7 +187,9 @@ class AmbiguousInputStepper extends StatefulWidget {
 
 class _AmbiguousInputStepperState extends State<AmbiguousInputStepper> {
   final _focusNode = FocusNode()..requestFocus();
-  _Step _currentStep = _Step.determineXY;
+  late _Step _currentStep = widget.initialStepIndex != null
+      ? _Step.values[widget.initialStepIndex!]
+      : _Step.determineXY;
 
   @override
   void dispose() {
@@ -230,7 +235,7 @@ class _AmbiguousInputStepperState extends State<AmbiguousInputStepper> {
                       content: SizedBox.shrink(),
                     ),
                   _Step.determineXY => Step(
-                      title: const Text('Confirm or swap'),
+                      title: const Text('Confirm or swap order'),
                       content: _PickXY(
                         inputPoint: widget.inputPoint,
                         onUpdateInputPoint: widget.onUpdateInputPoint,
@@ -238,7 +243,9 @@ class _AmbiguousInputStepperState extends State<AmbiguousInputStepper> {
                     ),
                   _Step.enterApproximateLocation => Step(
                       title: const Text('Enter approximate location'),
-                      content: _Map(onTap: widget.onMapTap),
+                      content: _EnterApproximateLocation(
+                        onEntered: widget.onApproximateLocationSelected,
+                      ),
                     ),
                 },
               )
@@ -281,6 +288,23 @@ class _PickXY extends StatelessWidget {
           icon: const Icon(Icons.swap_vert),
         ),
       ],
+    );
+  }
+}
+
+class _EnterApproximateLocation extends StatelessWidget {
+  final Function(LonLat lonLat) onEntered;
+
+  const _EnterApproximateLocation({required this.onEntered});
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: <Widget>[
+        const Text(
+            '''To locate this point on Earth, we first need to identify its coordinate system from the thousands available. Please provide an approximate location so we can find the best matching coordinate system for your input.'''),
+        _Map(onTap: onEntered),
+      ].separate((i, e0, e1) => const SizedBox(height: 16)),
     );
   }
 }
