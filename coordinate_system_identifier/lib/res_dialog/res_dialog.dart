@@ -42,9 +42,18 @@ class _ResDialogState extends State<ResDialog> {
                           fontWeight: FontWeight.bold,
                         ),
                         child: _Tile(
-                          cell1: Text('coordinate system'),
-                          cell2: Text('WGS84 coordinates'),
-                          cell3: Text('distance from approximation'),
+                          cell1: Text(
+                            'coordinate system',
+                            textAlign: TextAlign.center,
+                          ),
+                          cell2: Text(
+                            'WGS84 coordinates',
+                            textAlign: TextAlign.center,
+                          ),
+                          cell3: Text(
+                            'distance from approximation',
+                            textAlign: TextAlign.center,
+                          ),
                         ),
                       ),
                       const Divider(),
@@ -103,6 +112,7 @@ class _ResTile extends StatelessWidget {
             .openUrl('https://epsg.io/${data.coordinateSystem.epsgCode}'),
         child: Text(
           data.coordinateSystem.name,
+          textAlign: TextAlign.center,
         ),
       ),
       cell2: TextButton(
@@ -182,27 +192,25 @@ class _LatLong extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Text.rich(
-      TextSpan(
-        children: [
-          TextSpan(
-            text: lonLat.formatAsDegrees,
+    return Row(
+      children: [
+        Flexible(
+          child: Text(
+            lonLat.formatAsDegrees,
+            textAlign: TextAlign.center,
           ),
-          WidgetSpan(
-            alignment: PlaceholderAlignment.middle,
-            child: IconButton(
-              onPressed: () => showDialog(
-                context: context,
-                builder: (context) => CopyDialog(lonLat: lonLat),
-              ),
-              icon: const Icon(
-                Icons.copy,
-                size: copyDialogCopyIconSize,
-              ),
-            ),
+        ),
+        IconButton(
+          onPressed: () => showDialog(
+            context: context,
+            builder: (context) => CopyDialog(lonLat: lonLat),
           ),
-        ],
-      ),
+          icon: const Icon(
+            Icons.copy,
+            size: copyDialogCopyIconSize,
+          ),
+        ),
+      ],
     );
   }
 }
