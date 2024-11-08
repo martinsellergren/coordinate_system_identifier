@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:separate/separate.dart';
 import 'package:shared/coordinate_system_data/model.dart';
 import 'package:shared/geoutils/coordinates_parsing.dart';
 import 'package:shared/geoutils/get_point_details.dart';
 import 'package:shared/geoutils/model.dart';
+import 'package:shared/my_google_map.dart';
 
 import '../app.dart';
 import '../res_dialog/res_dialog.dart';
@@ -196,13 +196,10 @@ class ApproximationInputMap extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return AspectRatio(
-      aspectRatio: 2,
-      child: GoogleMap(
-        initialCameraPosition: const CameraPosition(target: LatLng(0, 0)),
-        onTap: (argument) =>
-            onTap(LonLat(lon: argument.longitude, lat: argument.latitude)),
-      ),
+    return MyGoogleMap(
+      cameraTarget: const LonLat(lon: 0, lat: 0),
+      zoom: 0,
+      onTap: onTap,
     );
   }
 }

@@ -1,11 +1,23 @@
 import 'package:flutter/material.dart';
+import 'package:shared/my_google_map.dart';
 
 import 'home_page/home_page.dart';
 
 const appName = 'Coordinates opener';
 
-class App extends StatelessWidget {
+class App extends StatefulWidget {
   const App({super.key});
+
+  @override
+  State<App> createState() => _AppState();
+}
+
+class _AppState extends State<App> {
+  @override
+  void initState() {
+    super.initState();
+    applyGoogleMapAndroidFix();
+  }
 
   @override
   Widget build(BuildContext context) {

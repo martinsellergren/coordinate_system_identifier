@@ -26,6 +26,10 @@ class _ResDialogState extends State<ResDialog> {
 
   @override
   Widget build(BuildContext context) {
+    const headerTextStyle = TextStyle(
+      fontSize: 12,
+      fontWeight: FontWeight.bold,
+    );
     return Dialog(
       child: PointerInterceptor(
         child: _items.isEmpty
@@ -36,24 +40,21 @@ class _ResDialogState extends State<ResDialog> {
                   child: Column(
                     mainAxisSize: MainAxisSize.min,
                     children: [
-                      const DefaultTextStyle(
-                        style: TextStyle(
-                          fontSize: 12,
-                          fontWeight: FontWeight.bold,
+                      const _Tile(
+                        cell1: Text(
+                          'coordinate system',
+                          textAlign: TextAlign.center,
+                          style: headerTextStyle,
                         ),
-                        child: _Tile(
-                          cell1: Text(
-                            'coordinate system',
-                            textAlign: TextAlign.center,
-                          ),
-                          cell2: Text(
-                            'WGS84 coordinates',
-                            textAlign: TextAlign.center,
-                          ),
-                          cell3: Text(
-                            'distance from approximation',
-                            textAlign: TextAlign.center,
-                          ),
+                        cell2: Text(
+                          'WGS84 coordinates',
+                          textAlign: TextAlign.center,
+                          style: headerTextStyle,
+                        ),
+                        cell3: Text(
+                          'distance from approximation',
+                          textAlign: TextAlign.center,
+                          style: headerTextStyle,
                         ),
                       ),
                       const Divider(),
@@ -106,6 +107,9 @@ class _ResTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    const textStyle = TextStyle(
+      fontSize: 12,
+    );
     return _Tile(
       cell1: TextButton(
         onPressed: () => context
@@ -113,6 +117,7 @@ class _ResTile extends StatelessWidget {
         child: Text(
           data.coordinateSystem.name,
           textAlign: TextAlign.center,
+          style: textStyle,
         ),
       ),
       cell2: TextButton(
@@ -130,9 +135,15 @@ class _ResTile extends StatelessWidget {
                   (res) async => context.mounted ? context.openUrl(url) : null)
               : context.openUrl(url);
         },
-        child: _LatLong(lonLat: data.lonLat),
+        child: _LatLong(
+          lonLat: data.lonLat,
+          style: textStyle,
+        ),
       ),
-      cell3: Text('${data.dKm.toStringAsFixed(0)} km'),
+      cell3: Text(
+        '${data.dKm.toStringAsFixed(0)} km',
+        style: textStyle,
+      ),
     );
   }
 }
@@ -148,9 +159,9 @@ class _Tile extends StatelessWidget {
   Widget build(BuildContext context) {
     return Row(
       children: [
-        Expanded(flex: 5, child: Center(child: cell1)),
-        Expanded(flex: 5, child: Center(child: cell2)),
-        Expanded(flex: 3, child: Center(child: cell3)),
+        Expanded(flex: 1, child: Center(child: cell1)),
+        Expanded(flex: 1, child: Center(child: cell2)),
+        Expanded(flex: 1, child: Center(child: cell3)),
       ],
     );
   }
@@ -187,17 +198,20 @@ class _InaccurateTransformationDialog extends StatelessWidget {
 
 class _LatLong extends StatelessWidget {
   final LonLat lonLat;
+  final TextStyle style;
 
-  const _LatLong({required this.lonLat});
+  const _LatLong({required this.lonLat, required this.style});
 
   @override
   Widget build(BuildContext context) {
     return Row(
+      mainAxisSize: MainAxisSize.min,
       children: [
         Flexible(
           child: Text(
             lonLat.formatAsDegrees,
             textAlign: TextAlign.center,
+            style: style,
           ),
         ),
         IconButton(

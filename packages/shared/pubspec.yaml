@@ -11,6 +11,8 @@ dependencies:
   flutter:
     sdk: flutter
   google_maps_flutter: ^2.9.0
+  google_maps_flutter_android: ^2.14.11
+  google_maps_flutter_platform_interface: ^2.9.5
   proj4dart: ^2.1.0
   maps_toolkit: ^3.0.0
   logger: ^2.4.0

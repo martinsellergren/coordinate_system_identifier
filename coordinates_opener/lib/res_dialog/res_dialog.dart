@@ -11,6 +11,7 @@ import 'package:shared/geoutils/formatting.dart';
 import 'package:shared/geoutils/geoutils.dart';
 import 'package:shared/geoutils/model.dart';
 import 'package:shared/inaccurate_transformation_heads_up.dart';
+import 'package:shared/my_google_map.dart';
 
 import 'pick_reference_system_dialog.dart';
 
@@ -309,51 +310,20 @@ class _ChangeCoordinateSystem extends StatelessWidget {
   }
 }
 
-const _mapWidth = 350.0;
-
-class _MapWithMarker extends StatefulWidget {
+class _MapWithMarker extends StatelessWidget {
   final LonLat lonLat;
 
   const _MapWithMarker({required this.lonLat});
 
   @override
-  State<_MapWithMarker> createState() => _MapWithMarkerState();
-}
-
-class _MapWithMarkerState extends State<_MapWithMarker> {
-  GoogleMapController? _controller;
-
-  @override
-  void didUpdateWidget(covariant _MapWithMarker oldWidget) {
-    if (widget.lonLat != oldWidget.lonLat) {
-      _controller?.animateCamera(
-          CameraUpdate.newLatLngZoom(widget.lonLat.toGoogle(), 1));
-    }
-    super.didUpdateWidget(oldWidget);
-  }
-
-  @override
   Widget build(BuildContext context) {
-    return SizedBox(
-      width: _mapWidth,
-      child: AspectRatio(
-        aspectRatio: 1.5,
-        child: GoogleMap(
-          onMapCreated: (controller) => _controller = controller,
-          initialCameraPosition: CameraPosition(
-            target: widget.lonLat.toGoogle(),
-            zoom: 1,
-          ),
-          markers: {
-            Marker(
-              markerId: const MarkerId('theOneAndOnlyMarker'),
-              position: widget.lonLat.toGoogle(),
-              onTap: () => context.openInGoogleMaps(lonLat: widget.lonLat),
-            ),
-          },
-        ),
+    return MyGoogleMap(cameraTarget: lonLat, zoom: 1, markers: {
+      Marker(
+        markerId: const MarkerId('theOneAndOnlyMarker'),
+        position: lonLat.toGoogle(),
+        onTap: () => context.openInGoogleMaps(lonLat: lonLat),
       ),
-    );
+    });
   }
 }
 
