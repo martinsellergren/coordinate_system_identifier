@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 import 'home_page/home_page.dart';
@@ -13,7 +14,7 @@ class App extends StatelessWidget {
       title: appName,
       home: const HomePage(),
       builder: (context, child) =>
-          Overlay.wrap(child: SelectionArea(child: child!)),
+          Overlay.wrap(child: kIsWeb ? SelectionArea(child: child!) : child!),
     );
   }
 }
