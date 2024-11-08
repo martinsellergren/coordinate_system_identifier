@@ -36,9 +36,21 @@ class _PickReferenceSystemDialogState extends State<PickReferenceSystemDialog> {
             children: [
               const _Tile(
                 onTap: null,
-                cell1: Text('coordinate system', style: headerStyle),
-                cell2: Text('WGS84 coordinates', style: headerStyle),
-                cell3: Text('distance from approximation', style: headerStyle),
+                cell1: Text(
+                  'coordinate system',
+                  textAlign: TextAlign.center,
+                  style: headerStyle,
+                ),
+                cell2: Text(
+                  'WGS84 coordinates',
+                  textAlign: TextAlign.center,
+                  style: headerStyle,
+                ),
+                cell3: Text(
+                  'distance from approximation',
+                  textAlign: TextAlign.center,
+                  style: headerStyle,
+                ),
               ),
               const Divider(height: 1),
               Expanded(
@@ -48,9 +60,18 @@ class _PickReferenceSystemDialogState extends State<PickReferenceSystemDialog> {
                       .take(100)
                       .map(
                         (e) => _Tile(
-                          cell1: Text(e.coordinateSystem.name),
-                          cell2: Text(e.lonLat.formatAsDegrees),
-                          cell3: Text('${e.dKm} km'),
+                          cell1: Text(
+                            e.coordinateSystem.name,
+                            textAlign: TextAlign.center,
+                          ),
+                          cell2: Text(
+                            e.lonLat.formatAsDegrees,
+                            textAlign: TextAlign.center,
+                          ),
+                          cell3: Text(
+                            '${e.dKm} km',
+                            textAlign: TextAlign.center,
+                          ),
                           onTap: () => widget.onPicked(e.coordinateSystem),
                         ),
                       )

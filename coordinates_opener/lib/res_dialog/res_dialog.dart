@@ -223,6 +223,7 @@ class _Coordinates extends StatelessWidget {
                 lonLat.formatAsDegrees,
                 if (isInaccurate) ' *',
               ].join(),
+              textAlign: TextAlign.center,
               style: const TextStyle(
                 fontWeight: FontWeight.bold,
               ),
@@ -246,6 +247,7 @@ class _CoordinateSystem extends StatelessWidget {
       children: [
         const Text('coordinate system:'),
         TextButton(
+          style: TextButton.styleFrom(visualDensity: VisualDensity.compact),
           onPressed: () =>
               context.openUrl('https://epsg.io/${coordinateSystem.epsgCode}'),
           child: Text(coordinateSystem.name),
