@@ -21,6 +21,9 @@ CoordinatesParsingResult parseCoordinates(String source) {
   source = source.trim();
   if (source.contains('°')) {
     return CoordinatesParsingResult.wellDefined(lonLat: _parseDegrees(source));
+  } else if (source.toLowerCase().contains('lat')) {
+    return CoordinatesParsingResult.wellDefined(
+        lonLat: _parseLabeledDecimalDegrees(source));
   } else if (source.contains(RegExp(r'[C-X]'))) {
     return CoordinatesParsingResult.wellDefined(lonLat: _parseUtm(source));
   } else {
@@ -29,9 +32,27 @@ CoordinatesParsingResult parseCoordinates(String source) {
 }
 
 LonLat _parseDegrees(String source) {
+  source = source
+      .replaceFirst(RegExp(r'N\s*,'), 'N')
+      .replaceFirst(RegExp(r'E\s*,'), 'E')
+      .replaceFirst(RegExp(r'S\s*,'), 'S')
+      .replaceFirst(RegExp(r'W\s*,'), 'W')
+      .replaceAll(RegExp(r'°\s+'), '°')
+      .replaceAll(RegExp(r"'\s+"), "'")
+      .replaceAll(RegExp(r'"\s+'), '"');
   final res = p.parseCoordinates(source);
   if (res == null) throw const FormatException();
   return LonLat(lon: res.long, lat: res.lat);
+}
+
+LonLat _parseLabeledDecimalDegrees(String source) {
+  final lon = double.parse(RegExp(r'lon.*?(-?\d+(\.\d+)?)')
+      .firstMatch(source.toLowerCase())!
+      .group(1)!);
+  final lat = double.parse(RegExp(r'lat.*?(-?\d+(\.\d+)?)')
+      .firstMatch(source.toLowerCase())!
+      .group(1)!);
+  return LonLat(lon: lon, lat: lat);
 }
 
 LonLat _parseUtm(String source) {

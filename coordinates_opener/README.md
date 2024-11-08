@@ -3,6 +3,8 @@
 Open any coordinates in google maps.
 
 showanycoordinatesongooglemaps.com
+opencoordinates.com
+coordinatesopener.com
 
 
 text field
