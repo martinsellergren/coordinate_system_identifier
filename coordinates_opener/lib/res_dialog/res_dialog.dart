@@ -212,26 +212,32 @@ class _Coordinates extends StatelessWidget {
         size: copyDialogCopyIconSize,
       ),
     );
-    return Row(
+    return Column(
       mainAxisSize: MainAxisSize.min,
       children: [
-        Opacity(opacity: 0, child: IgnorePointer(child: copyButton)),
-        Flexible(
-          child: TextButton(
-            onPressed: () => context.openInGoogleMaps(lonLat: lonLat),
-            child: Text(
-              [
-                lonLat.formatAsDegrees,
-                if (isInaccurate) ' *',
-              ].join(),
-              textAlign: TextAlign.center,
-              style: const TextStyle(
-                fontWeight: FontWeight.bold,
+        const Text('click to open in Google Maps:'),
+        Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Opacity(opacity: 0, child: IgnorePointer(child: copyButton)),
+            Flexible(
+              child: TextButton(
+                onPressed: () => context.openInGoogleMaps(lonLat: lonLat),
+                child: Text(
+                  [
+                    lonLat.formatAsDegrees,
+                    if (isInaccurate) ' *',
+                  ].join(),
+                  textAlign: TextAlign.center,
+                  style: const TextStyle(
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
               ),
             ),
-          ),
+            copyButton,
+          ],
         ),
-        copyButton,
       ],
     );
   }
