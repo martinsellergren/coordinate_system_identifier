@@ -1,3 +1,5 @@
+import 'package:collection/collection.dart';
+import 'package:flutter/material.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:mgrs_dart/mgrs_dart.dart' as m;
 import 'package:parse_coordinates/parse_coordinates.dart' as p;
@@ -19,13 +21,16 @@ sealed class CoordinatesParsingResult with _$CoordinatesParsingResult {
 }
 
 CoordinatesParsingResult parseCoordinates(String source) {
-  source = source.trim();
+  source = source.trim().evaluateTransformFromEuropeanStyleDecimalNotation();
   if (source.contains('°')) {
     return CoordinatesParsingResult.wellDefined(lonLat: _parseDegrees(source));
   } else if (source.toLowerCase().contains('lat')) {
     return CoordinatesParsingResult.wellDefined(
-        lonLat: _parseLabeledDecimalDegrees(source));
-  } else if (source.contains(RegExp(r'[C-X]'))) {
+        lonLat: _parseLonLatLabeledDecimalDegrees(source));
+  } else if (source.toLowerCase().contains(RegExp(r'x ?[:=]'))) {
+    return CoordinatesParsingResult.wellDefined(
+        lonLat: _parseXyLabeledDecimalDegrees(source));
+  } else if (source.toLowerCase().contains(RegExp(r'[a-z]'))) {
     return CoordinatesParsingResult.wellDefined(
         lonLat: _parseWhenSourceContainsLetters(source));
   } else {
@@ -34,20 +39,44 @@ CoordinatesParsingResult parseCoordinates(String source) {
 }
 
 LonLat _parseDegrees(String source) {
-  source = source
-      .replaceFirst(RegExp(r'N\s*,'), 'N')
-      .replaceFirst(RegExp(r'E\s*,'), 'E')
-      .replaceFirst(RegExp(r'S\s*,'), 'S')
-      .replaceFirst(RegExp(r'W\s*,'), 'W')
-      .replaceAll(RegExp(r'°\s+'), '°')
-      .replaceAll(RegExp(r"'\s+"), "'")
-      .replaceAll(RegExp(r'"\s+'), '"');
-  final res = p.parseCoordinates(source);
-  if (res == null) throw const FormatException();
-  return LonLat(lon: res.long, lat: res.lat);
+  final e = source.dirCoordinate(dir: 'E');
+  final w = source.dirCoordinate(dir: 'W');
+  final n = source.dirCoordinate(dir: 'N');
+  final s = source.dirCoordinate(dir: 'S');
+  return LonLat(
+    lon: e?.parseDecimalDegrees() ?? -w!.parseDecimalDegrees(),
+    lat: n?.parseDecimalDegrees() ?? -s!.parseDecimalDegrees(),
+  );
 }
 
-LonLat _parseLabeledDecimalDegrees(String source) {
+extension on String {
+  String? dirCoordinate({required String dir}) =>
+      RegExp(r'''([\d°'"\s\.]+)''' + dir.toLowerCase())
+          .firstMatch(toLowerCase())
+          ?.group(1)
+          ?.trim();
+
+  double parseDecimalDegrees() {
+    final res = [
+      r'([\d\.]+)°',
+      r"([\d\.]+)'",
+      r'([\d\.]+)"',
+    ]
+        .map((e) => RegExp(e).firstMatch(this)?.group(1))
+        .map((e) => e == null ? null : double.parse(e))
+        .toList();
+    final deg = res[0]!;
+    final min = res[1];
+    final sec = res[2];
+    return [
+      deg,
+      if (min != null) min / 60,
+      if (sec != null) sec / 3600,
+    ].sum;
+  }
+}
+
+LonLat _parseLonLatLabeledDecimalDegrees(String source) {
   final lon = double.parse(RegExp(r'lon.*?(-?\d+(\.\d+)?)')
       .firstMatch(source.toLowerCase())!
       .group(1)!);
@@ -55,6 +84,16 @@ LonLat _parseLabeledDecimalDegrees(String source) {
       .firstMatch(source.toLowerCase())!
       .group(1)!);
   return LonLat(lon: lon, lat: lat);
+}
+
+LonLat _parseXyLabeledDecimalDegrees(String source) {
+  final x = double.parse(RegExp(r'x ?[:=].*?(-?\d+(\.\d+)?)')
+      .firstMatch(source.toLowerCase())!
+      .group(1)!);
+  final y = double.parse(RegExp(r'y ?[:=].*?(-?\d+(\.\d+)?)')
+      .firstMatch(source.toLowerCase())!
+      .group(1)!);
+  return LonLat(lon: x, lat: y);
 }
 
 LonLat _parseWhenSourceContainsLetters(String source) {
@@ -74,4 +113,14 @@ Point _parseDecimal(String source) {
     x: double.parse(parts[1]),
     y: double.parse(parts[0]),
   );
+}
+
+extension on String {
+  String evaluateTransformFromEuropeanStyleDecimalNotation() {
+    if (characters.where((e) => e == ',').length > 1) {
+      return replaceAll(',', '.');
+    } else {
+      return this;
+    }
+  }
 }
