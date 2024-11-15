@@ -1,6 +1,7 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:shared/my_google_map.dart';
+import 'package:shared/theme.dart';
 
 import 'home_page/home_page.dart';
 
@@ -25,6 +26,7 @@ class _AppState extends State<App> {
     return MaterialApp(
       title: appName,
       home: const HomePage(),
+      theme: lightTheme(),
       builder: (context, child) =>
           Overlay.wrap(child: kIsWeb ? SelectionArea(child: child!) : child!),
     );
