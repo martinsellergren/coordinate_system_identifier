@@ -1,4 +1,5 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:mgrs_dart/mgrs_dart.dart' as m;
 import 'package:parse_coordinates/parse_coordinates.dart' as p;
 
 import '../coordinate_system_data/model.dart';
@@ -25,7 +26,8 @@ CoordinatesParsingResult parseCoordinates(String source) {
     return CoordinatesParsingResult.wellDefined(
         lonLat: _parseLabeledDecimalDegrees(source));
   } else if (source.contains(RegExp(r'[C-X]'))) {
-    return CoordinatesParsingResult.wellDefined(lonLat: _parseUtm(source));
+    return CoordinatesParsingResult.wellDefined(
+        lonLat: _parseWhenSourceContainsLetters(source));
   } else {
     return CoordinatesParsingResult.ambiguous(point: _parseDecimal(source));
   }
@@ -55,10 +57,13 @@ LonLat _parseLabeledDecimalDegrees(String source) {
   return LonLat(lon: lon, lat: lat);
 }
 
-LonLat _parseUtm(String source) {
+LonLat _parseWhenSourceContainsLetters(String source) {
   final res = p.parseCoordinates(source);
-  if (res == null) throw const FormatException();
-  return LonLat(lon: res.long, lat: res.lat);
+  if (res != null) {
+    return LonLat(lon: res.long, lat: res.lat);
+  }
+  final res2 = m.Mgrs.toPoint(source);
+  return LonLat(lon: res2.first, lat: res2.last);
 }
 
 Point _parseDecimal(String source) {

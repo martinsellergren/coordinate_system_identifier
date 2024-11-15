@@ -19,6 +19,8 @@ void main() {
         '''lon: 20.548645 lat: 69.059973''',
         '''Latitude: 69.059973 Longitude: 20.548645''',
         '''Longitude: 20.548645latitude: 69.059973''',
+        '''34W DB 81997 61115''', // mgrs
+        '''34WDB8199761115''',
       ].forEach(
         (e) => expectEqualCoordinates(
           parseCoordinates(e).requireWellDefined,
