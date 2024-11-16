@@ -21,7 +21,10 @@ sealed class CoordinatesParsingResult with _$CoordinatesParsingResult {
 }
 
 CoordinatesParsingResult parseCoordinates(String source) {
-  source = source.trim().evaluateTransformFromEuropeanStyleDecimalNotation();
+  source = source
+      .trim()
+      .evaluateTransformFromEuropeanStyleDecimalNotation()
+      .replaceAll(RegExp(r' +'), ' ');
   if (source.contains('°')) {
     return CoordinatesParsingResult.wellDefined(lonLat: _parseDegrees(source));
   } else if (source.toLowerCase().contains('lat')) {

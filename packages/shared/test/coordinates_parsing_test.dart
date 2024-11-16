@@ -10,24 +10,35 @@ const _capeHorn = LonLat(lon: -67.265894, lat: -55.983620);
 
 void main() {
   test(
-    "Treriksröset, well defined",
+    'Degrees, minutes and seconds',
     () {
       [
         '''69°03'35.9"N 20°32'55.1"E''',
         '''69° 03' 35.9" N 20°   32' 55.1" E''',
         '''69° 03' 35.9"  N   ,  20° 32' 55.1" E''',
-        '''lat=69.059973, lon=20.548645''',
-        '''lat=69,059973 lon=20,548645''',
-        '''y: 69,059973 x:20,548645''',
-        '''x: 20.548645, y: 69.059973''',
-        '''x:20.548645 y = 69.059973''',
-        '''69.059973°N 20.548645°E''',
+      ].forEach(
+        (e) => expectEqualCoordinates(
+          parseCoordinates(e).requireWellDefined,
+          _treriksroset,
+        ),
+      );
+      [
+        '''55°59'01.0"S 67°15'57.2"W''',
+        '''55°  59'01.0" S, 67°15' 57.2" W ''',
+      ].forEach(
+        (e) => expectEqualCoordinates(
+          parseCoordinates(e).requireWellDefined,
+          _capeHorn,
+        ),
+      );
+    },
+  );
+
+  test(
+    "Degrees and minutes",
+    () {
+      [
         '''69°3.59838'N 20°32.9187'E''',
-        '''lon: 20.548645 lat: 69.059973''',
-        '''Latitude: 69.059973 Longitude: 20.548645''',
-        '''Longitude: 20.548645latitude: 69.059973''',
-        '''34W DB 81997 61115''', // mgrs
-        '''34WDB8199761115''',
       ].forEach(
         (e) => expectEqualCoordinates(
           parseCoordinates(e).requireWellDefined,
@@ -38,7 +49,21 @@ void main() {
   );
 
   test(
-    "Treriksröset, ambiguous",
+    "Degrees only",
+    () {
+      [
+        '''69.059973°N 20.548645°E''',
+      ].forEach(
+        (e) => expectEqualCoordinates(
+          parseCoordinates(e).requireWellDefined,
+          _treriksroset,
+        ),
+      );
+    },
+  );
+
+  test(
+    "Decimal",
     () {
       [
         '''69.059973, 20.548645''',
@@ -53,17 +78,72 @@ void main() {
   );
 
   test(
-    "Cape horn, well defined",
+    "Lat lon labeled",
     () {
       [
-        '''55°59'01.0"S 67°15'57.2"W''',
-        '''55°  59'01.0" S, 67°15' 57.2" W ''',
+        '''lat=69.059973, lon=20.548645''',
+        '''lat=69,059973 lon=20,548645''',
+        '''lon: 20.548645 lat: 69.059973''',
+        '''Latitude: 69.059973 Longitude: 20.548645''',
+        '''Longitude: 20.548645latitude: 69.059973''',
+      ].forEach(
+        (e) => expectEqualCoordinates(
+          parseCoordinates(e).requireWellDefined,
+          _treriksroset,
+        ),
+      );
+      [
         '''lat: -55.983620, lon: -67.265894''',
         '''lon=-67.265894 lat  =  -55.983620''',
       ].forEach(
         (e) => expectEqualCoordinates(
           parseCoordinates(e).requireWellDefined,
           _capeHorn,
+        ),
+      );
+    },
+  );
+
+  test(
+    "XY labeled",
+    () {
+      [
+        '''y: 69,059973 x:20,548645''',
+        '''x: 20.548645, y: 69.059973''',
+        '''x:20.548645 y = 69.059973''',
+      ].forEach(
+        (e) => expectEqualCoordinates(
+          parseCoordinates(e).requireWellDefined,
+          _treriksroset,
+        ),
+      );
+    },
+  );
+
+  test(
+    "UTM",
+    () {
+      [
+        '''34W 481997.74 7661115.65''',
+      ].forEach(
+        (e) => expectEqualCoordinates(
+          parseCoordinates(e).requireWellDefined,
+          _treriksroset,
+        ),
+      );
+    },
+  );
+
+  test(
+    "Military Grid Reference System, MGRS",
+    () {
+      [
+        '''34W DB 81997 61115''',
+        '''34WDB8199761115''',
+      ].forEach(
+        (e) => expectEqualCoordinates(
+          parseCoordinates(e).requireWellDefined,
+          _treriksroset,
         ),
       );
     },
