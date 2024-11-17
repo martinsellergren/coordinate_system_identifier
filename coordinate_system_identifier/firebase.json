@@ -1,13 +1,1 @@
-{
-  "hosting": {
-    "source": ".",
-    "ignore": [
-      "firebase.json",
-      "**/.*",
-      "**/node_modules/**"
-    ],
-    "frameworksBackend": {
-      "region": "europe-west1"
-    }
-  }
-}
+{"hosting":{"source":".","ignore":["firebase.json","**/.*","**/node_modules/**"],"frameworksBackend":{"region":"europe-west1"}},"flutter":{"platforms":{"android":{"default":{"projectId":"coordinate-system-identifier","appId":"1:265739521579:android:d2e654cd6ae5c74172a46e","fileOutput":"android/app/google-services.json"}},"ios":{"default":{"projectId":"coordinate-system-identifier","appId":"1:265739521579:ios:905bf567059f3acd72a46e","uploadDebugSymbols":false,"fileOutput":"ios/Runner/GoogleService-Info.plist"}},"dart":{"lib/firebase_options.dart":{"projectId":"coordinate-system-identifier","configurations":{"android":"1:265739521579:android:d2e654cd6ae5c74172a46e","ios":"1:265739521579:ios:905bf567059f3acd72a46e","web":"1:265739521579:web:9e735f8b8750f23672a46e"}}}}}}
