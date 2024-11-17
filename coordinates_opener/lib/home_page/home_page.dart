@@ -18,6 +18,7 @@ class HomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      extendBodyBehindAppBar: true,
       appBar: AppBar(
         actions: [
           IconButton(
@@ -62,27 +63,31 @@ class _ContentState extends State<_Content> {
   @override
   Widget build(BuildContext context) {
     final ambiguousInputPoint = _ambiguousInputPoint;
-    return ambiguousInputPoint == null
-        ? Center(
-            child: _AnyCoordinatesTextField(
-              controller:
-                  _anyCoordinatesInputController, // to preserve text input state
-              onEnteredWellDefinedCoordinates: (lonLat) =>
-                  context.openInGoogleMaps(lonLat: lonLat),
-              onEnteredAmbiguousCoordinates: (point) =>
-                  setState(() => _ambiguousInputPoint = point),
-            ),
-          )
-        : AmbiguousInputStepper(
-            inputPoint: ambiguousInputPoint,
-            onUpdateInputPoint: (inputPoint) =>
-                setState(() => _ambiguousInputPoint = inputPoint),
-            onCancel: () => setState(() => _ambiguousInputPoint = null),
-            onApproximateLocationSelected: (lonLat) => _onMapTap(
-              tapped: lonLat,
-              inputPoint: ambiguousInputPoint,
-            ),
-          );
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        const _Headline(),
+        ambiguousInputPoint == null
+            ? _AnyCoordinatesTextField(
+                controller:
+                    _anyCoordinatesInputController, // to preserve text input state
+                onEnteredWellDefinedCoordinates: (lonLat) =>
+                    context.openInGoogleMaps(lonLat: lonLat),
+                onEnteredAmbiguousCoordinates: (point) =>
+                    setState(() => _ambiguousInputPoint = point),
+              )
+            : AmbiguousInputStepper(
+                inputPoint: ambiguousInputPoint,
+                onUpdateInputPoint: (inputPoint) =>
+                    setState(() => _ambiguousInputPoint = inputPoint),
+                onCancel: () => setState(() => _ambiguousInputPoint = null),
+                onApproximateLocationSelected: (lonLat) => _onMapTap(
+                  tapped: lonLat,
+                  inputPoint: ambiguousInputPoint,
+                ),
+              ),
+      ].separate((i, e0, e1) => const SizedBox(height: 16)),
+    );
   }
 
   void _onMapTap({
@@ -113,6 +118,21 @@ class _ContentState extends State<_Content> {
             SnackBar(content: Text('Error processing input, $e')));
       }
     }
+  }
+}
+
+class _Headline extends StatelessWidget {
+  const _Headline();
+
+  @override
+  Widget build(BuildContext context) {
+    return const Text(
+      'Coordinates Opener',
+      style: TextStyle(
+        fontSize: 24,
+        fontWeight: FontWeight.w400,
+      ),
+    );
   }
 }
 
@@ -210,46 +230,50 @@ class _AmbiguousInputStepperState extends State<AmbiguousInputStepper> {
             }
           : null,
       child: SingleChildScrollView(
-        child: Stepper(
-          currentStep: _currentStep.index,
-          controlsBuilder: switch (_currentStep) {
-            _Step.determineXY => null, //i.e default controls
-            _Step.enterCoordinates ||
-            _Step.enterApproximateLocation =>
-              (context, details) => const SizedBox.shrink(),
-          },
-          onStepCancel: () => widget.onCancel(),
-          onStepContinue: () => setState(() => _currentStep =
-              _Step.values[_Step.values.indexOf(_currentStep) + 1]),
-          onStepTapped: (value) => switch (_Step.values[value]) {
-            _Step.enterCoordinates => widget.onCancel(),
-            _Step.determineXY ||
-            _Step.enterApproximateLocation =>
-              setState(() => _currentStep = _Step.values[value]),
-          },
-          steps: _Step.values
-              .map(
-                (e) => switch (e) {
-                  _Step.enterCoordinates => const Step(
-                      title: Text('Enter coordinates'),
-                      content: SizedBox.shrink(),
-                    ),
-                  _Step.determineXY => Step(
-                      title: const Text('Confirm or swap order'),
-                      content: _PickXY(
-                        inputPoint: widget.inputPoint,
-                        onUpdateInputPoint: widget.onUpdateInputPoint,
+        child: MediaQuery.removePadding(
+          context: context,
+          removeTop: true,
+          child: Stepper(
+            currentStep: _currentStep.index,
+            controlsBuilder: switch (_currentStep) {
+              _Step.determineXY => null, //i.e default controls
+              _Step.enterCoordinates ||
+              _Step.enterApproximateLocation =>
+                (context, details) => const SizedBox.shrink(),
+            },
+            onStepCancel: () => widget.onCancel(),
+            onStepContinue: () => setState(() => _currentStep =
+                _Step.values[_Step.values.indexOf(_currentStep) + 1]),
+            onStepTapped: (value) => switch (_Step.values[value]) {
+              _Step.enterCoordinates => widget.onCancel(),
+              _Step.determineXY ||
+              _Step.enterApproximateLocation =>
+                setState(() => _currentStep = _Step.values[value]),
+            },
+            steps: _Step.values
+                .map(
+                  (e) => switch (e) {
+                    _Step.enterCoordinates => const Step(
+                        title: Text('Enter coordinates'),
+                        content: SizedBox.shrink(),
                       ),
-                    ),
-                  _Step.enterApproximateLocation => Step(
-                      title: const Text('Enter approximate location'),
-                      content: _EnterApproximateLocation(
-                        onEntered: widget.onApproximateLocationSelected,
+                    _Step.determineXY => Step(
+                        title: const Text('Confirm or swap order'),
+                        content: _PickXY(
+                          inputPoint: widget.inputPoint,
+                          onUpdateInputPoint: widget.onUpdateInputPoint,
+                        ),
                       ),
-                    ),
-                },
-              )
-              .toList(),
+                    _Step.enterApproximateLocation => Step(
+                        title: const Text('Enter approximate location'),
+                        content: _EnterApproximateLocation(
+                          onEntered: widget.onApproximateLocationSelected,
+                        ),
+                      ),
+                  },
+                )
+                .toList(),
+          ),
         ),
       ),
     );
