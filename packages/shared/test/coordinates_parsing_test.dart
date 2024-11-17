@@ -112,9 +112,9 @@ void main() {
         '''x: 20.548645, y: 69.059973''',
         '''x:20.548645 y = 69.059973''',
       ].forEach(
-        (e) => expectEqualCoordinates(
-          parseCoordinates(e).requireWellDefined,
-          _treriksroset,
+        (e) => expectEqualPoints(
+          parseCoordinates(e).requireAmbiguous,
+          _treriksroset.toPoint,
         ),
       );
     },

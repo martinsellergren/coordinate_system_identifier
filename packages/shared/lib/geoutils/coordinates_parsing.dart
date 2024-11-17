@@ -31,8 +31,8 @@ CoordinatesParsingResult parseCoordinates(String source) {
     return CoordinatesParsingResult.wellDefined(
         lonLat: _parseLonLatLabeledDecimalDegrees(source));
   } else if (source.toLowerCase().contains(RegExp(r'x ?[:=]'))) {
-    return CoordinatesParsingResult.wellDefined(
-        lonLat: _parseXyLabeledDecimalDegrees(source));
+    return CoordinatesParsingResult.ambiguous(
+        point: _parseXyLabeledDecimalDegrees(source));
   } else if (source.toLowerCase().contains(RegExp(r'[a-z]'))) {
     return CoordinatesParsingResult.wellDefined(
         lonLat: _parseWhenSourceContainsLetters(source));
@@ -89,14 +89,14 @@ LonLat _parseLonLatLabeledDecimalDegrees(String source) {
   return LonLat(lon: lon, lat: lat);
 }
 
-LonLat _parseXyLabeledDecimalDegrees(String source) {
+Point _parseXyLabeledDecimalDegrees(String source) {
   final x = double.parse(RegExp(r'x ?[:=].*?(-?\d+(\.\d+)?)')
       .firstMatch(source.toLowerCase())!
       .group(1)!);
   final y = double.parse(RegExp(r'y ?[:=].*?(-?\d+(\.\d+)?)')
       .firstMatch(source.toLowerCase())!
       .group(1)!);
-  return LonLat(lon: x, lat: y);
+  return Point(x: x, y: y);
 }
 
 LonLat _parseWhenSourceContainsLetters(String source) {
