@@ -6,9 +6,11 @@ import 'package:flutter/foundation.dart';
 Future<void> setupFirebase({required FirebaseOptions options}) async {
   await Firebase.initializeApp(options: options);
   FirebaseAnalytics.instance; // trigger default reporting(?)
-  FlutterError.onError = FirebaseCrashlytics.instance.recordFlutterFatalError;
-  PlatformDispatcher.instance.onError = (error, stack) {
-    FirebaseCrashlytics.instance.recordError(error, stack, fatal: true);
-    return true;
-  };
+  if (kIsWeb) {
+    FlutterError.onError = FirebaseCrashlytics.instance.recordFlutterFatalError;
+    PlatformDispatcher.instance.onError = (error, stack) {
+      FirebaseCrashlytics.instance.recordError(error, stack, fatal: true);
+      return true;
+    };
+  }
 }
