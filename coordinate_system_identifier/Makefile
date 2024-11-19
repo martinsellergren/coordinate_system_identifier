@@ -1,5 +1,5 @@
 MAKEFLAGS += --always_make
 
 deploy:
-	f clean
+	fvm flutter clean
 	firebase deploy

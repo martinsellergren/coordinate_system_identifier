@@ -121,6 +121,25 @@ void main() {
   );
 
   test(
+    "NESW labeled",
+    () {
+      [
+        '''N 69.059973, E 20.548645''',
+        '''E 20.548645 N 69.059973''',
+        '''N:  69.059973 E:  20.548645''',
+        '''S -69.059973,E = 20.548645''',
+        '''S -69.059973, W = -20.548645''',
+        '''N 69.059973, W = -20.548645''',
+      ].forEach(
+        (e) => expectEqualPoints(
+          parseCoordinates(e).requireAmbiguous,
+          _treriksroset.toPoint,
+        ),
+      );
+    },
+  );
+
+  test(
     "UTM",
     () {
       [

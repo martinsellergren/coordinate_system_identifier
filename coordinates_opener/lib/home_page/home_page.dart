@@ -299,8 +299,8 @@ class _PickXY extends StatelessWidget {
         Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text('Y or latitude: ${inputPoint.y}'),
-            Text('X or longitude:  ${inputPoint.x}'),
+            Text('Y/N/latitude: ${inputPoint.y}'),
+            Text('X/E/longitude:  ${inputPoint.x}'),
           ],
         ),
         const SizedBox(width: 8),
