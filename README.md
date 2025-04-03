@@ -1,5 +1,9 @@
 # coordinate_system_identifier
 
+Two web-apps with minimalistic design
+- Coordinate system identifier, for finding which coordinate system some coordinates are defined in, and
+- Coordinates opener, for opening any coordinates in Google Maps.
+
 ## Some example points, format Y X
 
 - Treriksröset
@@ -22,21 +26,3 @@
 - Cape cod bay, Massachusetts, USA
   - EPSG:4326 41.949527 -70.320297
   - EPSG:26986 NAD83 / Massachusetts Mainland: 856139.6674427887 297810.8402277441
-
-## nadgrid proj4 problem
-
-proj4 with nadgrid, e.g:
-+.gsb
-results in
-Unable to find mandatory grid 'OSTN15_NTv2_OSGBtoETRS.gsb'
-
-CQ77NA83.GSB (50.474279, -59.612757, 2009) -> (5593416.237319979 225813.86761223225), chevery
-May76v20.gsb (46.028399, -83.866416, 2019) -> (5107793.160269224 -33228.78023276129), great lakes
-NB7783v2.gsb (45.972127, -66.012198, 2200) -> (741444.7741532337 337803.05379672465), new brunswick
-NTv2_0.gsb (64.101711, -21.835583, 2964) -> (20080491.382446535 9689085.002793662), reykjavik
-BETA2007.gsb (53.505453, 9.978689, 3068) -> (137297.6317391371 -201856.0288693174), hamburg
-CA61_003.gsb (-23.663996, -46.472949, 5536) -> (7342896.53723805 1577657.9023158252), sao paulo
-\"National 84 (02.07.01).gsb\" (-26.130019, 113.189257, 20349) -> (7107928.730444487 718745.0924721587), australia west
-CA7072_003.gsb
-nzgd2kgrid0005.gsb
-OSTN15_NTv2_OSGBtoETRS.gsb, Piccadilly Circus above
