@@ -1,9 +1,7 @@
 import 'dart:convert';
 
+import 'package:coordinate_systems_model/coordinate_systems_model.dart';
 import 'package:flutter/services.dart';
-
-import 'consts.dart';
-import 'model.dart';
 
 Future<CoordinateSystemsData> loadCoordinateSystemData() async {
   String str = await rootBundle.loadString(
@@ -13,13 +11,20 @@ Future<CoordinateSystemsData> loadCoordinateSystemData() async {
   );
   var data = CoordinateSystemsData.fromJson(jsonDecode(str));
   return data.copyWith(
-    items: [...data.items, wgs84]
-        .map((e) => e.proj4.contains('+nadgrids')
-            ? e.copyWith(
-                proj4: e.proj4.replaceAll(RegExp(r'\+nadgrids=.+? \+'), '+'),
-                hasNadgrid: true,
-              )
-            : e)
-        .toList(),
+    items:
+        [...data.items, wgs84]
+            .map(
+              (e) =>
+                  e.proj4.contains('+nadgrids')
+                      ? e.copyWith(
+                        proj4: e.proj4.replaceAll(
+                          RegExp(r'\+nadgrids=.+? \+'),
+                          '+',
+                        ),
+                        hasNadgrid: true,
+                      )
+                      : e,
+            )
+            .toList(),
   );
 }

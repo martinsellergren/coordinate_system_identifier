@@ -12,7 +12,8 @@ part of 'coordinates_parsing.dart';
 T _$identity<T>(T value) => value;
 
 final _privateConstructorUsedError = UnsupportedError(
-    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models');
+  'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models',
+);
 
 /// @nodoc
 mixin _$CoordinatesParsingResult {
@@ -20,52 +21,49 @@ mixin _$CoordinatesParsingResult {
   TResult when<TResult extends Object?>({
     required TResult Function(LonLat lonLat) wellDefined,
     required TResult Function(Point point) ambiguous,
-  }) =>
-      throw _privateConstructorUsedError;
+  }) => throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function(LonLat lonLat)? wellDefined,
     TResult? Function(Point point)? ambiguous,
-  }) =>
-      throw _privateConstructorUsedError;
+  }) => throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
     TResult Function(LonLat lonLat)? wellDefined,
     TResult Function(Point point)? ambiguous,
     required TResult orElse(),
-  }) =>
-      throw _privateConstructorUsedError;
+  }) => throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult map<TResult extends Object?>({
     required TResult Function(WellDefined value) wellDefined,
     required TResult Function(Ambiguous value) ambiguous,
-  }) =>
-      throw _privateConstructorUsedError;
+  }) => throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
     TResult? Function(WellDefined value)? wellDefined,
     TResult? Function(Ambiguous value)? ambiguous,
-  }) =>
-      throw _privateConstructorUsedError;
+  }) => throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult maybeMap<TResult extends Object?>({
     TResult Function(WellDefined value)? wellDefined,
     TResult Function(Ambiguous value)? ambiguous,
     required TResult orElse(),
-  }) =>
-      throw _privateConstructorUsedError;
+  }) => throw _privateConstructorUsedError;
 }
 
 /// @nodoc
 abstract class $CoordinatesParsingResultCopyWith<$Res> {
-  factory $CoordinatesParsingResultCopyWith(CoordinatesParsingResult value,
-          $Res Function(CoordinatesParsingResult) then) =
-      _$CoordinatesParsingResultCopyWithImpl<$Res, CoordinatesParsingResult>;
+  factory $CoordinatesParsingResultCopyWith(
+    CoordinatesParsingResult value,
+    $Res Function(CoordinatesParsingResult) then,
+  ) = _$CoordinatesParsingResultCopyWithImpl<$Res, CoordinatesParsingResult>;
 }
 
 /// @nodoc
-class _$CoordinatesParsingResultCopyWithImpl<$Res,
-        $Val extends CoordinatesParsingResult>
+class _$CoordinatesParsingResultCopyWithImpl<
+  $Res,
+  $Val extends CoordinatesParsingResult
+>
     implements $CoordinatesParsingResultCopyWith<$Res> {
   _$CoordinatesParsingResultCopyWithImpl(this._value, this._then);
 
@@ -81,10 +79,13 @@ class _$CoordinatesParsingResultCopyWithImpl<$Res,
 /// @nodoc
 abstract class _$$WellDefinedImplCopyWith<$Res> {
   factory _$$WellDefinedImplCopyWith(
-          _$WellDefinedImpl value, $Res Function(_$WellDefinedImpl) then) =
-      __$$WellDefinedImplCopyWithImpl<$Res>;
+    _$WellDefinedImpl value,
+    $Res Function(_$WellDefinedImpl) then,
+  ) = __$$WellDefinedImplCopyWithImpl<$Res>;
   @useResult
   $Res call({LonLat lonLat});
+
+  $LonLatCopyWith<$Res> get lonLat;
 }
 
 /// @nodoc
@@ -92,22 +93,34 @@ class __$$WellDefinedImplCopyWithImpl<$Res>
     extends _$CoordinatesParsingResultCopyWithImpl<$Res, _$WellDefinedImpl>
     implements _$$WellDefinedImplCopyWith<$Res> {
   __$$WellDefinedImplCopyWithImpl(
-      _$WellDefinedImpl _value, $Res Function(_$WellDefinedImpl) _then)
-      : super(_value, _then);
+    _$WellDefinedImpl _value,
+    $Res Function(_$WellDefinedImpl) _then,
+  ) : super(_value, _then);
 
   /// Create a copy of CoordinatesParsingResult
   /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
-  $Res call({
-    Object? lonLat = freezed,
-  }) {
-    return _then(_$WellDefinedImpl(
-      lonLat: freezed == lonLat
-          ? _value.lonLat
-          : lonLat // ignore: cast_nullable_to_non_nullable
-              as LonLat,
-    ));
+  $Res call({Object? lonLat = null}) {
+    return _then(
+      _$WellDefinedImpl(
+        lonLat:
+            null == lonLat
+                ? _value.lonLat
+                : lonLat // ignore: cast_nullable_to_non_nullable
+                    as LonLat,
+      ),
+    );
+  }
+
+  /// Create a copy of CoordinatesParsingResult
+  /// with the given fields replaced by the non-null parameter values.
+  @override
+  @pragma('vm:prefer-inline')
+  $LonLatCopyWith<$Res> get lonLat {
+    return $LonLatCopyWith<$Res>(_value.lonLat, (value) {
+      return _then(_value.copyWith(lonLat: value));
+    });
   }
 }
 
@@ -129,12 +142,11 @@ class _$WellDefinedImpl implements WellDefined {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$WellDefinedImpl &&
-            const DeepCollectionEquality().equals(other.lonLat, lonLat));
+            (identical(other.lonLat, lonLat) || other.lonLat == lonLat));
   }
 
   @override
-  int get hashCode =>
-      Object.hash(runtimeType, const DeepCollectionEquality().hash(lonLat));
+  int get hashCode => Object.hash(runtimeType, lonLat);
 
   /// Create a copy of CoordinatesParsingResult
   /// with the given fields replaced by the non-null parameter values.
@@ -222,8 +234,9 @@ abstract class WellDefined implements CoordinatesParsingResult {
 /// @nodoc
 abstract class _$$AmbiguousImplCopyWith<$Res> {
   factory _$$AmbiguousImplCopyWith(
-          _$AmbiguousImpl value, $Res Function(_$AmbiguousImpl) then) =
-      __$$AmbiguousImplCopyWithImpl<$Res>;
+    _$AmbiguousImpl value,
+    $Res Function(_$AmbiguousImpl) then,
+  ) = __$$AmbiguousImplCopyWithImpl<$Res>;
   @useResult
   $Res call({Point point});
 
@@ -235,22 +248,24 @@ class __$$AmbiguousImplCopyWithImpl<$Res>
     extends _$CoordinatesParsingResultCopyWithImpl<$Res, _$AmbiguousImpl>
     implements _$$AmbiguousImplCopyWith<$Res> {
   __$$AmbiguousImplCopyWithImpl(
-      _$AmbiguousImpl _value, $Res Function(_$AmbiguousImpl) _then)
-      : super(_value, _then);
+    _$AmbiguousImpl _value,
+    $Res Function(_$AmbiguousImpl) _then,
+  ) : super(_value, _then);
 
   /// Create a copy of CoordinatesParsingResult
   /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
-  $Res call({
-    Object? point = null,
-  }) {
-    return _then(_$AmbiguousImpl(
-      point: null == point
-          ? _value.point
-          : point // ignore: cast_nullable_to_non_nullable
-              as Point,
-    ));
+  $Res call({Object? point = null}) {
+    return _then(
+      _$AmbiguousImpl(
+        point:
+            null == point
+                ? _value.point
+                : point // ignore: cast_nullable_to_non_nullable
+                    as Point,
+      ),
+    );
   }
 
   /// Create a copy of CoordinatesParsingResult

@@ -12,7 +12,8 @@ part of 'epsg_response_model.dart';
 T _$identity<T>(T value) => value;
 
 final _privateConstructorUsedError = UnsupportedError(
-    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models');
+  'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models',
+);
 
 EpsgJsonResponse _$EpsgJsonResponseFromJson(Map<String, dynamic> json) {
   return _EpsgJsonResponse.fromJson(json);
@@ -35,8 +36,9 @@ mixin _$EpsgJsonResponse {
 /// @nodoc
 abstract class $EpsgJsonResponseCopyWith<$Res> {
   factory $EpsgJsonResponseCopyWith(
-          EpsgJsonResponse value, $Res Function(EpsgJsonResponse) then) =
-      _$EpsgJsonResponseCopyWithImpl<$Res, EpsgJsonResponse>;
+    EpsgJsonResponse value,
+    $Res Function(EpsgJsonResponse) then,
+  ) = _$EpsgJsonResponseCopyWithImpl<$Res, EpsgJsonResponse>;
   @useResult
   $Res call({BboxResp bbox});
 
@@ -57,15 +59,17 @@ class _$EpsgJsonResponseCopyWithImpl<$Res, $Val extends EpsgJsonResponse>
   /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
-  $Res call({
-    Object? bbox = null,
-  }) {
-    return _then(_value.copyWith(
-      bbox: null == bbox
-          ? _value.bbox
-          : bbox // ignore: cast_nullable_to_non_nullable
-              as BboxResp,
-    ) as $Val);
+  $Res call({Object? bbox = null}) {
+    return _then(
+      _value.copyWith(
+            bbox:
+                null == bbox
+                    ? _value.bbox
+                    : bbox // ignore: cast_nullable_to_non_nullable
+                        as BboxResp,
+          )
+          as $Val,
+    );
   }
 
   /// Create a copy of EpsgJsonResponse
@@ -82,9 +86,10 @@ class _$EpsgJsonResponseCopyWithImpl<$Res, $Val extends EpsgJsonResponse>
 /// @nodoc
 abstract class _$$EpsgJsonResponseImplCopyWith<$Res>
     implements $EpsgJsonResponseCopyWith<$Res> {
-  factory _$$EpsgJsonResponseImplCopyWith(_$EpsgJsonResponseImpl value,
-          $Res Function(_$EpsgJsonResponseImpl) then) =
-      __$$EpsgJsonResponseImplCopyWithImpl<$Res>;
+  factory _$$EpsgJsonResponseImplCopyWith(
+    _$EpsgJsonResponseImpl value,
+    $Res Function(_$EpsgJsonResponseImpl) then,
+  ) = __$$EpsgJsonResponseImplCopyWithImpl<$Res>;
   @override
   @useResult
   $Res call({BboxResp bbox});
@@ -97,23 +102,25 @@ abstract class _$$EpsgJsonResponseImplCopyWith<$Res>
 class __$$EpsgJsonResponseImplCopyWithImpl<$Res>
     extends _$EpsgJsonResponseCopyWithImpl<$Res, _$EpsgJsonResponseImpl>
     implements _$$EpsgJsonResponseImplCopyWith<$Res> {
-  __$$EpsgJsonResponseImplCopyWithImpl(_$EpsgJsonResponseImpl _value,
-      $Res Function(_$EpsgJsonResponseImpl) _then)
-      : super(_value, _then);
+  __$$EpsgJsonResponseImplCopyWithImpl(
+    _$EpsgJsonResponseImpl _value,
+    $Res Function(_$EpsgJsonResponseImpl) _then,
+  ) : super(_value, _then);
 
   /// Create a copy of EpsgJsonResponse
   /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
-  $Res call({
-    Object? bbox = null,
-  }) {
-    return _then(_$EpsgJsonResponseImpl(
-      bbox: null == bbox
-          ? _value.bbox
-          : bbox // ignore: cast_nullable_to_non_nullable
-              as BboxResp,
-    ));
+  $Res call({Object? bbox = null}) {
+    return _then(
+      _$EpsgJsonResponseImpl(
+        bbox:
+            null == bbox
+                ? _value.bbox
+                : bbox // ignore: cast_nullable_to_non_nullable
+                    as BboxResp,
+      ),
+    );
   }
 }
 
@@ -152,13 +159,13 @@ class _$EpsgJsonResponseImpl implements _EpsgJsonResponse {
   @pragma('vm:prefer-inline')
   _$$EpsgJsonResponseImplCopyWith<_$EpsgJsonResponseImpl> get copyWith =>
       __$$EpsgJsonResponseImplCopyWithImpl<_$EpsgJsonResponseImpl>(
-          this, _$identity);
+        this,
+        _$identity,
+      );
 
   @override
   Map<String, dynamic> toJson() {
-    return _$$EpsgJsonResponseImplToJson(
-      this,
-    );
+    return _$$EpsgJsonResponseImplToJson(this);
   }
 }
 
@@ -206,11 +213,12 @@ abstract class $BboxRespCopyWith<$Res> {
   factory $BboxRespCopyWith(BboxResp value, $Res Function(BboxResp) then) =
       _$BboxRespCopyWithImpl<$Res, BboxResp>;
   @useResult
-  $Res call(
-      {double southLatitude,
-      double westLongitude,
-      double northLatitude,
-      double eastLongitude});
+  $Res call({
+    double southLatitude,
+    double westLongitude,
+    double northLatitude,
+    double eastLongitude,
+  });
 }
 
 /// @nodoc
@@ -233,39 +241,48 @@ class _$BboxRespCopyWithImpl<$Res, $Val extends BboxResp>
     Object? northLatitude = null,
     Object? eastLongitude = null,
   }) {
-    return _then(_value.copyWith(
-      southLatitude: null == southLatitude
-          ? _value.southLatitude
-          : southLatitude // ignore: cast_nullable_to_non_nullable
-              as double,
-      westLongitude: null == westLongitude
-          ? _value.westLongitude
-          : westLongitude // ignore: cast_nullable_to_non_nullable
-              as double,
-      northLatitude: null == northLatitude
-          ? _value.northLatitude
-          : northLatitude // ignore: cast_nullable_to_non_nullable
-              as double,
-      eastLongitude: null == eastLongitude
-          ? _value.eastLongitude
-          : eastLongitude // ignore: cast_nullable_to_non_nullable
-              as double,
-    ) as $Val);
+    return _then(
+      _value.copyWith(
+            southLatitude:
+                null == southLatitude
+                    ? _value.southLatitude
+                    : southLatitude // ignore: cast_nullable_to_non_nullable
+                        as double,
+            westLongitude:
+                null == westLongitude
+                    ? _value.westLongitude
+                    : westLongitude // ignore: cast_nullable_to_non_nullable
+                        as double,
+            northLatitude:
+                null == northLatitude
+                    ? _value.northLatitude
+                    : northLatitude // ignore: cast_nullable_to_non_nullable
+                        as double,
+            eastLongitude:
+                null == eastLongitude
+                    ? _value.eastLongitude
+                    : eastLongitude // ignore: cast_nullable_to_non_nullable
+                        as double,
+          )
+          as $Val,
+    );
   }
 }
 
 /// @nodoc
 abstract class _$$BboxImplCopyWith<$Res> implements $BboxRespCopyWith<$Res> {
   factory _$$BboxImplCopyWith(
-          _$BboxImpl value, $Res Function(_$BboxImpl) then) =
-      __$$BboxImplCopyWithImpl<$Res>;
+    _$BboxImpl value,
+    $Res Function(_$BboxImpl) then,
+  ) = __$$BboxImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call(
-      {double southLatitude,
-      double westLongitude,
-      double northLatitude,
-      double eastLongitude});
+  $Res call({
+    double southLatitude,
+    double westLongitude,
+    double northLatitude,
+    double eastLongitude,
+  });
 }
 
 /// @nodoc
@@ -273,7 +290,7 @@ class __$$BboxImplCopyWithImpl<$Res>
     extends _$BboxRespCopyWithImpl<$Res, _$BboxImpl>
     implements _$$BboxImplCopyWith<$Res> {
   __$$BboxImplCopyWithImpl(_$BboxImpl _value, $Res Function(_$BboxImpl) _then)
-      : super(_value, _then);
+    : super(_value, _then);
 
   /// Create a copy of BboxResp
   /// with the given fields replaced by the non-null parameter values.
@@ -285,24 +302,30 @@ class __$$BboxImplCopyWithImpl<$Res>
     Object? northLatitude = null,
     Object? eastLongitude = null,
   }) {
-    return _then(_$BboxImpl(
-      southLatitude: null == southLatitude
-          ? _value.southLatitude
-          : southLatitude // ignore: cast_nullable_to_non_nullable
-              as double,
-      westLongitude: null == westLongitude
-          ? _value.westLongitude
-          : westLongitude // ignore: cast_nullable_to_non_nullable
-              as double,
-      northLatitude: null == northLatitude
-          ? _value.northLatitude
-          : northLatitude // ignore: cast_nullable_to_non_nullable
-              as double,
-      eastLongitude: null == eastLongitude
-          ? _value.eastLongitude
-          : eastLongitude // ignore: cast_nullable_to_non_nullable
-              as double,
-    ));
+    return _then(
+      _$BboxImpl(
+        southLatitude:
+            null == southLatitude
+                ? _value.southLatitude
+                : southLatitude // ignore: cast_nullable_to_non_nullable
+                    as double,
+        westLongitude:
+            null == westLongitude
+                ? _value.westLongitude
+                : westLongitude // ignore: cast_nullable_to_non_nullable
+                    as double,
+        northLatitude:
+            null == northLatitude
+                ? _value.northLatitude
+                : northLatitude // ignore: cast_nullable_to_non_nullable
+                    as double,
+        eastLongitude:
+            null == eastLongitude
+                ? _value.eastLongitude
+                : eastLongitude // ignore: cast_nullable_to_non_nullable
+                    as double,
+      ),
+    );
   }
 }
 
@@ -310,11 +333,12 @@ class __$$BboxImplCopyWithImpl<$Res>
 
 @JsonSerializable(fieldRename: FieldRename.snake)
 class _$BboxImpl implements _Bbox {
-  const _$BboxImpl(
-      {required this.southLatitude,
-      required this.westLongitude,
-      required this.northLatitude,
-      required this.eastLongitude});
+  const _$BboxImpl({
+    required this.southLatitude,
+    required this.westLongitude,
+    required this.northLatitude,
+    required this.eastLongitude,
+  });
 
   factory _$BboxImpl.fromJson(Map<String, dynamic> json) =>
       _$$BboxImplFromJson(json);
@@ -351,7 +375,12 @@ class _$BboxImpl implements _Bbox {
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   int get hashCode => Object.hash(
-      runtimeType, southLatitude, westLongitude, northLatitude, eastLongitude);
+    runtimeType,
+    southLatitude,
+    westLongitude,
+    northLatitude,
+    eastLongitude,
+  );
 
   /// Create a copy of BboxResp
   /// with the given fields replaced by the non-null parameter values.
@@ -363,18 +392,17 @@ class _$BboxImpl implements _Bbox {
 
   @override
   Map<String, dynamic> toJson() {
-    return _$$BboxImplToJson(
-      this,
-    );
+    return _$$BboxImplToJson(this);
   }
 }
 
 abstract class _Bbox implements BboxResp {
-  const factory _Bbox(
-      {required final double southLatitude,
-      required final double westLongitude,
-      required final double northLatitude,
-      required final double eastLongitude}) = _$BboxImpl;
+  const factory _Bbox({
+    required final double southLatitude,
+    required final double westLongitude,
+    required final double northLatitude,
+    required final double eastLongitude,
+  }) = _$BboxImpl;
 
   factory _Bbox.fromJson(Map<String, dynamic> json) = _$BboxImpl.fromJson;
 

@@ -1,4 +1,4 @@
-import 'package:coordinate_systems/coordinate_systems.dart';
+import 'package:coordinate_systems_model/coordinate_systems_model.dart';
 import 'package:flutter/material.dart';
 import 'package:pointer_interceptor/pointer_interceptor.dart';
 import 'package:shared/geoutils/evaluate_coordinate_systems.dart';
@@ -10,11 +10,12 @@ class PickReferenceSystemDialog extends StatefulWidget {
   final LonLat tappedPoint;
   final Function(CoordinateSystem pickedCoordinateSystem) onPicked;
 
-  const PickReferenceSystemDialog(
-      {super.key,
-      required this.pointDetails,
-      required this.tappedPoint,
-      required this.onPicked});
+  const PickReferenceSystemDialog({
+    super.key,
+    required this.pointDetails,
+    required this.tappedPoint,
+    required this.onPicked,
+  });
 
   @override
   State<PickReferenceSystemDialog> createState() =>
@@ -22,8 +23,9 @@ class PickReferenceSystemDialog extends StatefulWidget {
 }
 
 class _PickReferenceSystemDialogState extends State<PickReferenceSystemDialog> {
-  late final _items = widget.pointDetails
-      .coordinateSystemsOrderedByDistance(reference: widget.tappedPoint);
+  late final _items = widget.pointDetails.coordinateSystemsOrderedByDistance(
+    reference: widget.tappedPoint,
+  );
 
   @override
   Widget build(BuildContext context) {
@@ -56,26 +58,27 @@ class _PickReferenceSystemDialogState extends State<PickReferenceSystemDialog> {
               Expanded(
                 child: ListView(
                   padding: const EdgeInsets.only(top: 16),
-                  children: _items
-                      .take(100)
-                      .map(
-                        (e) => _Tile(
-                          cell1: Text(
-                            e.coordinateSystem.name,
-                            textAlign: TextAlign.center,
-                          ),
-                          cell2: Text(
-                            e.lonLat.formatAsDegrees,
-                            textAlign: TextAlign.center,
-                          ),
-                          cell3: Text(
-                            '${e.dKm} km',
-                            textAlign: TextAlign.center,
-                          ),
-                          onTap: () => widget.onPicked(e.coordinateSystem),
-                        ),
-                      )
-                      .toList(),
+                  children:
+                      _items
+                          .take(100)
+                          .map(
+                            (e) => _Tile(
+                              cell1: Text(
+                                e.coordinateSystem.name,
+                                textAlign: TextAlign.center,
+                              ),
+                              cell2: Text(
+                                e.lonLat.formatAsDegrees,
+                                textAlign: TextAlign.center,
+                              ),
+                              cell3: Text(
+                                '${e.dKm} km',
+                                textAlign: TextAlign.center,
+                              ),
+                              onTap: () => widget.onPicked(e.coordinateSystem),
+                            ),
+                          )
+                          .toList(),
                 ),
               ),
             ],
@@ -92,11 +95,12 @@ class _Tile extends StatelessWidget {
   final Widget cell2;
   final Widget cell3;
 
-  const _Tile(
-      {required this.cell1,
-      required this.cell2,
-      required this.cell3,
-      required this.onTap});
+  const _Tile({
+    required this.cell1,
+    required this.cell2,
+    required this.cell3,
+    required this.onTap,
+  });
 
   @override
   Widget build(BuildContext context) {

@@ -5,9 +5,8 @@ part 'model.g.dart';
 
 @freezed
 class CoordinateSystemsData with _$CoordinateSystemsData {
-  const factory CoordinateSystemsData({
-    required List<CoordinateSystem> items,
-  }) = _Data;
+  const factory CoordinateSystemsData({required List<CoordinateSystem> items}) =
+      _Data;
 
   factory CoordinateSystemsData.fromJson(Map<String, dynamic> json) =>
       _$CoordinateSystemsDataFromJson(json);
@@ -29,10 +28,8 @@ class CoordinateSystem with _$CoordinateSystem {
 
 @freezed
 class Bounds with _$Bounds {
-  const factory Bounds({
-    required LonLat northEast,
-    required LonLat southWest,
-  }) = _Bounds;
+  const factory Bounds({required LonLat northEast, required LonLat southWest}) =
+      _Bounds;
 
   factory Bounds.fromJson(Map<String, dynamic> json) => _$BoundsFromJson(json);
 }
@@ -40,10 +37,7 @@ class Bounds with _$Bounds {
 /// WGS84
 @freezed
 class LonLat with _$LonLat {
-  const factory LonLat({
-    required double lon,
-    required double lat,
-  }) = _LonLat;
+  const factory LonLat({required double lon, required double lat}) = _LonLat;
 
   factory LonLat.fromJson(Map<String, dynamic> json) => _$LonLatFromJson(json);
 }

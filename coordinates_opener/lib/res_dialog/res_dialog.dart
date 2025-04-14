@@ -1,5 +1,5 @@
 import 'package:collection/collection.dart';
-import 'package:coordinate_systems/coordinate_systems.dart';
+import 'package:coordinate_systems_model/coordinate_systems_model.dart';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:lottie/lottie.dart' as l;
@@ -20,11 +20,12 @@ class AmbiguousResDialog extends StatefulWidget {
   final LonLat tappedPoint;
   final bool showDummyLoadingScreen;
 
-  const AmbiguousResDialog(
-      {super.key,
-      required this.inputPointDetails,
-      required this.tappedPoint,
-      this.showDummyLoadingScreen = true});
+  const AmbiguousResDialog({
+    super.key,
+    required this.inputPointDetails,
+    required this.tappedPoint,
+    this.showDummyLoadingScreen = true,
+  });
 
   @override
   State<AmbiguousResDialog> createState() => _AmbiguousResDialogState();
@@ -48,8 +49,8 @@ class _AmbiguousResDialogState extends State<AmbiguousResDialog> {
               if (_showLoadingScreen)
                 Positioned.fill(
                   child: _LoadingScreen(
-                    onComplete: () =>
-                        setState(() => _showLoadingScreen = false),
+                    onComplete:
+                        () => setState(() => _showLoadingScreen = false),
                   ),
                 ),
             ],
@@ -110,9 +111,11 @@ class _LoadingScreenState extends State<_LoadingScreen>
                 child: l.Lottie.asset(
                   'packages/coordinates_opener/assets/loading_animation.json',
                   controller: _controller,
-                  onLoaded: (data) => _controller
-                    ..duration = data.duration
-                    ..forward(),
+                  onLoaded:
+                      (data) =>
+                          _controller
+                            ..duration = data.duration
+                            ..forward(),
                 ),
               ),
             ],
@@ -159,13 +162,17 @@ class _ContentState extends State<_Content> {
           _ChangeCoordinateSystem(
             inputPointDetails: widget.inputPointDetails,
             tappedPoint: widget.tappedPoint,
-            onPickCoordinateSystem: (pickedCoordinateSystem) => setState(
-              () => _activeCoordinateSystem = (
-                coordinateSystem: pickedCoordinateSystem,
-                lonLat:
-                    widget.inputPointDetails.lonLats[pickedCoordinateSystem]!,
-              ),
-            ),
+            onPickCoordinateSystem:
+                (pickedCoordinateSystem) => setState(
+                  () =>
+                      _activeCoordinateSystem = (
+                        coordinateSystem: pickedCoordinateSystem,
+                        lonLat:
+                            widget
+                                .inputPointDetails
+                                .lonLats[pickedCoordinateSystem]!,
+                      ),
+                ),
           ),
           if (isInaccurate)
             _InaccurateTransformationHeadsUp(
@@ -178,19 +185,24 @@ class _ContentState extends State<_Content> {
   }
 }
 
-({CoordinateSystem coordinateSystem, LonLat lonLat}) _pickBestMatch(
-    {required PointDetails pointDetails, required LonLat approximation}) {
-  final res = pointDetails.lonLats.entries
-      .map((e) {
-        final d = distanceBetween(lonLat1: e.value, lonLat2: approximation);
-        final dRoundedKm = double.parse((d * 0.001).toStringAsFixed(0));
-        return (sys: e.key, p: e.value, d: dRoundedKm);
-      })
-      .sorted((a, b) => [
-            a.d.compareTo(b.d),
-            a.sys.name.compareTo(b.sys.name),
-          ].firstWhere((e) => e != 0, orElse: () => 0))
-      .first;
+({CoordinateSystem coordinateSystem, LonLat lonLat}) _pickBestMatch({
+  required PointDetails pointDetails,
+  required LonLat approximation,
+}) {
+  final res =
+      pointDetails.lonLats.entries
+          .map((e) {
+            final d = distanceBetween(lonLat1: e.value, lonLat2: approximation);
+            final dRoundedKm = double.parse((d * 0.001).toStringAsFixed(0));
+            return (sys: e.key, p: e.value, d: dRoundedKm);
+          })
+          .sorted(
+            (a, b) => [
+              a.d.compareTo(b.d),
+              a.sys.name.compareTo(b.sys.name),
+            ].firstWhere((e) => e != 0, orElse: () => 0),
+          )
+          .first;
   return (coordinateSystem: res.sys, lonLat: res.p);
 }
 
@@ -203,14 +215,12 @@ class _Coordinates extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final copyButton = IconButton(
-      onPressed: () => showDialog(
-        context: context,
-        builder: (context) => CopyDialog(lonLat: lonLat),
-      ),
-      icon: const Icon(
-        Icons.copy,
-        size: copyDialogCopyIconSize,
-      ),
+      onPressed:
+          () => showDialog(
+            context: context,
+            builder: (context) => CopyDialog(lonLat: lonLat),
+          ),
+      icon: const Icon(Icons.copy, size: copyDialogCopyIconSize),
     );
     return Column(
       mainAxisSize: MainAxisSize.min,
@@ -224,14 +234,9 @@ class _Coordinates extends StatelessWidget {
               child: TextButton(
                 onPressed: () => context.openInGoogleMaps(lonLat: lonLat),
                 child: Text(
-                  [
-                    lonLat.formatAsDegrees,
-                    if (isInaccurate) ' *',
-                  ].join(),
+                  [lonLat.formatAsDegrees, if (isInaccurate) ' *'].join(),
                   textAlign: TextAlign.center,
-                  style: const TextStyle(
-                    fontWeight: FontWeight.bold,
-                  ),
+                  style: const TextStyle(fontWeight: FontWeight.bold),
                 ),
               ),
             ),
@@ -255,8 +260,10 @@ class _CoordinateSystem extends StatelessWidget {
         const Text('coordinate system:'),
         TextButton(
           style: TextButton.styleFrom(visualDensity: VisualDensity.compact),
-          onPressed: () =>
-              context.openUrl('https://epsg.io/${coordinateSystem.epsgCode}'),
+          onPressed:
+              () => context.openUrl(
+                'https://epsg.io/${coordinateSystem.epsgCode}',
+              ),
           child: Text(coordinateSystem.name),
         ),
       ],
@@ -270,12 +277,13 @@ class _ChangeCoordinateSystem extends StatelessWidget {
   final PointDetails inputPointDetails;
   final LonLat tappedPoint;
   final Function(CoordinateSystem pickedCoordinateSystem)
-      onPickCoordinateSystem;
+  onPickCoordinateSystem;
 
-  const _ChangeCoordinateSystem(
-      {required this.inputPointDetails,
-      required this.tappedPoint,
-      required this.onPickCoordinateSystem});
+  const _ChangeCoordinateSystem({
+    required this.inputPointDetails,
+    required this.tappedPoint,
+    required this.onPickCoordinateSystem,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -292,17 +300,19 @@ class _ChangeCoordinateSystem extends StatelessWidget {
           WidgetSpan(
             alignment: PlaceholderAlignment.middle,
             child: InkWell(
-              onTap: () => showDialog(
-                context: context,
-                builder: (context) => PickReferenceSystemDialog(
-                  pointDetails: inputPointDetails,
-                  tappedPoint: tappedPoint,
-                  onPicked: (pickedCoordinateSystem) {
-                    Navigator.of(context).pop();
-                    onPickCoordinateSystem(pickedCoordinateSystem);
-                  },
-                ),
-              ),
+              onTap:
+                  () => showDialog(
+                    context: context,
+                    builder:
+                        (context) => PickReferenceSystemDialog(
+                          pointDetails: inputPointDetails,
+                          tappedPoint: tappedPoint,
+                          onPicked: (pickedCoordinateSystem) {
+                            Navigator.of(context).pop();
+                            onPickCoordinateSystem(pickedCoordinateSystem);
+                          },
+                        ),
+                  ),
               child: Text(
                 'Click here',
                 style: style.copyWith(color: primaryColor),
@@ -323,13 +333,17 @@ class _MapWithMarker extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MyGoogleMap(cameraTarget: lonLat, zoom: 1, markers: {
-      Marker(
-        markerId: const MarkerId('theOneAndOnlyMarker'),
-        position: lonLat.toGoogle(),
-        onTap: () => context.openInGoogleMaps(lonLat: lonLat),
-      ),
-    });
+    return MyGoogleMap(
+      cameraTarget: lonLat,
+      zoom: 1,
+      markers: {
+        Marker(
+          markerId: const MarkerId('theOneAndOnlyMarker'),
+          position: lonLat.toGoogle(),
+          onTap: () => context.openInGoogleMaps(lonLat: lonLat),
+        ),
+      },
+    );
   }
 }
 
@@ -341,8 +355,10 @@ class _InaccurateTransformationHeadsUp extends StatelessWidget {
   final Point inputPoint;
   final CoordinateSystem coordinateSystem;
 
-  const _InaccurateTransformationHeadsUp(
-      {required this.inputPoint, required this.coordinateSystem});
+  const _InaccurateTransformationHeadsUp({
+    required this.inputPoint,
+    required this.coordinateSystem,
+  });
 
   @override
   Widget build(BuildContext context) {

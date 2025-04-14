@@ -1,4 +1,4 @@
-import 'package:coordinate_systems/coordinate_systems.dart';
+import 'package:coordinate_systems_model/coordinate_systems_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:separate/separate.dart';
@@ -37,11 +37,11 @@ class HomePage extends StatelessWidget {
 }
 
 void _showAboutDialog(BuildContext context) => showAboutDialog(
-      context: context,
-      applicationName: appName,
-      applicationIcon: const Icon(Icons.place),
-      children: [const Text('Enjoy life')],
-    );
+  context: context,
+  applicationName: appName,
+  applicationIcon: const Icon(Icons.place),
+  children: [const Text('Enjoy life')],
+);
 
 class _Content extends StatefulWidget {
   const _Content();
@@ -69,53 +69,53 @@ class _ContentState extends State<_Content> {
         const _Headline(),
         ambiguousInputPoint == null
             ? _AnyCoordinatesTextField(
-                controller:
-                    _anyCoordinatesInputController, // to preserve text input state
-                onEnteredWellDefinedCoordinates: (lonLat) =>
-                    context.openInGoogleMaps(lonLat: lonLat),
-                onEnteredAmbiguousCoordinates: (point) =>
-                    setState(() => _ambiguousInputPoint = point),
-              )
+              controller:
+                  _anyCoordinatesInputController, // to preserve text input state
+              onEnteredWellDefinedCoordinates:
+                  (lonLat) => context.openInGoogleMaps(lonLat: lonLat),
+              onEnteredAmbiguousCoordinates:
+                  (point) => setState(() => _ambiguousInputPoint = point),
+            )
             : AmbiguousInputStepper(
-                inputPoint: ambiguousInputPoint,
-                onUpdateInputPoint: (inputPoint) =>
-                    setState(() => _ambiguousInputPoint = inputPoint),
-                onCancel: () => setState(() => _ambiguousInputPoint = null),
-                onApproximateLocationSelected: (lonLat) => _onMapTap(
-                  tapped: lonLat,
-                  inputPoint: ambiguousInputPoint,
-                ),
-              ),
+              inputPoint: ambiguousInputPoint,
+              onUpdateInputPoint:
+                  (inputPoint) =>
+                      setState(() => _ambiguousInputPoint = inputPoint),
+              onCancel: () => setState(() => _ambiguousInputPoint = null),
+              onApproximateLocationSelected:
+                  (lonLat) => _onMapTap(
+                    tapped: lonLat,
+                    inputPoint: ambiguousInputPoint,
+                  ),
+            ),
       ].separate((i, e0, e1) => const SizedBox(height: 16)),
     );
   }
 
-  void _onMapTap({
-    required LonLat tapped,
-    required Point inputPoint,
-  }) {
+  void _onMapTap({required LonLat tapped, required Point inputPoint}) {
     if (isLikelyWgs84DegreesInDecimalFormat(
-        point: inputPoint, approximation: tapped)) {
+      point: inputPoint,
+      approximation: tapped,
+    )) {
       context.openInGoogleMaps(
-        lonLat: LonLat(
-          lon: inputPoint.x,
-          lat: inputPoint.y,
-        ),
+        lonLat: LonLat(lon: inputPoint.x, lat: inputPoint.y),
       );
     } else {
       try {
         final details = getPointDetails(point: inputPoint);
         showDialog(
           context: context,
-          builder: (context) => AmbiguousResDialog(
-            inputPointDetails: details,
-            tappedPoint: tapped,
-          ),
+          builder:
+              (context) => AmbiguousResDialog(
+                inputPointDetails: details,
+                tappedPoint: tapped,
+              ),
         );
       } catch (e) {
         setState(() => _ambiguousInputPoint = null);
         context.showSnackBar(
-            SnackBar(content: Text('Error processing input, $e')));
+          SnackBar(content: Text('Error processing input, $e')),
+        );
       }
     }
   }
@@ -128,10 +128,7 @@ class _Headline extends StatelessWidget {
   Widget build(BuildContext context) {
     return const Text(
       'Coordinates Opener',
-      style: TextStyle(
-        fontSize: 24,
-        fontWeight: FontWeight.w400,
-      ),
+      style: TextStyle(fontSize: 24, fontWeight: FontWeight.w400),
     );
   }
 }
@@ -141,10 +138,11 @@ class _AnyCoordinatesTextField extends StatefulWidget {
   final Function(LonLat lonLat) onEnteredWellDefinedCoordinates;
   final Function(Point point) onEnteredAmbiguousCoordinates;
 
-  const _AnyCoordinatesTextField(
-      {required this.onEnteredWellDefinedCoordinates,
-      required this.onEnteredAmbiguousCoordinates,
-      required this.controller});
+  const _AnyCoordinatesTextField({
+    required this.onEnteredWellDefinedCoordinates,
+    required this.onEnteredAmbiguousCoordinates,
+    required this.controller,
+  });
 
   @override
   State<_AnyCoordinatesTextField> createState() =>
@@ -193,13 +191,14 @@ class AmbiguousInputStepper extends StatefulWidget {
   final int? initialStepIndex;
 
   @visibleForTesting
-  const AmbiguousInputStepper(
-      {super.key,
-      required this.onApproximateLocationSelected,
-      required this.onCancel,
-      required this.inputPoint,
-      required this.onUpdateInputPoint,
-      this.initialStepIndex});
+  const AmbiguousInputStepper({
+    super.key,
+    required this.onApproximateLocationSelected,
+    required this.onCancel,
+    required this.inputPoint,
+    required this.onUpdateInputPoint,
+    this.initialStepIndex,
+  });
 
   @override
   State<AmbiguousInputStepper> createState() => _AmbiguousInputStepperState();
@@ -207,9 +206,10 @@ class AmbiguousInputStepper extends StatefulWidget {
 
 class _AmbiguousInputStepperState extends State<AmbiguousInputStepper> {
   final _focusNode = FocusNode()..requestFocus();
-  late _Step _currentStep = widget.initialStepIndex != null
-      ? _Step.values[widget.initialStepIndex!]
-      : _Step.determineXY;
+  late _Step _currentStep =
+      widget.initialStepIndex != null
+          ? _Step.values[widget.initialStepIndex!]
+          : _Step.determineXY;
 
   @override
   void dispose() {
@@ -221,14 +221,18 @@ class _AmbiguousInputStepperState extends State<AmbiguousInputStepper> {
   Widget build(BuildContext context) {
     return KeyboardListener(
       focusNode: _focusNode,
-      onKeyEvent: (value) => value is KeyDownEvent &&
-              value.logicalKey == LogicalKeyboardKey.enter
-          ? switch (_currentStep) {
-              _Step.enterCoordinates || _Step.enterApproximateLocation => null,
-              _Step.determineXY =>
-                setState(() => _currentStep = _Step.enterApproximateLocation),
-            }
-          : null,
+      onKeyEvent:
+          (value) =>
+              value is KeyDownEvent &&
+                      value.logicalKey == LogicalKeyboardKey.enter
+                  ? switch (_currentStep) {
+                    _Step.enterCoordinates ||
+                    _Step.enterApproximateLocation => null,
+                    _Step.determineXY => setState(
+                      () => _currentStep = _Step.enterApproximateLocation,
+                    ),
+                  }
+                  : null,
       child: SingleChildScrollView(
         child: MediaQuery.removePadding(
           context: context,
@@ -237,42 +241,46 @@ class _AmbiguousInputStepperState extends State<AmbiguousInputStepper> {
             currentStep: _currentStep.index,
             controlsBuilder: switch (_currentStep) {
               _Step.determineXY => null, //i.e default controls
-              _Step.enterCoordinates ||
-              _Step.enterApproximateLocation =>
+              _Step.enterCoordinates || _Step.enterApproximateLocation =>
                 (context, details) => const SizedBox.shrink(),
             },
             onStepCancel: () => widget.onCancel(),
-            onStepContinue: () => setState(() => _currentStep =
-                _Step.values[_Step.values.indexOf(_currentStep) + 1]),
-            onStepTapped: (value) => switch (_Step.values[value]) {
-              _Step.enterCoordinates => widget.onCancel(),
-              _Step.determineXY ||
-              _Step.enterApproximateLocation =>
-                setState(() => _currentStep = _Step.values[value]),
-            },
-            steps: _Step.values
-                .map(
-                  (e) => switch (e) {
-                    _Step.enterCoordinates => const Step(
-                        title: Text('Enter coordinates'),
-                        content: SizedBox.shrink(),
-                      ),
-                    _Step.determineXY => Step(
-                        title: const Text('Confirm or swap order'),
-                        content: _PickXY(
-                          inputPoint: widget.inputPoint,
-                          onUpdateInputPoint: widget.onUpdateInputPoint,
+            onStepContinue:
+                () => setState(
+                  () =>
+                      _currentStep =
+                          _Step.values[_Step.values.indexOf(_currentStep) + 1],
+                ),
+            onStepTapped:
+                (value) => switch (_Step.values[value]) {
+                  _Step.enterCoordinates => widget.onCancel(),
+                  _Step.determineXY || _Step.enterApproximateLocation =>
+                    setState(() => _currentStep = _Step.values[value]),
+                },
+            steps:
+                _Step.values
+                    .map(
+                      (e) => switch (e) {
+                        _Step.enterCoordinates => const Step(
+                          title: Text('Enter coordinates'),
+                          content: SizedBox.shrink(),
                         ),
-                      ),
-                    _Step.enterApproximateLocation => Step(
-                        title: const Text('Enter approximate location'),
-                        content: _EnterApproximateLocation(
-                          onEntered: widget.onApproximateLocationSelected,
+                        _Step.determineXY => Step(
+                          title: const Text('Confirm or swap order'),
+                          content: _PickXY(
+                            inputPoint: widget.inputPoint,
+                            onUpdateInputPoint: widget.onUpdateInputPoint,
+                          ),
                         ),
-                      ),
-                  },
-                )
-                .toList(),
+                        _Step.enterApproximateLocation => Step(
+                          title: const Text('Enter approximate location'),
+                          content: _EnterApproximateLocation(
+                            onEntered: widget.onApproximateLocationSelected,
+                          ),
+                        ),
+                      },
+                    )
+                    .toList(),
           ),
         ),
       ),
@@ -280,11 +288,7 @@ class _AmbiguousInputStepperState extends State<AmbiguousInputStepper> {
   }
 }
 
-enum _Step {
-  enterCoordinates,
-  determineXY,
-  enterApproximateLocation,
-}
+enum _Step { enterCoordinates, determineXY, enterApproximateLocation }
 
 class _PickXY extends StatelessWidget {
   final Point inputPoint;
@@ -305,10 +309,8 @@ class _PickXY extends StatelessWidget {
         ),
         const SizedBox(width: 8),
         IconButton(
-          onPressed: () => onUpdateInputPoint(Point(
-            x: inputPoint.y,
-            y: inputPoint.x,
-          )),
+          onPressed:
+              () => onUpdateInputPoint(Point(x: inputPoint.y, y: inputPoint.x)),
           icon: const Icon(Icons.swap_vert),
         ),
       ],
@@ -326,7 +328,8 @@ class _EnterApproximateLocation extends StatelessWidget {
     return Column(
       children: <Widget>[
         const Text(
-            '''To locate this point on Earth, we first need to identify its coordinate system from the thousands available. Please provide an approximate location so we can find the best matching coordinate system for your input.'''),
+          '''To locate this point on Earth, we first need to identify its coordinate system from the thousands available. Please provide an approximate location so we can find the best matching coordinate system for your input.''',
+        ),
         _Map(onTap: onEntered),
       ].separate((i, e0, e1) => const SizedBox(height: 16)),
     );

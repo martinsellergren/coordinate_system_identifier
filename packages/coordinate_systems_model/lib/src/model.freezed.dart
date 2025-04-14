@@ -12,10 +12,12 @@ part of 'model.dart';
 T _$identity<T>(T value) => value;
 
 final _privateConstructorUsedError = UnsupportedError(
-    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models');
+  'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models',
+);
 
 CoordinateSystemsData _$CoordinateSystemsDataFromJson(
-    Map<String, dynamic> json) {
+  Map<String, dynamic> json,
+) {
   return _Data.fromJson(json);
 }
 
@@ -35,16 +37,19 @@ mixin _$CoordinateSystemsData {
 
 /// @nodoc
 abstract class $CoordinateSystemsDataCopyWith<$Res> {
-  factory $CoordinateSystemsDataCopyWith(CoordinateSystemsData value,
-          $Res Function(CoordinateSystemsData) then) =
-      _$CoordinateSystemsDataCopyWithImpl<$Res, CoordinateSystemsData>;
+  factory $CoordinateSystemsDataCopyWith(
+    CoordinateSystemsData value,
+    $Res Function(CoordinateSystemsData) then,
+  ) = _$CoordinateSystemsDataCopyWithImpl<$Res, CoordinateSystemsData>;
   @useResult
   $Res call({List<CoordinateSystem> items});
 }
 
 /// @nodoc
-class _$CoordinateSystemsDataCopyWithImpl<$Res,
-        $Val extends CoordinateSystemsData>
+class _$CoordinateSystemsDataCopyWithImpl<
+  $Res,
+  $Val extends CoordinateSystemsData
+>
     implements $CoordinateSystemsDataCopyWith<$Res> {
   _$CoordinateSystemsDataCopyWithImpl(this._value, this._then);
 
@@ -57,15 +62,17 @@ class _$CoordinateSystemsDataCopyWithImpl<$Res,
   /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
-  $Res call({
-    Object? items = null,
-  }) {
-    return _then(_value.copyWith(
-      items: null == items
-          ? _value.items
-          : items // ignore: cast_nullable_to_non_nullable
-              as List<CoordinateSystem>,
-    ) as $Val);
+  $Res call({Object? items = null}) {
+    return _then(
+      _value.copyWith(
+            items:
+                null == items
+                    ? _value.items
+                    : items // ignore: cast_nullable_to_non_nullable
+                        as List<CoordinateSystem>,
+          )
+          as $Val,
+    );
   }
 }
 
@@ -73,8 +80,9 @@ class _$CoordinateSystemsDataCopyWithImpl<$Res,
 abstract class _$$DataImplCopyWith<$Res>
     implements $CoordinateSystemsDataCopyWith<$Res> {
   factory _$$DataImplCopyWith(
-          _$DataImpl value, $Res Function(_$DataImpl) then) =
-      __$$DataImplCopyWithImpl<$Res>;
+    _$DataImpl value,
+    $Res Function(_$DataImpl) then,
+  ) = __$$DataImplCopyWithImpl<$Res>;
   @override
   @useResult
   $Res call({List<CoordinateSystem> items});
@@ -85,21 +93,22 @@ class __$$DataImplCopyWithImpl<$Res>
     extends _$CoordinateSystemsDataCopyWithImpl<$Res, _$DataImpl>
     implements _$$DataImplCopyWith<$Res> {
   __$$DataImplCopyWithImpl(_$DataImpl _value, $Res Function(_$DataImpl) _then)
-      : super(_value, _then);
+    : super(_value, _then);
 
   /// Create a copy of CoordinateSystemsData
   /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
-  $Res call({
-    Object? items = null,
-  }) {
-    return _then(_$DataImpl(
-      items: null == items
-          ? _value._items
-          : items // ignore: cast_nullable_to_non_nullable
-              as List<CoordinateSystem>,
-    ));
+  $Res call({Object? items = null}) {
+    return _then(
+      _$DataImpl(
+        items:
+            null == items
+                ? _value._items
+                : items // ignore: cast_nullable_to_non_nullable
+                    as List<CoordinateSystem>,
+      ),
+    );
   }
 }
 
@@ -107,7 +116,7 @@ class __$$DataImplCopyWithImpl<$Res>
 @JsonSerializable()
 class _$DataImpl implements _Data {
   const _$DataImpl({required final List<CoordinateSystem> items})
-      : _items = items;
+    : _items = items;
 
   factory _$DataImpl.fromJson(Map<String, dynamic> json) =>
       _$$DataImplFromJson(json);
@@ -148,9 +157,7 @@ class _$DataImpl implements _Data {
 
   @override
   Map<String, dynamic> toJson() {
-    return _$$DataImplToJson(
-      this,
-    );
+    return _$$DataImplToJson(this);
   }
 }
 
@@ -196,15 +203,17 @@ mixin _$CoordinateSystem {
 /// @nodoc
 abstract class $CoordinateSystemCopyWith<$Res> {
   factory $CoordinateSystemCopyWith(
-          CoordinateSystem value, $Res Function(CoordinateSystem) then) =
-      _$CoordinateSystemCopyWithImpl<$Res, CoordinateSystem>;
+    CoordinateSystem value,
+    $Res Function(CoordinateSystem) then,
+  ) = _$CoordinateSystemCopyWithImpl<$Res, CoordinateSystem>;
   @useResult
-  $Res call(
-      {int epsgCode,
-      String name,
-      String proj4,
-      Bounds bounds,
-      bool hasNadgrid});
+  $Res call({
+    int epsgCode,
+    String name,
+    String proj4,
+    Bounds bounds,
+    bool hasNadgrid,
+  });
 
   $BoundsCopyWith<$Res> get bounds;
 }
@@ -230,28 +239,36 @@ class _$CoordinateSystemCopyWithImpl<$Res, $Val extends CoordinateSystem>
     Object? bounds = null,
     Object? hasNadgrid = null,
   }) {
-    return _then(_value.copyWith(
-      epsgCode: null == epsgCode
-          ? _value.epsgCode
-          : epsgCode // ignore: cast_nullable_to_non_nullable
-              as int,
-      name: null == name
-          ? _value.name
-          : name // ignore: cast_nullable_to_non_nullable
-              as String,
-      proj4: null == proj4
-          ? _value.proj4
-          : proj4 // ignore: cast_nullable_to_non_nullable
-              as String,
-      bounds: null == bounds
-          ? _value.bounds
-          : bounds // ignore: cast_nullable_to_non_nullable
-              as Bounds,
-      hasNadgrid: null == hasNadgrid
-          ? _value.hasNadgrid
-          : hasNadgrid // ignore: cast_nullable_to_non_nullable
-              as bool,
-    ) as $Val);
+    return _then(
+      _value.copyWith(
+            epsgCode:
+                null == epsgCode
+                    ? _value.epsgCode
+                    : epsgCode // ignore: cast_nullable_to_non_nullable
+                        as int,
+            name:
+                null == name
+                    ? _value.name
+                    : name // ignore: cast_nullable_to_non_nullable
+                        as String,
+            proj4:
+                null == proj4
+                    ? _value.proj4
+                    : proj4 // ignore: cast_nullable_to_non_nullable
+                        as String,
+            bounds:
+                null == bounds
+                    ? _value.bounds
+                    : bounds // ignore: cast_nullable_to_non_nullable
+                        as Bounds,
+            hasNadgrid:
+                null == hasNadgrid
+                    ? _value.hasNadgrid
+                    : hasNadgrid // ignore: cast_nullable_to_non_nullable
+                        as bool,
+          )
+          as $Val,
+    );
   }
 
   /// Create a copy of CoordinateSystem
@@ -268,17 +285,19 @@ class _$CoordinateSystemCopyWithImpl<$Res, $Val extends CoordinateSystem>
 /// @nodoc
 abstract class _$$CoordinateSystemImplCopyWith<$Res>
     implements $CoordinateSystemCopyWith<$Res> {
-  factory _$$CoordinateSystemImplCopyWith(_$CoordinateSystemImpl value,
-          $Res Function(_$CoordinateSystemImpl) then) =
-      __$$CoordinateSystemImplCopyWithImpl<$Res>;
+  factory _$$CoordinateSystemImplCopyWith(
+    _$CoordinateSystemImpl value,
+    $Res Function(_$CoordinateSystemImpl) then,
+  ) = __$$CoordinateSystemImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call(
-      {int epsgCode,
-      String name,
-      String proj4,
-      Bounds bounds,
-      bool hasNadgrid});
+  $Res call({
+    int epsgCode,
+    String name,
+    String proj4,
+    Bounds bounds,
+    bool hasNadgrid,
+  });
 
   @override
   $BoundsCopyWith<$Res> get bounds;
@@ -288,9 +307,10 @@ abstract class _$$CoordinateSystemImplCopyWith<$Res>
 class __$$CoordinateSystemImplCopyWithImpl<$Res>
     extends _$CoordinateSystemCopyWithImpl<$Res, _$CoordinateSystemImpl>
     implements _$$CoordinateSystemImplCopyWith<$Res> {
-  __$$CoordinateSystemImplCopyWithImpl(_$CoordinateSystemImpl _value,
-      $Res Function(_$CoordinateSystemImpl) _then)
-      : super(_value, _then);
+  __$$CoordinateSystemImplCopyWithImpl(
+    _$CoordinateSystemImpl _value,
+    $Res Function(_$CoordinateSystemImpl) _then,
+  ) : super(_value, _then);
 
   /// Create a copy of CoordinateSystem
   /// with the given fields replaced by the non-null parameter values.
@@ -303,40 +323,48 @@ class __$$CoordinateSystemImplCopyWithImpl<$Res>
     Object? bounds = null,
     Object? hasNadgrid = null,
   }) {
-    return _then(_$CoordinateSystemImpl(
-      epsgCode: null == epsgCode
-          ? _value.epsgCode
-          : epsgCode // ignore: cast_nullable_to_non_nullable
-              as int,
-      name: null == name
-          ? _value.name
-          : name // ignore: cast_nullable_to_non_nullable
-              as String,
-      proj4: null == proj4
-          ? _value.proj4
-          : proj4 // ignore: cast_nullable_to_non_nullable
-              as String,
-      bounds: null == bounds
-          ? _value.bounds
-          : bounds // ignore: cast_nullable_to_non_nullable
-              as Bounds,
-      hasNadgrid: null == hasNadgrid
-          ? _value.hasNadgrid
-          : hasNadgrid // ignore: cast_nullable_to_non_nullable
-              as bool,
-    ));
+    return _then(
+      _$CoordinateSystemImpl(
+        epsgCode:
+            null == epsgCode
+                ? _value.epsgCode
+                : epsgCode // ignore: cast_nullable_to_non_nullable
+                    as int,
+        name:
+            null == name
+                ? _value.name
+                : name // ignore: cast_nullable_to_non_nullable
+                    as String,
+        proj4:
+            null == proj4
+                ? _value.proj4
+                : proj4 // ignore: cast_nullable_to_non_nullable
+                    as String,
+        bounds:
+            null == bounds
+                ? _value.bounds
+                : bounds // ignore: cast_nullable_to_non_nullable
+                    as Bounds,
+        hasNadgrid:
+            null == hasNadgrid
+                ? _value.hasNadgrid
+                : hasNadgrid // ignore: cast_nullable_to_non_nullable
+                    as bool,
+      ),
+    );
   }
 }
 
 /// @nodoc
 @JsonSerializable()
 class _$CoordinateSystemImpl implements _CoordinateSystem {
-  const _$CoordinateSystemImpl(
-      {required this.epsgCode,
-      required this.name,
-      required this.proj4,
-      required this.bounds,
-      this.hasNadgrid = false});
+  const _$CoordinateSystemImpl({
+    required this.epsgCode,
+    required this.name,
+    required this.proj4,
+    required this.bounds,
+    this.hasNadgrid = false,
+  });
 
   factory _$CoordinateSystemImpl.fromJson(Map<String, dynamic> json) =>
       _$$CoordinateSystemImplFromJson(json);
@@ -384,23 +412,24 @@ class _$CoordinateSystemImpl implements _CoordinateSystem {
   @pragma('vm:prefer-inline')
   _$$CoordinateSystemImplCopyWith<_$CoordinateSystemImpl> get copyWith =>
       __$$CoordinateSystemImplCopyWithImpl<_$CoordinateSystemImpl>(
-          this, _$identity);
+        this,
+        _$identity,
+      );
 
   @override
   Map<String, dynamic> toJson() {
-    return _$$CoordinateSystemImplToJson(
-      this,
-    );
+    return _$$CoordinateSystemImplToJson(this);
   }
 }
 
 abstract class _CoordinateSystem implements CoordinateSystem {
-  const factory _CoordinateSystem(
-      {required final int epsgCode,
-      required final String name,
-      required final String proj4,
-      required final Bounds bounds,
-      final bool hasNadgrid}) = _$CoordinateSystemImpl;
+  const factory _CoordinateSystem({
+    required final int epsgCode,
+    required final String name,
+    required final String proj4,
+    required final Bounds bounds,
+    final bool hasNadgrid,
+  }) = _$CoordinateSystemImpl;
 
   factory _CoordinateSystem.fromJson(Map<String, dynamic> json) =
       _$CoordinateSystemImpl.fromJson;
@@ -467,20 +496,22 @@ class _$BoundsCopyWithImpl<$Res, $Val extends Bounds>
   /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
-  $Res call({
-    Object? northEast = null,
-    Object? southWest = null,
-  }) {
-    return _then(_value.copyWith(
-      northEast: null == northEast
-          ? _value.northEast
-          : northEast // ignore: cast_nullable_to_non_nullable
-              as LonLat,
-      southWest: null == southWest
-          ? _value.southWest
-          : southWest // ignore: cast_nullable_to_non_nullable
-              as LonLat,
-    ) as $Val);
+  $Res call({Object? northEast = null, Object? southWest = null}) {
+    return _then(
+      _value.copyWith(
+            northEast:
+                null == northEast
+                    ? _value.northEast
+                    : northEast // ignore: cast_nullable_to_non_nullable
+                        as LonLat,
+            southWest:
+                null == southWest
+                    ? _value.southWest
+                    : southWest // ignore: cast_nullable_to_non_nullable
+                        as LonLat,
+          )
+          as $Val,
+    );
   }
 
   /// Create a copy of Bounds
@@ -507,8 +538,9 @@ class _$BoundsCopyWithImpl<$Res, $Val extends Bounds>
 /// @nodoc
 abstract class _$$BoundsImplCopyWith<$Res> implements $BoundsCopyWith<$Res> {
   factory _$$BoundsImplCopyWith(
-          _$BoundsImpl value, $Res Function(_$BoundsImpl) then) =
-      __$$BoundsImplCopyWithImpl<$Res>;
+    _$BoundsImpl value,
+    $Res Function(_$BoundsImpl) then,
+  ) = __$$BoundsImplCopyWithImpl<$Res>;
   @override
   @useResult
   $Res call({LonLat northEast, LonLat southWest});
@@ -524,27 +556,29 @@ class __$$BoundsImplCopyWithImpl<$Res>
     extends _$BoundsCopyWithImpl<$Res, _$BoundsImpl>
     implements _$$BoundsImplCopyWith<$Res> {
   __$$BoundsImplCopyWithImpl(
-      _$BoundsImpl _value, $Res Function(_$BoundsImpl) _then)
-      : super(_value, _then);
+    _$BoundsImpl _value,
+    $Res Function(_$BoundsImpl) _then,
+  ) : super(_value, _then);
 
   /// Create a copy of Bounds
   /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
-  $Res call({
-    Object? northEast = null,
-    Object? southWest = null,
-  }) {
-    return _then(_$BoundsImpl(
-      northEast: null == northEast
-          ? _value.northEast
-          : northEast // ignore: cast_nullable_to_non_nullable
-              as LonLat,
-      southWest: null == southWest
-          ? _value.southWest
-          : southWest // ignore: cast_nullable_to_non_nullable
-              as LonLat,
-    ));
+  $Res call({Object? northEast = null, Object? southWest = null}) {
+    return _then(
+      _$BoundsImpl(
+        northEast:
+            null == northEast
+                ? _value.northEast
+                : northEast // ignore: cast_nullable_to_non_nullable
+                    as LonLat,
+        southWest:
+            null == southWest
+                ? _value.southWest
+                : southWest // ignore: cast_nullable_to_non_nullable
+                    as LonLat,
+      ),
+    );
   }
 }
 
@@ -591,16 +625,15 @@ class _$BoundsImpl implements _Bounds {
 
   @override
   Map<String, dynamic> toJson() {
-    return _$$BoundsImplToJson(
-      this,
-    );
+    return _$$BoundsImplToJson(this);
   }
 }
 
 abstract class _Bounds implements Bounds {
-  const factory _Bounds(
-      {required final LonLat northEast,
-      required final LonLat southWest}) = _$BoundsImpl;
+  const factory _Bounds({
+    required final LonLat northEast,
+    required final LonLat southWest,
+  }) = _$BoundsImpl;
 
   factory _Bounds.fromJson(Map<String, dynamic> json) = _$BoundsImpl.fromJson;
 
@@ -657,28 +690,31 @@ class _$LonLatCopyWithImpl<$Res, $Val extends LonLat>
   /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
-  $Res call({
-    Object? lon = null,
-    Object? lat = null,
-  }) {
-    return _then(_value.copyWith(
-      lon: null == lon
-          ? _value.lon
-          : lon // ignore: cast_nullable_to_non_nullable
-              as double,
-      lat: null == lat
-          ? _value.lat
-          : lat // ignore: cast_nullable_to_non_nullable
-              as double,
-    ) as $Val);
+  $Res call({Object? lon = null, Object? lat = null}) {
+    return _then(
+      _value.copyWith(
+            lon:
+                null == lon
+                    ? _value.lon
+                    : lon // ignore: cast_nullable_to_non_nullable
+                        as double,
+            lat:
+                null == lat
+                    ? _value.lat
+                    : lat // ignore: cast_nullable_to_non_nullable
+                        as double,
+          )
+          as $Val,
+    );
   }
 }
 
 /// @nodoc
 abstract class _$$LonLatImplCopyWith<$Res> implements $LonLatCopyWith<$Res> {
   factory _$$LonLatImplCopyWith(
-          _$LonLatImpl value, $Res Function(_$LonLatImpl) then) =
-      __$$LonLatImplCopyWithImpl<$Res>;
+    _$LonLatImpl value,
+    $Res Function(_$LonLatImpl) then,
+  ) = __$$LonLatImplCopyWithImpl<$Res>;
   @override
   @useResult
   $Res call({double lon, double lat});
@@ -689,27 +725,29 @@ class __$$LonLatImplCopyWithImpl<$Res>
     extends _$LonLatCopyWithImpl<$Res, _$LonLatImpl>
     implements _$$LonLatImplCopyWith<$Res> {
   __$$LonLatImplCopyWithImpl(
-      _$LonLatImpl _value, $Res Function(_$LonLatImpl) _then)
-      : super(_value, _then);
+    _$LonLatImpl _value,
+    $Res Function(_$LonLatImpl) _then,
+  ) : super(_value, _then);
 
   /// Create a copy of LonLat
   /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
-  $Res call({
-    Object? lon = null,
-    Object? lat = null,
-  }) {
-    return _then(_$LonLatImpl(
-      lon: null == lon
-          ? _value.lon
-          : lon // ignore: cast_nullable_to_non_nullable
-              as double,
-      lat: null == lat
-          ? _value.lat
-          : lat // ignore: cast_nullable_to_non_nullable
-              as double,
-    ));
+  $Res call({Object? lon = null, Object? lat = null}) {
+    return _then(
+      _$LonLatImpl(
+        lon:
+            null == lon
+                ? _value.lon
+                : lon // ignore: cast_nullable_to_non_nullable
+                    as double,
+        lat:
+            null == lat
+                ? _value.lat
+                : lat // ignore: cast_nullable_to_non_nullable
+                    as double,
+      ),
+    );
   }
 }
 
@@ -754,15 +792,15 @@ class _$LonLatImpl implements _LonLat {
 
   @override
   Map<String, dynamic> toJson() {
-    return _$$LonLatImplToJson(
-      this,
-    );
+    return _$$LonLatImplToJson(this);
   }
 }
 
 abstract class _LonLat implements LonLat {
-  const factory _LonLat(
-      {required final double lon, required final double lat}) = _$LonLatImpl;
+  const factory _LonLat({
+    required final double lon,
+    required final double lat,
+  }) = _$LonLatImpl;
 
   factory _LonLat.fromJson(Map<String, dynamic> json) = _$LonLatImpl.fromJson;
 

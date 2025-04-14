@@ -12,8 +12,8 @@ dependencies:
     sdk: flutter
   shared:
     path: ../packages/shared
-  coordinate_systems:
-    path: ../packages/coordinate_systems
+  coordinate_systems_model:
+    path: ../packages/coordinate_systems_model
   google_maps_flutter: ^2.9.0
   separate: ^1.0.3
   pointer_interceptor: ^0.10.1+2

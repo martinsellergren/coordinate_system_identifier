@@ -2,7 +2,7 @@
 
 import 'package:coordinate_system_identifier/home_page/home_page.dart';
 import 'package:coordinate_system_identifier/res_dialog/res_dialog.dart';
-import 'package:coordinate_systems/coordinate_systems.dart';
+import 'package:coordinate_systems_model/coordinate_systems_model.dart';
 import 'package:flutter/material.dart';
 import 'package:shared/copy_dialog.dart';
 import 'package:shared/geoutils/get_point_details.dart';
@@ -16,12 +16,7 @@ void main() async {
   runApp(const MaterialApp(home: _Page()));
 }
 
-enum _Case {
-  home,
-  map,
-  resDialog,
-  copyDialog,
-}
+enum _Case { home, map, resDialog, copyDialog }
 
 class _Page extends StatelessWidget {
   const _Page();
@@ -38,35 +33,43 @@ class _Page extends StatelessWidget {
           ),
         ),
         body: TabBarView(
-            physics: const NeverScrollableScrollPhysics(),
-            children: _Case.values
-                .map((e) => switch (e) {
+          physics: const NeverScrollableScrollPhysics(),
+          children:
+              _Case.values
+                  .map(
+                    (e) => switch (e) {
                       _Case.home => const HomePage(),
                       _Case.map => ApproximationInputMap(
-                          onTap: (lonLat) => print('Tapped map at $lonLat'),
-                        ),
+                        onTap: (lonLat) => print('Tapped map at $lonLat'),
+                      ),
                       _Case.resDialog => () {
-                          final dialog = ResDialog(
-                            tappedPoint: const LonLat(lon: 20, lat: 60),
-                            pointDetails: getPointDetails(
-                                point: const Point(x: 6097107, y: 356084)),
-                          );
-                          return Column(
-                            children: [
-                              TextButton(
-                                  onPressed: () => showDialog(
-                                        context: context,
-                                        builder: (context) => dialog,
-                                      ),
-                                  child: const Text('open')),
-                              dialog,
-                            ],
-                          );
-                        }(),
+                        final dialog = ResDialog(
+                          tappedPoint: const LonLat(lon: 20, lat: 60),
+                          pointDetails: getPointDetails(
+                            point: const Point(x: 6097107, y: 356084),
+                          ),
+                        );
+                        return Column(
+                          children: [
+                            TextButton(
+                              onPressed:
+                                  () => showDialog(
+                                    context: context,
+                                    builder: (context) => dialog,
+                                  ),
+                              child: const Text('open'),
+                            ),
+                            dialog,
+                          ],
+                        );
+                      }(),
                       _Case.copyDialog => const CopyDialog(
-                          lonLat: LonLat(lon: 10.43, lat: 60.54654)),
-                    })
-                .toList()),
+                        lonLat: LonLat(lon: 10.43, lat: 60.54654),
+                      ),
+                    },
+                  )
+                  .toList(),
+        ),
       ),
     );
   }

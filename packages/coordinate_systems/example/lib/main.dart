@@ -1,6 +1,5 @@
 import 'package:coordinate_systems/coordinate_systems.dart';
 import 'package:flutter/material.dart';
-import 'package:proj4dart/proj4dart.dart' as p;
 import 'package:url_launcher/url_launcher.dart';
 
 const _lon = 60.0;
@@ -9,28 +8,8 @@ const _coordinateSystemEpsgCode = 3006; // SWEREF99 TM
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  final coordinateSystemsData = await loadCoordinateSystemData();
-  await _loadAllProjProjections(coordinateSystemsData: coordinateSystemsData);
+  final converter = await CoordinatesConverter.create();
   runApp(MaterialApp(home: _Page()));
-}
-
-// Load add coordinate systems.
-// Alt, load just the ones you need.
-Future<void> _loadAllProjProjections({
-  required CoordinateSystemsData coordinateSystemsData,
-}) async {
-  int nSuccess = 0;
-  int nErrors = 0;
-  for (final e in coordinateSystemsData.items) {
-    try {
-      p.Projection.add(e.epsgCode.toString(), e.proj4);
-      nSuccess++;
-    } catch (error) {
-      print('Error registering proj4 definition for ${e.epsgCode}');
-      nErrors++;
-    }
-  }
-  print('Load projections, nSuccess: $nSuccess, nErrors: $nErrors');
 }
 
 class _Page extends StatefulWidget {
@@ -41,8 +20,6 @@ class _Page extends StatefulWidget {
 }
 
 class _PageState extends State<_Page> {
-  p.Point? _res;
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -50,23 +27,7 @@ class _PageState extends State<_Page> {
       body: Center(
         child:
             _res == null
-                ? _Button(
-                  lat: _lat,
-                  lon: _lon,
-                  onPressed: () {
-                    final proj = p.Projection.get('$_coordinateSystemEpsgCode');
-                    assert(
-                      proj != null,
-                      'Make sure the proj $_coordinateSystemEpsgCode is loaded successfully',
-                    );
-                    setState(() {
-                      _res = p.Projection.WGS84.transform(
-                        proj!,
-                        p.Point(x: _lon, y: _lat),
-                      );
-                    });
-                  },
-                )
+                ? _Button(lat: _lat, lon: _lon, onPressed: () {})
                 : _Res(lat: _lat, lon: _lon, res: _res!),
       ),
     );

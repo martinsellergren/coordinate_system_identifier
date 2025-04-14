@@ -1,5 +1,5 @@
 import 'package:collection/collection.dart';
-import 'package:coordinate_systems/coordinate_systems.dart';
+import 'package:coordinate_systems_model/coordinate_systems_model.dart';
 import 'package:flutter/material.dart';
 import 'package:pointer_interceptor/pointer_interceptor.dart';
 import 'package:shared/context_extension.dart';
@@ -13,16 +13,20 @@ class ResDialog extends StatefulWidget {
   final LonLat tappedPoint;
   final PointDetails pointDetails;
 
-  const ResDialog(
-      {super.key, required this.tappedPoint, required this.pointDetails});
+  const ResDialog({
+    super.key,
+    required this.tappedPoint,
+    required this.pointDetails,
+  });
 
   @override
   State<ResDialog> createState() => _ResDialogState();
 }
 
 class _ResDialogState extends State<ResDialog> {
-  late final _items = widget.pointDetails
-      .coordinateSystemsOrderedByDistance(reference: widget.tappedPoint);
+  late final _items = widget.pointDetails.coordinateSystemsOrderedByDistance(
+    reference: widget.tappedPoint,
+  );
 
   @override
   Widget build(BuildContext context) {
@@ -32,55 +36,59 @@ class _ResDialogState extends State<ResDialog> {
     );
     return Dialog(
       child: PointerInterceptor(
-        child: _items.isEmpty
-            ? const Text('No results')
-            : SingleChildScrollView(
-                child: Padding(
-                  padding: const EdgeInsets.all(16.0),
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      const _Tile(
-                        cell1: Text(
-                          'coordinate system',
-                          textAlign: TextAlign.center,
-                          style: headerTextStyle,
-                        ),
-                        cell2: Text(
-                          'WGS84 coordinates',
-                          textAlign: TextAlign.center,
-                          style: headerTextStyle,
-                        ),
-                        cell3: Text(
-                          'distance from approximation',
-                          textAlign: TextAlign.center,
-                          style: headerTextStyle,
-                        ),
-                      ),
-                      const Divider(),
-                      ..._items.topCandidates.map(
-                        (e) => _ResTile(
-                          data: e,
-                          inputPoint: widget.pointDetails.point,
-                        ),
-                      ),
-                      if (_items.more.isNotEmpty)
-                        ExpansionTile(
-                          title: const Align(
-                            alignment: Alignment.centerRight,
-                            child: Text('More'),
+        child:
+            _items.isEmpty
+                ? const Text('No results')
+                : SingleChildScrollView(
+                  child: Padding(
+                    padding: const EdgeInsets.all(16.0),
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        const _Tile(
+                          cell1: Text(
+                            'coordinate system',
+                            textAlign: TextAlign.center,
+                            style: headerTextStyle,
                           ),
-                          children: _items.more
-                              .map((e) => _ResTile(
-                                    data: e,
-                                    inputPoint: widget.pointDetails.point,
-                                  ))
-                              .toList(),
+                          cell2: Text(
+                            'WGS84 coordinates',
+                            textAlign: TextAlign.center,
+                            style: headerTextStyle,
+                          ),
+                          cell3: Text(
+                            'distance from approximation',
+                            textAlign: TextAlign.center,
+                            style: headerTextStyle,
+                          ),
                         ),
-                    ],
+                        const Divider(),
+                        ..._items.topCandidates.map(
+                          (e) => _ResTile(
+                            data: e,
+                            inputPoint: widget.pointDetails.point,
+                          ),
+                        ),
+                        if (_items.more.isNotEmpty)
+                          ExpansionTile(
+                            title: const Align(
+                              alignment: Alignment.centerRight,
+                              child: Text('More'),
+                            ),
+                            children:
+                                _items.more
+                                    .map(
+                                      (e) => _ResTile(
+                                        data: e,
+                                        inputPoint: widget.pointDetails.point,
+                                      ),
+                                    )
+                                    .toList(),
+                          ),
+                      ],
+                    ),
                   ),
                 ),
-              ),
       ),
     );
   }
@@ -107,13 +115,13 @@ class _ResTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    const textStyle = TextStyle(
-      fontSize: 12,
-    );
+    const textStyle = TextStyle(fontSize: 12);
     return _Tile(
       cell1: TextButton(
-        onPressed: () => context
-            .openUrl('https://epsg.io/${data.coordinateSystem.epsgCode}'),
+        onPressed:
+            () => context.openUrl(
+              'https://epsg.io/${data.coordinateSystem.epsgCode}',
+            ),
         child: Text(
           data.coordinateSystem.name,
           textAlign: TextAlign.center,
@@ -126,24 +134,20 @@ class _ResTile extends StatelessWidget {
               'https://maps.google.com/?q=${data.lonLat.lat},${data.lonLat.lon}';
           data.coordinateSystem.hasNadgrid
               ? showDialog(
-                  context: context,
-                  builder: (context) => _InaccurateTransformationDialog(
-                    data: data,
-                    inputPoint: inputPoint,
-                  ),
-                ).then(
-                  (res) async => context.mounted ? context.openUrl(url) : null)
+                context: context,
+                builder:
+                    (context) => _InaccurateTransformationDialog(
+                      data: data,
+                      inputPoint: inputPoint,
+                    ),
+              ).then(
+                (res) async => context.mounted ? context.openUrl(url) : null,
+              )
               : context.openUrl(url);
         },
-        child: _LatLong(
-          lonLat: data.lonLat,
-          style: textStyle,
-        ),
+        child: _LatLong(lonLat: data.lonLat, style: textStyle),
       ),
-      cell3: Text(
-        '${data.dKm.toStringAsFixed(0)} km',
-        style: textStyle,
-      ),
+      cell3: Text('${data.dKm.toStringAsFixed(0)} km', style: textStyle),
     );
   }
 }
@@ -171,8 +175,10 @@ class _InaccurateTransformationDialog extends StatelessWidget {
   final CoordinateSystemRes data;
   final Point inputPoint;
 
-  const _InaccurateTransformationDialog(
-      {required this.data, required this.inputPoint});
+  const _InaccurateTransformationDialog({
+    required this.data,
+    required this.inputPoint,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -215,14 +221,12 @@ class _LatLong extends StatelessWidget {
           ),
         ),
         IconButton(
-          onPressed: () => showDialog(
-            context: context,
-            builder: (context) => CopyDialog(lonLat: lonLat),
-          ),
-          icon: const Icon(
-            Icons.copy,
-            size: copyDialogCopyIconSize,
-          ),
+          onPressed:
+              () => showDialog(
+                context: context,
+                builder: (context) => CopyDialog(lonLat: lonLat),
+              ),
+          icon: const Icon(Icons.copy, size: copyDialogCopyIconSize),
         ),
       ],
     );

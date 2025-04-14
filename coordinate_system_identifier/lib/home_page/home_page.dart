@@ -1,4 +1,4 @@
-import 'package:coordinate_systems/coordinate_systems.dart';
+import 'package:coordinate_systems_model/coordinate_systems_model.dart';
 import 'package:flutter/material.dart';
 import 'package:separate/separate.dart';
 import 'package:shared/geoutils/coordinates_parsing.dart';
@@ -18,12 +18,13 @@ class HomePage extends StatelessWidget {
       appBar: AppBar(
         actions: [
           IconButton(
-            onPressed: () => showAboutDialog(
-              context: context,
-              applicationName: appName,
-              applicationIcon: const Icon(Icons.place),
-              children: [const Text('Enjoy life')],
-            ),
+            onPressed:
+                () => showAboutDialog(
+                  context: context,
+                  applicationName: appName,
+                  applicationIcon: const Icon(Icons.place),
+                  children: [const Text('Enjoy life')],
+                ),
             icon: const Icon(Icons.info),
           ),
         ],
@@ -55,10 +56,7 @@ class _Headline extends StatelessWidget {
   Widget build(BuildContext context) {
     return const Text(
       'Welcome to this Coordinate system identifier',
-      style: TextStyle(
-        fontSize: 24,
-        fontWeight: FontWeight.w600,
-      ),
+      style: TextStyle(fontSize: 24, fontWeight: FontWeight.w600),
     );
   }
 }
@@ -69,7 +67,8 @@ class _WelcomeText extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return const Text(
-        "Use this tool when you have some coordinates but don't know in which coordinate system they are defined.");
+      "Use this tool when you have some coordinates but don't know in which coordinate system they are defined.",
+    );
   }
 }
 
@@ -89,43 +88,47 @@ class _StepperState extends State<_Stepper> {
     return Stepper(
       currentStep: _currentStep,
       controlsBuilder: (context, details) => const SizedBox.shrink(),
-      onStepTapped: (value) => switch (_Step.values[value]) {
-        _Step.enterCoordinates => setState(() => _currentStep = 0),
-        _Step.enterMapPoint => null,
-      },
-      steps: _Step.values
-          .map((e) => switch (e) {
-                _Step.enterCoordinates => Step(
+      onStepTapped:
+          (value) => switch (_Step.values[value]) {
+            _Step.enterCoordinates => setState(() => _currentStep = 0),
+            _Step.enterMapPoint => null,
+          },
+      steps:
+          _Step.values
+              .map(
+                (e) => switch (e) {
+                  _Step.enterCoordinates => Step(
                     title: const Text('Enter coordinates'),
                     content: _EnterCoordinatesTextField(
-                      onInputAccepted: (res) => setState(() {
-                        _inputPointDetails = res;
-                        _currentStep = 1;
-                      }),
+                      onInputAccepted:
+                          (res) => setState(() {
+                            _inputPointDetails = res;
+                            _currentStep = 1;
+                          }),
                     ),
                   ),
-                _Step.enterMapPoint => Step(
+                  _Step.enterMapPoint => Step(
                     title: const Text('Enter approximate location'),
                     content: ApproximationInputMap(
-                      onTap: (lonLat) => showDialog(
-                        context: context,
-                        builder: (context) => ResDialog(
-                          tappedPoint: lonLat,
-                          pointDetails: _inputPointDetails!,
-                        ),
-                      ),
+                      onTap:
+                          (lonLat) => showDialog(
+                            context: context,
+                            builder:
+                                (context) => ResDialog(
+                                  tappedPoint: lonLat,
+                                  pointDetails: _inputPointDetails!,
+                                ),
+                          ),
                     ),
                   ),
-              })
-          .toList(),
+                },
+              )
+              .toList(),
     );
   }
 }
 
-enum _Step {
-  enterCoordinates,
-  enterMapPoint,
-}
+enum _Step { enterCoordinates, enterMapPoint }
 
 class _EnterCoordinatesTextField extends StatefulWidget {
   final Function(PointDetails res) onInputAccepted;
@@ -152,21 +155,23 @@ class _EnterCoordinatesTextFieldState
   Widget build(BuildContext context) {
     return ListenableBuilder(
       listenable: _controller,
-      builder: (context, child) => TextField(
-        controller: _controller,
-        onChanged: (value) => setState(() => _errorMessage = null),
-        onSubmitted: _onSubmitted,
-        decoration: InputDecoration(
-          errorText: _errorMessage,
-          suffix: _controller.text.isEmpty
-              ? null
-              : IconButton(
-                  icon: const Icon(Icons.send),
-                  onPressed: () => _onSubmitted(_controller.text),
-                ),
-          helperText: 'north east',
-        ),
-      ),
+      builder:
+          (context, child) => TextField(
+            controller: _controller,
+            onChanged: (value) => setState(() => _errorMessage = null),
+            onSubmitted: _onSubmitted,
+            decoration: InputDecoration(
+              errorText: _errorMessage,
+              suffix:
+                  _controller.text.isEmpty
+                      ? null
+                      : IconButton(
+                        icon: const Icon(Icons.send),
+                        onPressed: () => _onSubmitted(_controller.text),
+                      ),
+              helperText: 'north east',
+            ),
+          ),
     );
   }
 

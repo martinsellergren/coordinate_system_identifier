@@ -1,7 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
 
-import 'package:coordinate_systems/coordinate_systems.dart';
+import 'package:coordinate_systems_model/coordinate_systems_model.dart';
 import 'package:http/http.dart';
 import 'package:postgres/postgres.dart' as p;
 
@@ -29,12 +29,14 @@ void main(List<String> arguments) async {
     try {
       final proj4 = await _getProj4(client: client, epsgCode: epsgCode);
       final epsgJson = await _getEpsgJson(client: client, epsgCode: epsgCode);
-      items.add(CoordinateSystem(
-        epsgCode: epsgCode,
-        name: name,
-        proj4: proj4,
-        bounds: epsgJson.bounds,
-      ));
+      items.add(
+        CoordinateSystem(
+          epsgCode: epsgCode,
+          name: name,
+          proj4: proj4,
+          bounds: epsgJson.bounds,
+        ),
+      );
       await _saveJson(CoordinateSystemsData(items: items));
     } catch (e, s) {
       print('Error for $epsgCode: $e $s');
@@ -78,13 +80,14 @@ Future<EpsgJsonResponse> _getEpsgJson({
 }
 
 Future<void> _saveJson(CoordinateSystemsData data) async {
-  await File('../packages/coordinate_systems/assets/coordinate_systems.json')
-      .writeAsString(jsonEncode(data.toJson()));
+  await File(
+    '../packages/coordinate_systems/assets/coordinate_systems.json',
+  ).writeAsString(jsonEncode(data.toJson()));
 }
 
 extension on EpsgJsonResponse {
   Bounds get bounds => Bounds(
-        northEast: LonLat(lon: bbox.eastLongitude, lat: bbox.northLatitude),
-        southWest: LonLat(lon: bbox.westLongitude, lat: bbox.southLatitude),
-      );
+    northEast: LonLat(lon: bbox.eastLongitude, lat: bbox.northLatitude),
+    southWest: LonLat(lon: bbox.westLongitude, lat: bbox.southLatitude),
+  );
 }

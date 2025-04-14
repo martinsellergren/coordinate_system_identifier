@@ -24,24 +24,25 @@ class GetPointDetails {
     int nSuccess = 0;
     int nErrors = 0;
     final entries = _coordinateSystemsData.items
-        .map(
-          (e) {
-            final lonLat = _lonLatFromPointAndCoordinateSystem(
-                point: point, coordinateSystem: e);
-            if (lonLat != null) {
-              nSuccess++;
-            } else {
-              nErrors++;
-            }
-            return MapEntry(e, lonLat);
-          },
-        )
+        .map((e) {
+          final lonLat = _lonLatFromPointAndCoordinateSystem(
+            point: point,
+            coordinateSystem: e,
+          );
+          if (lonLat != null) {
+            nSuccess++;
+          } else {
+            nErrors++;
+          }
+          return MapEntry(e, lonLat);
+        })
         .where((e) => e.value != null)
         .map((e) => MapEntry(e.key, e.value!));
     if (entries.isEmpty) throw TransformException();
     final map = Map.fromEntries(entries);
     logger.i(
-        'lonLatFromPointAndCoordinateSystem, nSuccess: $nSuccess, nErrors: $nErrors');
+      'lonLatFromPointAndCoordinateSystem, nSuccess: $nSuccess, nErrors: $nErrors',
+    );
     final res = PointDetails(point: point, lonLats: map);
     return res;
   }
@@ -77,8 +78,10 @@ LonLat? _lonLatFromPointAndCoordinateSystem({
   final proj = p.Projection.get('${coordinateSystem.epsgCode}');
   if (proj == null) return null;
   try {
-    final res =
-        proj.transform(p.Projection.WGS84, p.Point(x: point.x, y: point.y));
+    final res = proj.transform(
+      p.Projection.WGS84,
+      p.Point(x: point.x, y: point.y),
+    );
     if (!res.x.isFinite) throw 'Longitude is not finite, ${res.x}';
     if (!res.y.isFinite) throw 'Latitude is not finite, ${res.y}';
     final lonLat = LonLat(lon: res.x, lat: res.y);
@@ -90,7 +93,8 @@ LonLat? _lonLatFromPointAndCoordinateSystem({
     e.toString().toLowerCase().contains('unable to find mandatory grid')
         ? logger.e('Missing grid shift file', error: e, stackTrace: s)
         : logger.d(
-            'Error transforming ($point, epsg=${coordinateSystem.epsgCode}), $e');
+          'Error transforming ($point, epsg=${coordinateSystem.epsgCode}), $e',
+        );
     return null;
   }
 }
