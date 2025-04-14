@@ -1,0 +1,14 @@
+name: none
+publish_to: none
+environment:
+  sdk: ^3.7.0
+workspace:
+  - coordinate_system_identifier
+  - coordinate_system_identifier/playground
+  - coordinates_opener
+  - coordinates_opener/playground
+  - data-parsing
+  - packages/coordinate_systems
+  - packages/coordinate_systems/example
+  - packages/coordinate_systems_model
+  - packages/shared

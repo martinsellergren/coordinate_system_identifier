@@ -1,8 +1,9 @@
-name: example
+name: coordinate_systems_example
 
 environment:
-  sdk: ^3.5.4
+  sdk: ^3.7.0
   flutter: ">=1.17.0"
+resolution: workspace
 
 dependencies:
   flutter:
