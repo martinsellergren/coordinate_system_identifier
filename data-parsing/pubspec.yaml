@@ -10,6 +10,8 @@ dependencies:
   postgres: ^3.4.0
   shared:
     path: ../packages/shared
+  coordinate_systems:
+    path: ../packages/coordinate_systems
   http: ^1.2.2
   freezed_annotation: ^2.4.4
   json_annotation: ^4.9.0

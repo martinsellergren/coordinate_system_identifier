@@ -1,6 +1,5 @@
+import 'package:coordinate_systems/coordinate_systems.dart';
 import 'package:maps_toolkit/maps_toolkit.dart' as t;
-
-import '../coordinate_system_data/model.dart';
 
 double distanceBetween({required LonLat lonLat1, required LonLat lonLat2}) {
   return t.SphericalUtil.computeDistanceBetween(

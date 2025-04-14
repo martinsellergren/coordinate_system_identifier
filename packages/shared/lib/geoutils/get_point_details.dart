@@ -1,10 +1,6 @@
-import 'dart:convert';
-
-import 'package:flutter/services.dart';
+import 'package:coordinate_systems/coordinate_systems.dart';
 import 'package:proj4dart/proj4dart.dart' as p;
 
-import '../coordinate_system_data/consts.dart';
-import '../coordinate_system_data/model.dart';
 import '../logger.dart';
 import 'geoutils.dart';
 import 'model.dart';
@@ -56,23 +52,7 @@ class TransformException implements Exception {}
 late final CoordinateSystemsData _coordinateSystemsData;
 
 Future<void> _loadCoordinateSystemData() async {
-  String str = await rootBundle.loadString(
-    // this is only projected coordinate systems
-    // e.g degree-based systems (like WGS84) are not included
-    'packages/shared/assets/coordinate_systems.json',
-  );
-  var data = CoordinateSystemsData.fromJson(jsonDecode(str));
-  data = data.copyWith(
-    items: [...data.items, wgs84]
-        .map((e) => e.proj4.contains('+nadgrids')
-            ? e.copyWith(
-                proj4: e.proj4.replaceAll(RegExp(r'\+nadgrids=.+? \+'), '+'),
-                hasNadgrid: true,
-              )
-            : e)
-        .toList(),
-  );
-  _coordinateSystemsData = data;
+  _coordinateSystemsData = await loadCoordinateSystemData();
 }
 
 Future<void> _loadProjProjections() async {

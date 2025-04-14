@@ -1,5 +1,5 @@
+import 'package:coordinate_systems/coordinate_systems.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:shared/coordinate_system_data/model.dart';
 import 'package:shared/geoutils/model.dart';
 
 void expectEqualCoordinates(LonLat ll1, LonLat ll2) {

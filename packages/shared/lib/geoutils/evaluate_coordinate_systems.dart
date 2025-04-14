@@ -1,6 +1,6 @@
 import 'package:collection/collection.dart';
+import 'package:coordinate_systems/coordinate_systems.dart';
 
-import '../coordinate_system_data/model.dart';
 import 'geoutils.dart';
 import 'model.dart';
 

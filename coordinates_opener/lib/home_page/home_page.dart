@@ -1,8 +1,8 @@
+import 'package:coordinate_systems/coordinate_systems.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:separate/separate.dart';
 import 'package:shared/context_extension.dart';
-import 'package:shared/coordinate_system_data/model.dart';
 import 'package:shared/geoutils/coordinates_parsing.dart';
 import 'package:shared/geoutils/get_point_details.dart';
 import 'package:shared/geoutils/model.dart';

@@ -85,8 +85,6 @@ abstract class _$$WellDefinedImplCopyWith<$Res> {
       __$$WellDefinedImplCopyWithImpl<$Res>;
   @useResult
   $Res call({LonLat lonLat});
-
-  $LonLatCopyWith<$Res> get lonLat;
 }
 
 /// @nodoc
@@ -102,24 +100,14 @@ class __$$WellDefinedImplCopyWithImpl<$Res>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? lonLat = null,
+    Object? lonLat = freezed,
   }) {
     return _then(_$WellDefinedImpl(
-      lonLat: null == lonLat
+      lonLat: freezed == lonLat
           ? _value.lonLat
           : lonLat // ignore: cast_nullable_to_non_nullable
               as LonLat,
     ));
-  }
-
-  /// Create a copy of CoordinatesParsingResult
-  /// with the given fields replaced by the non-null parameter values.
-  @override
-  @pragma('vm:prefer-inline')
-  $LonLatCopyWith<$Res> get lonLat {
-    return $LonLatCopyWith<$Res>(_value.lonLat, (value) {
-      return _then(_value.copyWith(lonLat: value));
-    });
   }
 }
 
@@ -141,11 +129,12 @@ class _$WellDefinedImpl implements WellDefined {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$WellDefinedImpl &&
-            (identical(other.lonLat, lonLat) || other.lonLat == lonLat));
+            const DeepCollectionEquality().equals(other.lonLat, lonLat));
   }
 
   @override
-  int get hashCode => Object.hash(runtimeType, lonLat);
+  int get hashCode =>
+      Object.hash(runtimeType, const DeepCollectionEquality().hash(lonLat));
 
   /// Create a copy of CoordinatesParsingResult
   /// with the given fields replaced by the non-null parameter values.

@@ -1,7 +1,6 @@
+import 'package:coordinate_systems/coordinate_systems.dart';
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
-
-import 'coordinate_system_data/model.dart';
 
 extension ContextX on BuildContext {
   void showSnackBar(SnackBar snackBar) {

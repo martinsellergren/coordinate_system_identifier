@@ -1,6 +1,6 @@
 name: playground
 description: "A new Flutter project."
-publish_to: 'none'
+publish_to: "none"
 version: 1.0.0+1
 
 environment:
@@ -13,6 +13,8 @@ dependencies:
     path: ..
   shared:
     path: ../../packages/shared
+  coordinate_systems:
+    path: ../../packages/coordinate_systems
 
 dev_dependencies:
   flutter_test:

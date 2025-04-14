@@ -11,6 +11,8 @@ dependencies:
     sdk: flutter
   shared:
     path: ../packages/shared
+  coordinate_systems:
+    path: ../packages/coordinate_systems
   provider: ^6.1.2
   separate: ^1.0.3
   freezed_annotation: ^2.4.4

@@ -1,7 +1,7 @@
+import 'package:coordinate_systems/coordinate_systems.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
-import 'coordinate_system_data/model.dart';
 import 'geoutils/formatting.dart';
 
 const copyDialogCopyIconSize = 15.0;

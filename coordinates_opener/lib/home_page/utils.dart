@@ -1,4 +1,4 @@
-import 'package:shared/coordinate_system_data/model.dart';
+import 'package:coordinate_systems/coordinate_systems.dart';
 import 'package:shared/geoutils/geoutils.dart';
 import 'package:shared/geoutils/model.dart';
 

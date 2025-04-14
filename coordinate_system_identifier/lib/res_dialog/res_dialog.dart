@@ -1,8 +1,8 @@
 import 'package:collection/collection.dart';
+import 'package:coordinate_systems/coordinate_systems.dart';
 import 'package:flutter/material.dart';
 import 'package:pointer_interceptor/pointer_interceptor.dart';
 import 'package:shared/context_extension.dart';
-import 'package:shared/coordinate_system_data/model.dart';
 import 'package:shared/copy_dialog.dart';
 import 'package:shared/geoutils/evaluate_coordinate_systems.dart';
 import 'package:shared/geoutils/formatting.dart';

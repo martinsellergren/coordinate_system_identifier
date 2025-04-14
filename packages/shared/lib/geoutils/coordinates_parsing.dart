@@ -1,10 +1,10 @@
 import 'package:collection/collection.dart';
+import 'package:coordinate_systems/coordinate_systems.dart';
 import 'package:flutter/material.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:mgrs_dart/mgrs_dart.dart' as m;
 import 'package:parse_coordinates/parse_coordinates.dart' as p;
 
-import '../coordinate_system_data/model.dart';
 import 'model.dart';
 
 part 'coordinates_parsing.freezed.dart';

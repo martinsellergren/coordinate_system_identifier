@@ -1,10 +1,10 @@
 // ignore_for_file: invalid_use_of_visible_for_testing_member, avoid_print
 
+import 'package:coordinate_systems/coordinate_systems.dart';
 import 'package:coordinates_opener/home_page/home_page.dart';
 import 'package:coordinates_opener/res_dialog/pick_reference_system_dialog.dart';
 import 'package:coordinates_opener/res_dialog/res_dialog.dart';
 import 'package:flutter/material.dart';
-import 'package:shared/coordinate_system_data/model.dart';
 import 'package:shared/geoutils/get_point_details.dart';
 import 'package:shared/geoutils/model.dart';
 

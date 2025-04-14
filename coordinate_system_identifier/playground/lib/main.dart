@@ -2,8 +2,8 @@
 
 import 'package:coordinate_system_identifier/home_page/home_page.dart';
 import 'package:coordinate_system_identifier/res_dialog/res_dialog.dart';
+import 'package:coordinate_systems/coordinate_systems.dart';
 import 'package:flutter/material.dart';
-import 'package:shared/coordinate_system_data/model.dart';
 import 'package:shared/copy_dialog.dart';
 import 'package:shared/geoutils/get_point_details.dart';
 import 'package:shared/geoutils/model.dart';
